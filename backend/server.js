@@ -17,22 +17,34 @@ import billRoutes from "./routes/billRoutes.js";
 import recurringRoutes from "./routes/recurringRoutes.js";
 import startingBalanceRoutes from "./routes/startingBalanceRoutes.js";
 import paycheckSettingsRoutes from "./routes/paycheckSettingsRoutes.js";
-import calendarRoutes from "./routes/calendarRoutes.js"; // placeholder
+import calendarRoutes from "./routes/calendarRoutes.js";
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 
-// ===============================
+// ========================================
 // Middleware
-// ===============================
+// ========================================
 app.use(cors());
 app.use(express.json());
 
-// ===============================
+// ========================================
+// Routes
+// ========================================
+app.use("/api/auth", authRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/bills", billRoutes);
+app.use("/api/recurring", recurringRoutes);
+app.use("/api/starting-balance", startingBalanceRoutes);
+app.use("/api/paycheck-settings", paycheckSettingsRoutes);
+app.use("/api/calendar", calendarRoutes);
+
+// ========================================
 // MongoDB Connection
-// ===============================
+// ========================================
 const mongoUri = process.env.MONGO_URI;
 
 if (!mongoUri) {
@@ -48,32 +60,11 @@ mongoose
     process.exit(1);
   });
 
-// ===============================
-// API Routes
-// ===============================
-app.use("/api/auth", authRoutes);
-app.use("/api/transactions", transactionRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/bills", billRoutes);
-app.use("/api/recurring", recurringRoutes);
-app.use("/api/starting-balance", startingBalanceRoutes);
-app.use("/api/paycheck-settings", paycheckSettingsRoutes);
-
-// Placeholder (calendar handled fully on frontend)
-app.use("/api/calendar", calendarRoutes);
-
-// ===============================
-// Root Status Route
-// ===============================
-app.get("/", (req, res) => {
-  res.send("Underground Water 2 API is running ✅");
-});
-
-// ===============================
+// ========================================
 // Start Server
-// ===============================
+// ========================================
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
