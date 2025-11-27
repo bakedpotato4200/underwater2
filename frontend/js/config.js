@@ -1,15 +1,17 @@
 // frontend/js/config.js
 // ========================================
 // Underground Water 2 - Frontend Config
-// Centralized configuration for API calls
+// ========================================
+//
+// 🚨 IMPORTANT FOR LATER 🚨
+// This configuration is for LOCAL DEVELOPMENT ONLY.
+// It tells the frontend to use the backend running on your PC.
+//
+// When you switch to using Railway or production:
+//   CHANGE API_BASE_URL to your Railway URL.
 // ========================================
 
-// IMPORTANT:
-// If running locally on Replit or Railway, set your backend URL here:
-
-export const API_BASE_URL = "http://localhost:3000/api"; 
-// Example for production:
-// export const API_BASE_URL = "https://your-backend-url.up.railway.app/api";
+export const API_BASE_URL = "http://localhost:3000/api";
 
 // --------------------------------------------
 // Token Helpers
@@ -28,7 +30,6 @@ export function clearToken() {
 
 // --------------------------------------------
 // API Call Wrapper
-// Auto attaches token + handles JSON
 // --------------------------------------------
 export async function apiRequest(endpoint, method = "GET", body = null) {
   const headers = {
@@ -36,9 +37,7 @@ export async function apiRequest(endpoint, method = "GET", body = null) {
   };
 
   const token = getToken();
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
+  if (token) headers["Authorization"] = `Bearer ${token}`;
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method,
@@ -46,7 +45,6 @@ export async function apiRequest(endpoint, method = "GET", body = null) {
     body: body ? JSON.stringify(body) : null,
   });
 
-  // Parse JSON safely
   let data;
   try {
     data = await response.json();
@@ -55,15 +53,14 @@ export async function apiRequest(endpoint, method = "GET", body = null) {
   }
 
   if (!response.ok) {
-    const msg = data.error || "API error";
-    throw new Error(msg);
+    throw new Error(data.error || "API error");
   }
 
   return data;
 }
 
 // --------------------------------------------
-// Date Helpers
+// Date + Money Helpers
 // --------------------------------------------
 export function formatMoney(amount) {
   return "$" + Number(amount).toLocaleString(undefined, {
