@@ -2,2038 +2,239 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Underwater Budget</title>
+  <title>Underground Water 2</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    :root {
-      --bg-main: #050814;
-      --bg-panel: #0b1020;
-      --bg-panel-soft: #0f1427;
-      --accent: #3a8bff;
-      --accent-soft: rgba(58, 139, 255, 0.15);
-      --accent-strong: #4fd1c5;
-      --danger: #ff4f6b;
-      --success: #45d787;
-      --text-main: #f5f7ff;
-      --text-soft: #a8b0d0;
-      --border-subtle: #262b40;
-      --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.6);
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --radius-pill: 999px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      height: 100%;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #182647, #050814 60%);
-      color: var(--text-main);
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* =========================================
-       AUTH SCREEN
-       ========================================= */
-
-    #auth-screen {
-      width: 100%;
-      max-width: 1040px;
-      margin: auto;
-      padding: 32px 24px;
-    }
-
-    .auth-shell {
-      background: linear-gradient(135deg, #050814, #0d1224);
-      border-radius: 28px;
-      box-shadow: var(--shadow-soft);
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2.7fr);
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      min-height: 520px;
-    }
-
-    @media (max-width: 880px) {
-      .auth-shell {
-        grid-template-columns: 1fr;
-      }
-      .auth-hero {
-        display: none;
-      }
-    }
-
-    .auth-hero {
-      padding: 32px 32px 32px 32px;
-      background: radial-gradient(circle at top left, #1a2650, #050814 60%);
-      border-right: 1px solid rgba(255, 255, 255, 0.04);
-      position: relative;
-    }
-
-    .auth-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 32px;
-    }
-
-    .auth-logo-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 12px;
-      background: radial-gradient(circle at 30% 20%, #4fd1c5, #3a8bff);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 18px;
-      color: #020308;
-    }
-
-    .auth-logo-text {
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      font-size: 14px;
-      text-transform: uppercase;
-      color: var(--text-soft);
-    }
-
-    .auth-hero h1 {
-      font-size: 32px;
-      line-height: 1.2;
-      margin-bottom: 12px;
-    }
-
-    .auth-hero p {
-      color: var(--text-soft);
-      margin-bottom: 28px;
-      max-width: 360px;
-    }
-
-    .auth-pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .auth-pill {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      background: rgba(10, 12, 29, 0.8);
-      color: var(--text-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .auth-pill span.dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--accent-strong);
-    }
-
-    .auth-stat-grid {
-      margin-top: 24px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      max-width: 320px;
-    }
-
-    .auth-stat-card {
-      background: rgba(6, 10, 25, 0.95);
-      border-radius: 12px;
-      padding: 10px 12px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .auth-stat-card strong {
-      display: block;
-      font-size: 20px;
-      color: var(--accent-strong);
-      margin-bottom: 2px;
-    }
-
-    .auth-form-pane {
-      padding: 32px 28px;
-      background: radial-gradient(circle at top, #11172c, #050814 70%);
-      position: relative;
-    }
-
-    .auth-tabs {
-      display: inline-flex;
-      padding: 4px;
-      border-radius: 999px;
-      background: rgba(12, 19, 42, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      margin-bottom: 24px;
-    }
-
-    .auth-tab-btn {
-      border-radius: 999px;
-      border: none;
-      background: transparent;
-      color: var(--text-soft);
-      padding: 6px 16px;
-      font-size: 13px;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      opacity: 0.8;
-    }
-
-    .auth-tab-btn.active {
-      background: linear-gradient(135deg, #3a8bff, #4fd1c5);
-      color: #050814;
-      opacity: 1;
-    }
-
-    .auth-heading {
-      font-size: 22px;
-      margin-bottom: 6px;
-    }
-
-    .auth-sub {
-      font-size: 13px;
-      color: var(--text-soft);
-      margin-bottom: 20px;
-    }
-
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 10px;
-    }
-
-    .field-label {
-      font-size: 12px;
-      color: var(--text-soft);
-      margin-bottom: 4px;
-    }
-
-    .field-input {
-      width: 100%;
-      padding: 10px 11px;
-      border-radius: 10px;
-      border: 1px solid var(--border-subtle);
-      background: rgba(4, 7, 18, 0.95);
-      color: var(--text-main);
-      font-size: 13px;
-      outline: none;
-    }
-
-    .field-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(58, 139, 255, 0.5);
-    }
-
-    .primary-btn {
-      border-radius: 999px;
-      border: none;
-      padding: 10px 18px;
-      background: linear-gradient(135deg, #3a8bff, #4fd1c5);
-      color: #050814;
-      font-weight: 600;
-      font-size: 14px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .primary-btn:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
-
-    .auth-footer {
-      margin-top: 18px;
-      font-size: 11px;
-      color: var(--text-soft);
-      opacity: 0.9;
-    }
-
-    .auth-error,
-    .auth-success {
-      font-size: 12px;
-      margin-top: 8px;
-    }
-
-    .auth-error {
-      color: var(--danger);
-    }
-
-    .auth-success {
-      color: var(--success);
-    }
-
-    /* =========================================
-       APP SHELL
-       ========================================= */
-
-    #app {
-      width: 100%;
-      max-width: 1440px;
-      margin: auto;
-      height: 100vh;
-      padding: 18px;
-    }
-
-    .app-shell {
-      height: 100%;
-      background: radial-gradient(circle at top, #0b1020, #050814 70%);
-      border-radius: 26px;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-      overflow: hidden;
-    }
-
-    @media (max-width: 980px) {
-      .app-shell {
-        grid-template-columns: 220px minmax(0, 1fr);
-      }
-    }
-
-    @media (max-width: 780px) {
-      #app {
-        padding: 10px;
-      }
-      .app-shell {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        display: none;
-      }
-    }
-
-    .sidebar {
-      background: radial-gradient(circle at top left, #121930, #050814 60%);
-      border-right: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 18px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .sidebar-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .sidebar-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 12px;
-      background: radial-gradient(circle at 30% 20%, #4fd1c5, #3a8bff);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 17px;
-      color: #020308;
-    }
-
-    .sidebar-title {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .sidebar-title-main {
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .sidebar-title-sub {
-      font-size: 11px;
-      color: var(--text-soft);
-      opacity: 0.9;
-    }
-
-    .sidebar-nav {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      flex: 1;
-    }
-
-    .nav-button {
-      border-radius: 999px;
-      border: none;
-      background: transparent;
-      color: var(--text-soft);
-      padding: 8px 12px;
-      text-align: left;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      opacity: 0.9;
-    }
-
-    .nav-button span.icon {
-      font-size: 16px;
-    }
-
-    .nav-button.active {
-      background: rgba(58, 139, 255, 0.18);
-      color: var(--accent-strong);
-      border: 1px solid rgba(79, 209, 197, 0.5);
-    }
-
-    .sidebar-footer {
-      margin-top: auto;
-      font-size: 11px;
-      color: var(--text-soft);
-      opacity: 0.9;
-    }
-
-    .logout-btn {
-      margin-top: 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(8, 10, 26, 0.9);
-      color: var(--text-soft);
-      padding: 7px 11px;
-      font-size: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* =========================================
-       MAIN CONTENT LAYOUT
-       ========================================= */
-
-    .main-content {
-      padding: 18px 18px 18px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      overflow: hidden;
-    }
-
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .top-bar-left h1 {
-      font-size: 20px;
-      margin-bottom: 3px;
-    }
-
-    .top-bar-left p {
-      font-size: 12px;
-      color: var(--text-soft);
-    }
-
-    .top-bar-right {
-      font-size: 12px;
-      color: var(--text-soft);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .top-bar-pill {
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: rgba(15, 20, 46, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .page-scroll {
-      flex: 1;
-      min-height: 0;
-      overflow: auto;
-      padding-right: 4px;
-    }
-
-    .page-section {
-      display: none;
-    }
-
-    .page-section.active {
-      display: block;
-    }
-
-    /* =========================================
-       DASHBOARD STRUCTURE
-       ========================================= */
-
-    .dash-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-      gap: 16px;
-      margin-top: 10px;
-    }
-
-    @media (max-width: 1080px) {
-      .dash-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: var(--bg-panel);
-      border-radius: var(--radius-lg);
-      padding: 14px 14px 14px 14px;
-      border: 1px solid var(--border-subtle);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.5);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .card-header h2 {
-      font-size: 15px;
-    }
-
-    .card-sub {
-      font-size: 12px;
-      color: var(--text-soft);
-    }
-
-    .metric-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    @media (max-width: 640px) {
-      .metric-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .metric-card {
-      background: var(--bg-panel-soft);
-      border-radius: var(--radius-md);
-      padding: 9px 11px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 12px;
-      color: var(--text-soft);
-    }
-
-    .metric-label {
-      margin-bottom: 3px;
-    }
-
-    .metric-value {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--accent-strong);
-    }
-
-    .metric-tag {
-      font-size: 10px;
-      opacity: 0.8;
-    }
-
-    /* =========================================
-       📅 CALENDAR STYLES
-       ========================================= */
-
-    .calendar-wrapper {
-      display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      gap: 12px;
-      margin-top: 6px;
-    }
-
-    @media (max-width: 1080px) {
-      .calendar-wrapper {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .calendar-panel {
-      background: var(--bg-panel-soft);
-      border-radius: var(--radius-md);
-      padding: 10px 10px 12px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .calendar-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      gap: 10px;
-    }
-
-    .calendar-controls-left {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .calendar-nav-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(9, 12, 29, 0.9);
-      color: var(--text-main);
-      width: 26px;
-      height: 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
-
-    .calendar-month-label {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .calendar-balance-box {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      justify-content: flex-end;
-    }
-
-    .calendar-balance-box input {
-      width: 120px;
-      padding: 6px 7px;
-      border-radius: 999px;
-      border: 1px solid #666;
-      background: #050814;
-      color: var(--text-main);
-      font-size: 12px;
-      text-align: right;
-    }
-
-    .calendar-balance-box button {
-      border-radius: 999px;
-      border: none;
-      padding: 5px 10px;
-      background: rgba(58, 139, 255, 0.8);
-      color: #050814;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-      margin-top: 6px;
-      font-size: 11px;
-    }
-
-    .calendar-weekday {
-      text-align: center;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-soft);
-      opacity: 0.85;
-    }
-
-    .calendar-cell {
-      background: #080c18;
-      border-radius: 8px;
-      padding: 5px;
-      min-height: 75px;
-      color: white;
-      cursor: pointer;
-      position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      transition: transform 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease;
-    }
-
-    .calendar-cell:hover {
-      transform: translateY(-1px);
-      border-color: rgba(79, 209, 197, 0.8);
-      box-shadow: 0 0 0 1px rgba(79, 209, 197, 0.5);
-    }
-
-    .calendar-cell.outside {
-      opacity: 0.25;
-      cursor: default;
-    }
-
-    .calendar-cell .day-number {
-      font-weight: 600;
-      opacity: 0.9;
-      font-size: 11px;
-    }
-
-    .calendar-cell .dot-row {
-      margin-top: 2px;
-    }
-
-    .dot-income, .dot-bill {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 2px;
-    }
-
-    .dot-income {
-      background-color: #45d787;
-    }
-
-    .dot-bill {
-      background-color: #ff5c7a;
-    }
-
-    .calendar-cell .balance {
-      position: absolute;
-      bottom: 4px;
-      right: 5px;
-      font-size: 10px;
-      opacity: 0.9;
-      color: var(--text-soft);
-    }
-
-    .calendar-legend {
-      margin-top: 6px;
-      font-size: 10px;
-      color: var(--text-soft);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .calendar-legend span.legend-pill {
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      background: rgba(8, 12, 23, 0.9);
-      padding: 3px 7px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Detail pane */
-
-    .calendar-detail-panel {
-      background: var(--bg-panel-soft);
-      border-radius: var(--radius-md);
-      padding: 10px 11px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      font-size: 12px;
-      min-height: 120px;
-    }
-
-    .calendar-detail-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 3px;
-    }
-
-    .calendar-detail-header h3 {
-      font-size: 13px;
-    }
-
-    .calendar-detail-header span {
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    .calendar-detail-list {
-      margin-top: 5px;
-      max-height: 200px;
-      overflow: auto;
-    }
-
-    .calendar-detail-list p.empty {
-      color: var(--text-soft);
-      font-size: 11px;
-    }
-
-    .calendar-item-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 5px 0;
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
-    }
-
-    .calendar-item-row:last-child {
-      border-bottom: none;
-    }
-
-    .calendar-item-left {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-    .calendar-item-name {
-      font-size: 12px;
-    }
-
-    .calendar-item-type {
-      font-size: 10px;
-      color: var(--text-soft);
-    }
-
-    .calendar-item-amount {
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .calendar-item-amount.income {
-      color: var(--success);
-    }
-
-    .calendar-item-amount.bill {
-      color: var(--danger);
-    }
-
-    .calendar-detail-footer {
-      margin-top: 6px;
-      font-size: 11px;
-      color: var(--text-soft);
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    /* =========================================
-       OTHER SECTIONS (BILLS / SETTINGS STUBS)
-       ========================================= */
-
-    .section-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-      gap: 14px;
-      margin-top: 10px;
-    }
-
-    @media (max-width: 1080px) {
-      .section-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .section-heading {
-      font-size: 16px;
-      margin-bottom: 6px;
-    }
-
-    .section-sub {
-      font-size: 12px;
-      color: var(--text-soft);
-      margin-bottom: 10px;
-    }
-
-    .inline-form {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 6px;
-      margin-bottom: 8px;
-      font-size: 11px;
-    }
-
-    @media (max-width: 900px) {
-      .inline-form {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .inline-form input,
-    .inline-form select {
-      width: 100%;
-      padding: 7px 8px;
-      border-radius: 10px;
-      border: 1px solid var(--border-subtle);
-      background: #050814;
-      color: var(--text-main);
-      font-size: 11px;
-    }
-
-    .inline-form button {
-      border-radius: 999px;
-      border: none;
-      padding: 7px 8px;
-      background: rgba(58, 139, 255, 0.9);
-      color: #050814;
-      font-weight: 600;
-      font-size: 11px;
-    }
-
-    .table-list {
-      margin-top: 4px;
-      font-size: 11px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .table-row {
-      display: grid;
-      grid-template-columns: 1.8fr 0.9fr 0.9fr 0.9fr 0.8fr 0.6fr;
-      gap: 6px;
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      align-items: center;
-    }
-
-    .table-header {
-      font-size: 11px;
-      color: var(--text-soft);
-      font-weight: 500;
-    }
-
-    .table-cell-amount.income {
-      color: var(--success);
-    }
-
-    .table-cell-amount.expense {
-      color: var(--danger);
-    }
-
-    .chip {
-      padding: 2px 7px;
-      border-radius: 999px;
-      font-size: 10px;
-      background: rgba(10, 17, 40, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-  </style>
+  <!-- Main Styles -->
+  <link rel="stylesheet" href="./styles.css" />
 </head>
-
 <body>
-  <!-- =============================
-       AUTH SCREEN
-       ============================= -->
-  <div id="auth-screen">
-    <div class="auth-shell">
-      <div class="auth-hero">
-        <div class="auth-logo">
-          <div class="auth-logo-icon">U</div>
-          <div class="auth-logo-text">Underwater Budget</div>
-        </div>
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <h1 class="app-title">Underground Water 2</h1>
+      <p class="app-subtitle">Smart paycheck-to-paycheck budgeting</p>
 
-        <h1>See every bill and paycheck before it hits.</h1>
-        <p>
-          Upload statements, add recurring bills, and watch your cash flow across the month in one living calendar.
-        </p>
-
-        <div class="auth-pill-row">
-          <div class="auth-pill">
-            <span class="dot"></span> Smart bill calendar
-          </div>
-          <div class="auth-pill">
-            <span class="dot"></span> Recurring paychecks
-          </div>
-          <div class="auth-pill">
-            <span class="dot"></span> Debt & goals ready
-          </div>
-        </div>
-
-        <div class="auth-stat-grid">
-          <div class="auth-stat-card">
-            <strong>30d</strong>
-            of upcoming bills mapped out
-          </div>
-          <div class="auth-stat-card">
-            <strong>0</strong>
-            surprises on payday (that’s the goal)
-          </div>
-          <div class="auth-stat-card">
-            <strong>💧</strong>
-            Ride the waves instead of drowning in them.
-          </div>
-          <div class="auth-stat-card">
-            <strong>Live</strong>
-            Updates as you tweak bills and income.
-          </div>
-        </div>
+      <div class="auth-toggle">
+        <button id="login-tab" class="auth-tab auth-tab-active">Login</button>
+        <button id="signup-tab" class="auth-tab">Sign Up</button>
       </div>
 
-      <div class="auth-form-pane">
-        <div class="auth-tabs">
-          <button class="auth-tab-btn active" data-auth-tab="login">
-            <span>Login</span>
-          </button>
-          <button class="auth-tab-btn" data-auth-tab="signup">
-            <span>Sign up</span>
-          </button>
-        </div>
+      <!-- LOGIN FORM -->
+      <form id="login-form" class="auth-form">
+        <label>
+          Email
+          <input type="email" id="login-email" required />
+        </label>
+        <label>
+          Password
+          <input type="password" id="login-password" required />
+        </label>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <p class="auth-error" id="login-error"></p>
+      </form>
 
-        <!-- LOGIN FORM -->
-        <div id="login-pane">
-          <div class="auth-heading">Welcome back</div>
-          <div class="auth-sub">
-            Log in to your Underwater account or use the demo:
-            <strong>demo@example.com / demo</strong>
-          </div>
-
-          <form id="login-form" class="auth-form">
-            <div>
-              <div class="field-label">Email</div>
-              <input type="email" id="login-email" class="field-input" autocomplete="email" required />
-            </div>
-            <div>
-              <div class="field-label">Password</div>
-              <input type="password" id="login-password" class="field-input" autocomplete="current-password" required />
-            </div>
-            <button type="submit" class="primary-btn" id="login-submit">
-              Log in
-            </button>
-          </form>
-
-          <div id="login-message" class="auth-error hidden"></div>
-        </div>
-
-        <!-- SIGNUP FORM -->
-        <div id="signup-pane" class="hidden">
-          <div class="auth-heading">Create an account</div>
-          <div class="auth-sub">
-            Your data lives securely in your own MongoDB cluster.
-          </div>
-
-          <form id="signup-form" class="auth-form">
-            <div>
-              <div class="field-label">Email</div>
-              <input type="email" id="signup-email" class="field-input" autocomplete="email" required />
-            </div>
-            <div>
-              <div class="field-label">Password</div>
-              <input type="password" id="signup-password" class="field-input" autocomplete="new-password" required />
-            </div>
-            <button type="submit" class="primary-btn" id="signup-submit">
-              Sign up
-            </button>
-          </form>
-
-          <div id="signup-message" class="auth-error hidden"></div>
-        </div>
-
-        <div class="auth-footer">
-          Pro tip: once you're in, pin this tab and just live inside the calendar.
-        </div>
-      </div>
+      <!-- SIGNUP FORM -->
+      <form id="signup-form" class="auth-form auth-form-hidden">
+        <label>
+          Email
+          <input type="email" id="signup-email" required />
+        </label>
+        <label>
+          Password
+          <input type="password" id="signup-password" required />
+        </label>
+        <button type="submit" class="btn btn-secondary">Create Account</button>
+        <p class="auth-error" id="signup-error"></p>
+      </form>
     </div>
   </div>
 
-  <!-- =============================
-       APP SHELL
-       ============================= -->
-  <div id="app" class="hidden">
-    <div class="app-shell">
-      <aside class="sidebar">
-        <div class="sidebar-header">
-          <div class="sidebar-icon">U</div>
-          <div class="sidebar-title">
-            <div class="sidebar-title-main">Underwater</div>
-            <div class="sidebar-title-sub">Cash-flow control center</div>
+  <!-- MAIN APP SHELL -->
+  <div id="app-shell" class="app-shell app-shell-hidden">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">UW2</span>
+        <span class="sidebar-title">Underground Water</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item nav-item-active" data-view="dashboard-view">
+          Dashboard
+        </button>
+        <button class="nav-item" data-view="calendar-view">
+          Calendar
+        </button>
+        <button class="nav-item" data-view="recurring-view">
+          Recurring
+        </button>
+        <button class="nav-item" data-view="settings-view">
+          Settings
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span id="user-email-label" class="sidebar-user"></span>
+        <button id="logout-btn" class="btn btn-ghost">Logout</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- DASHBOARD VIEW -->
+      <section id="dashboard-view" class="view view-active">
+        <h2>Dashboard</h2>
+
+        <div class="cards-row">
+          <div class="card">
+            <h3>Starting Balance</h3>
+            <p id="dash-starting-balance" class="big-number">$0</p>
+          </div>
+          <div class="card">
+            <h3>This Month Income</h3>
+            <p id="dash-income" class="big-number">$0</p>
+          </div>
+          <div class="card">
+            <h3>This Month Bills</h3>
+            <p id="dash-expenses" class="big-number">$0</p>
+          </div>
+          <div class="card">
+            <h3>End of Month Balance</h3>
+            <p id="dash-end-balance" class="big-number">$0</p>
           </div>
         </div>
 
-        <nav class="sidebar-nav">
-          <button class="nav-button active" data-section="dashboard">
-            <span class="icon">🏠</span> Dashboard
-          </button>
-          <button class="nav-button" data-section="bills">
-            <span class="icon">📅</span> Recurring bills
-          </button>
-          <button class="nav-button" data-section="settings">
-            <span class="icon">⚙️</span> Settings
-          </button>
-        </nav>
-
-        <div class="sidebar-footer">
-          <div id="sidebar-email">Signed in</div>
-          <button id="logout-btn" class="logout-btn">
-            ⏏ Log out
-          </button>
-        </div>
-      </aside>
-
-      <main class="main-content">
-        <header class="top-bar">
-          <div class="top-bar-left">
-            <h1>Bill & Paycheck Calendar</h1>
-            <p>See your daily ending balance based only on recurring bills and income.</p>
+        <div class="cards-row">
+          <div class="card">
+            <h3>Lowest Balance</h3>
+            <p id="dash-lowest-balance" class="big-number">$0</p>
           </div>
-          <div class="top-bar-right">
-            <div class="top-bar-pill">
-              Balance is calculated from:
-              <strong>Starting balance + Recurring income − Recurring bills</strong>
-            </div>
+          <div class="card">
+            <h3>Highest Balance</h3>
+            <p id="dash-highest-balance" class="big-number">$0</p>
+          </div>
+          <div class="card card-wide">
+            <h3>Top Pressure Days</h3>
+            <ul id="dash-pressure-days" class="simple-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CALENDAR VIEW -->
+      <section id="calendar-view" class="view">
+        <header class="view-header">
+          <h2>Calendar</h2>
+          <div class="calendar-controls">
+            <button id="prev-month-btn" class="btn btn-ghost">&lt;</button>
+            <span id="calendar-month-label" class="calendar-month-label"></span>
+            <button id="next-month-btn" class="btn btn-ghost">&gt;</button>
           </div>
         </header>
 
-        <div class="page-scroll">
-          <!-- DASHBOARD SECTION -->
-          <section id="section-dashboard" class="page-section active">
-            <div class="dash-grid">
-              <!-- LEFT: SUMMARY + CALENDAR -->
-              <div class="card">
-                <div class="card-header">
-                  <h2>Month overview</h2>
-                  <div class="card-sub" id="summary-month-label">Loading…</div>
-                </div>
-
-                <div class="metric-row">
-                  <div class="metric-card">
-                    <div class="metric-label">Projected end of month</div>
-                    <div class="metric-value" id="summary-end-balance">$0</div>
-                    <div class="metric-tag">Based on current recurring plan</div>
-                  </div>
-                  <div class="metric-card">
-                    <div class="metric-label">Total recurring income</div>
-                    <div class="metric-value" id="summary-income">$0</div>
-                    <div class="metric-tag">Paychecks + income bills</div>
-                  </div>
-                  <div class="metric-card">
-                    <div class="metric-label">Total recurring bills</div>
-                    <div class="metric-value" id="summary-bills">$0</div>
-                    <div class="metric-tag">Rent, cards, subs, etc.</div>
-                  </div>
-                </div>
-
-                <div class="calendar-wrapper">
-                  <!-- Calendar grid -->
-                  <div class="calendar-panel">
-                    <div class="calendar-controls">
-                      <div class="calendar-controls-left">
-                        <button class="calendar-nav-btn" id="prev-month-btn">&lt;</button>
-                        <div class="calendar-month-label" id="calendar-month-label">
-                          …
-                        </div>
-                        <button class="calendar-nav-btn" id="next-month-btn">&gt;</button>
-                      </div>
-
-                      <div class="calendar-balance-box">
-                        <span>Starting balance</span>
-                        <input type="number" id="calendar-balance-input" step="0.01" />
-                        <button id="calendar-balance-apply">Apply</button>
-                      </div>
-                    </div>
-
-                    <div class="calendar-grid" id="calendar-grid">
-                      <!-- weekday headers + cells rendered by JS -->
-                    </div>
-
-                    <div class="calendar-legend">
-                      <span class="legend-pill">
-                        <span class="dot-income"></span> Income
-                      </span>
-                      <span class="legend-pill">
-                        <span class="dot-bill"></span> Bill
-                      </span>
-                      <span class="legend-pill">
-                        Balance shows end-of-day after that day’s items.
-                      </span>
-                    </div>
-                  </div>
-
-                  <!-- Detail card -->
-                  <div class="calendar-detail-panel">
-                    <div class="calendar-detail-header">
-                      <div>
-                        <h3 id="detail-date-label">Tap a day</h3>
-                        <span id="detail-type-label">You’ll see bills + income here</span>
-                      </div>
-                      <div id="detail-balance-label">$0</div>
-                    </div>
-
-                    <div class="calendar-detail-list" id="calendar-detail-list">
-                      <p class="empty">
-                        Click a day with a dot to see the exact bills and paychecks.
-                      </p>
-                    </div>
-
-                    <div class="calendar-detail-footer">
-                      <span id="detail-income-summary">Income: $0</span>
-                      <span id="detail-bill-summary">Bills: $0</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- RIGHT: QUICK NOTES / BILL SUMMARY -->
-              <div class="card">
-                <div class="card-header">
-                  <h2>This month’s pressure points</h2>
-                </div>
-                <div class="card-sub" id="pressure-points">
-                  We’ll highlight heavy bill clusters once we have your data.
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- BILLS SECTION -->
-          <section id="section-bills" class="page-section">
-            <div class="card">
-              <div class="section-heading">Recurring bills & paychecks</div>
-              <div class="section-sub">
-                These are the only things used by the calendar. Transactions and PDF uploads are ignored here on
-                purpose.
-              </div>
-
-              <div class="inline-form">
-                <input id="bill-name" type="text" placeholder="Name (rent, paycheck, Chase…)" />
-                <input id="bill-amount" type="number" placeholder="Amount" step="0.01" />
-                <select id="bill-type">
-                  <option value="expense">Bill (expense)</option>
-                  <option value="income">Income</option>
-                </select>
-                <input id="bill-frequency" type="number" placeholder="Every X days" />
-                <input id="bill-start" type="date" />
-                <button id="bill-add-btn">Add</button>
-              </div>
-
-              <div class="table-list" id="bills-table">
-                <!-- header -->
-              </div>
-            </div>
-          </section>
-
-          <!-- SETTINGS SECTION -->
-          <section id="section-settings" class="page-section">
-            <div class="section-row">
-              <div class="card">
-                <div class="section-heading">Paycheck settings</div>
-                <div class="section-sub">
-                  This feeds into the calendar as an extra recurring income stream
-                  (on top of any "income" items you add above).
-                </div>
-
-                <div class="inline-form">
-                  <input id="paycheck-amount" type="number" placeholder="Paycheck amount" step="0.01" />
-                  <input id="paycheck-frequency" type="number" placeholder="Every X days" />
-                  <button id="paycheck-save-btn">Save paycheck</button>
-                </div>
-
-                <div id="paycheck-settings-note" class="card-sub">
-                  Loading…
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="section-heading">Starting balance for calendar</div>
-                <div class="section-sub">
-                  This is used as the starting point for the month. You can tweak it here or directly in the calendar
-                  box at the top right.
-                </div>
-
-                <div class="inline-form">
-                  <input id="start-balance" type="number" placeholder="Starting balance" step="0.01" />
-                  <input id="start-date" type="date" />
-                  <button id="start-balance-save-btn">Save starting balance</button>
-                </div>
-
-                <div id="start-balance-note" class="card-sub">
-                  Loading…
-                </div>
-              </div>
-            </div>
-          </section>
+        <div class="calendar-summary">
+          <div>
+            <span class="summary-label">Income:</span>
+            <span id="cal-income" class="summary-value">$0</span>
+          </div>
+          <div>
+            <span class="summary-label">Bills:</span>
+            <span id="cal-expenses" class="summary-value">$0</span>
+          </div>
+          <div>
+            <span class="summary-label">Net:</span>
+            <span id="cal-net" class="summary-value">$0</span>
+          </div>
         </div>
-      </main>
-    </div>
+
+        <div id="calendar-grid" class="calendar-grid">
+          <!-- Filled by calendar.js using backend /api/calendar/month -->
+        </div>
+      </section>
+
+      <!-- RECURRING VIEW -->
+      <section id="recurring-view" class="view">
+        <h2>Recurring Items</h2>
+
+        <form id="recurring-form" class="form-row">
+          <input type="text" id="rec-name" placeholder="Name (Rent, Paycheck…)" required />
+          <input type="number" id="rec-amount" placeholder="Amount" step="0.01" required />
+          <select id="rec-type" required>
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+          <select id="rec-frequency" required>
+            <option value="monthly">Monthly</option>
+            <option value="biweekly">Biweekly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+          <input type="date" id="rec-start-date" required />
+          <button type="submit" class="btn btn-primary">Add / Save</button>
+        </form>
+
+        <p id="recurring-error" class="form-error"></p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Frequency</th>
+              <th>Amount</th>
+              <th>Start Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="recurring-table-body">
+            <!-- Filled by recurring.js -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SETTINGS VIEW -->
+      <section id="settings-view" class="view">
+        <h2>Settings</h2>
+
+        <div class="settings-section">
+          <h3>Starting Balance</h3>
+          <form id="starting-balance-form" class="form-row">
+            <input
+              type="number"
+              id="starting-balance-input"
+              placeholder="Starting balance"
+              step="0.01"
+              required
+            />
+            <button type="submit" class="btn btn-secondary">Save</button>
+          </form>
+          <p id="starting-balance-status" class="form-status"></p>
+        </div>
+
+        <div class="settings-section">
+          <h3>Paycheck Settings</h3>
+          <form id="paycheck-form" class="form-row">
+            <input
+              type="number"
+              id="pay-amount-input"
+              placeholder="Paycheck amount"
+              step="0.01"
+              required
+            />
+            <select id="pay-frequency-input" required>
+              <option value="weekly">Weekly</option>
+              <option value="biweekly" selected>Biweekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+            <input type="date" id="pay-start-date-input" required />
+            <button type="submit" class="btn btn-secondary">Save</button>
+          </form>
+          <p id="paycheck-status" class="form-status"></p>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <!-- =========================================
-       FRONTEND LOGIC
-       ========================================= -->
-  <script>
-    (function () {
-      const API_BASE = ""; // same origin
-
-      let authToken = localStorage.getItem("token") || null;
-      let currentEmail = localStorage.getItem("email") || null;
-
-      let recurringBills = [];
-      let paycheckSettings = { amount: 0, frequencyDays: 14 };
-      let startingSettings = { balance: 0, date: null };
-
-      const today = new Date();
-      let calendarState = {
-        year: today.getFullYear(),
-        month: today.getMonth(), // 0-based
-        startingBalance: 0,
-        ledger: [] // array of {dateStr, incomeTotal, billTotal, balance, items: []}
-      };
-
-      // ===============================
-      // HELPER: FETCH WRAPPER
-      // ===============================
-
-      async function apiRequest(path, options = {}) {
-        const headers = options.headers || {};
-        if (authToken) {
-          headers["Authorization"] = "Bearer " + authToken;
-        }
-        if (options.body && !headers["Content-Type"]) {
-          headers["Content-Type"] = "application/json";
-        }
-        const res = await fetch(API_BASE + path, {
-          ...options,
-          headers
-        });
-        if (!res.ok) {
-          let err;
-          try {
-            err = await res.json();
-          } catch {
-            err = { error: res.statusText || "Request failed" };
-          }
-          throw new Error(err.error || "Request failed");
-        }
-        try {
-          return await res.json();
-        } catch {
-          return null;
-        }
-      }
-
-      function formatCurrency(value) {
-        const num = Number(value || 0);
-        const sign = num < 0 ? "-" : "";
-        return sign + "$" + Math.abs(num).toFixed(2);
-      }
-
-      function formatMonthYear(year, monthIndex) {
-        return new Date(year, monthIndex, 1).toLocaleDateString("en-US", {
-          month: "long",
-          year: "numeric"
-        });
-      }
-
-      // ===============================
-      // AUTH UI
-      // ===============================
-
-      const authScreen = document.getElementById("auth-screen");
-      const appRoot = document.getElementById("app");
-      const sidebarEmail = document.getElementById("sidebar-email");
-      const logoutBtn = document.getElementById("logout-btn");
-
-      const loginPane = document.getElementById("login-pane");
-      const signupPane = document.getElementById("signup-pane");
-      const loginForm = document.getElementById("login-form");
-      const signupForm = document.getElementById("signup-form");
-      const loginMsg = document.getElementById("login-message");
-      const signupMsg = document.getElementById("signup-message");
-      const loginEmail = document.getElementById("login-email");
-      const loginPassword = document.getElementById("login-password");
-      const signupEmail = document.getElementById("signup-email");
-      const signupPassword = document.getElementById("signup-password");
-      const authTabButtons = document.querySelectorAll(".auth-tab-btn");
-
-      function setAuthMode(mode) {
-        authTabButtons.forEach((btn) => {
-          const m = btn.getAttribute("data-auth-tab");
-          btn.classList.toggle("active", m === mode);
-        });
-        if (mode === "login") {
-          loginPane.classList.remove("hidden");
-          signupPane.classList.add("hidden");
-        } else {
-          signupPane.classList.remove("hidden");
-          loginPane.classList.add("hidden");
-        }
-      }
-
-      authTabButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const mode = btn.getAttribute("data-auth-tab");
-          setAuthMode(mode);
-        });
-      });
-
-      loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        loginMsg.classList.add("hidden");
-        try {
-          const payload = {
-            email: loginEmail.value.trim(),
-            password: loginPassword.value
-          };
-          const res = await apiRequest("/api/auth/login", {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-          authToken = res.token;
-          currentEmail = res.email;
-          localStorage.setItem("token", authToken);
-          localStorage.setItem("email", currentEmail);
-          await enterApp();
-        } catch (err) {
-          loginMsg.textContent = err.message || "Login failed";
-          loginMsg.classList.remove("hidden");
-        }
-      });
-
-      signupForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        signupMsg.classList.add("hidden");
-        try {
-          const payload = {
-            email: signupEmail.value.trim(),
-            password: signupPassword.value
-          };
-          const res = await apiRequest("/api/auth/signup", {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-          authToken = res.token;
-          currentEmail = res.email;
-          localStorage.setItem("token", authToken);
-          localStorage.setItem("email", currentEmail);
-          await enterApp();
-        } catch (err) {
-          signupMsg.textContent = err.message || "Signup failed";
-          signupMsg.classList.remove("hidden");
-        }
-      });
-
-      logoutBtn.addEventListener("click", () => {
-        authToken = null;
-        currentEmail = null;
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
-        showAuthScreen();
-      });
-
-      function showAuthScreen() {
-        authScreen.classList.remove("hidden");
-        appRoot.classList.add("hidden");
-      }
-
-      function showAppShell() {
-        authScreen.classList.add("hidden");
-        appRoot.classList.remove("hidden");
-        if (currentEmail) {
-          sidebarEmail.textContent = currentEmail;
-        }
-      }
-
-      // ===============================
-      // NAV / SECTION SWITCHING
-      // ===============================
-
-      const navButtons = document.querySelectorAll(".nav-button");
-      const sections = {
-        dashboard: document.getElementById("section-dashboard"),
-        bills: document.getElementById("section-bills"),
-        settings: document.getElementById("section-settings")
-      };
-
-      function setActiveSection(name) {
-        Object.entries(sections).forEach(([key, el]) => {
-          el.classList.toggle("active", key === name);
-        });
-        navButtons.forEach((btn) => {
-          btn.classList.toggle(
-            "active",
-            btn.getAttribute("data-section") === name
-          );
-        });
-      }
-
-      navButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const name = btn.getAttribute("data-section");
-          setActiveSection(name);
-        });
-      });
-
-      // ===============================
-      // BILLS UI
-      // ===============================
-
-      const billNameInput = document.getElementById("bill-name");
-      const billAmountInput = document.getElementById("bill-amount");
-      const billTypeSelect = document.getElementById("bill-type");
-      const billFrequencyInput = document.getElementById("bill-frequency");
-      const billStartInput = document.getElementById("bill-start");
-      const billAddBtn = document.getElementById("bill-add-btn");
-      const billsTable = document.getElementById("bills-table");
-
-      billAddBtn.addEventListener("click", async () => {
-        if (!billNameInput.value.trim()) return;
-        if (!billAmountInput.value) return;
-        if (!billFrequencyInput.value) return;
-        if (!billStartInput.value) return;
-
-        const payload = {
-          name: billNameInput.value.trim(),
-          amount: Number(billAmountInput.value),
-          type: billTypeSelect.value,
-          frequency: Number(billFrequencyInput.value),
-          startDate: billStartInput.value
-        };
-
-        try {
-          await apiRequest("/api/recurring-bills", {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-          billNameInput.value = "";
-          billAmountInput.value = "";
-          billFrequencyInput.value = "";
-          billStartInput.value = "";
-          await loadRecurringBills();
-          buildCalendar();
-        } catch (err) {
-          alert("Failed to add bill: " + err.message);
-        }
-      });
-
-      async function loadRecurringBills() {
-        try {
-          const data = await apiRequest("/api/recurring-bills");
-          recurringBills = Array.isArray(data) ? data : [];
-          renderBillsTable();
-        } catch (err) {
-          recurringBills = [];
-          renderBillsTable();
-        }
-      }
-
-      function renderBillsTable() {
-        if (!recurringBills.length) {
-          billsTable.innerHTML =
-            '<div class="card-sub">No recurring items yet. Add rent, car, cards, paychecks, etc.</div>';
-          return;
-        }
-
-        let html = `
-          <div class="table-row table-header">
-            <div>Name</div>
-            <div>Amount</div>
-            <div>Type</div>
-            <div>Every (days)</div>
-            <div>Starts</div>
-            <div></div>
-          </div>
-        `;
-
-        for (const bill of recurringBills) {
-          html += `
-            <div class="table-row">
-              <div>${bill.name || ""}</div>
-              <div class="table-cell-amount ${bill.type === "income" ? "income" : "expense"}">
-                ${formatCurrency(bill.amount || 0)}
-              </div>
-              <div><span class="chip">${bill.type === "income" ? "Income" : "Bill"}</span></div>
-              <div>${bill.frequency || ""}</div>
-              <div>${bill.startDate || ""}</div>
-              <div>
-                <button data-bill-id="${bill.id}" class="delete-bill-btn">✕</button>
-              </div>
-            </div>
-          `;
-        }
-
-        billsTable.innerHTML = html;
-
-        billsTable.querySelectorAll(".delete-bill-btn").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            const id = btn.getAttribute("data-bill-id");
-            if (!id) return;
-            if (!confirm("Delete this recurring item?")) return;
-            try {
-              await apiRequest("/api/recurring-bills/" + encodeURIComponent(id), {
-                method: "DELETE"
-              });
-              await loadRecurringBills();
-              buildCalendar();
-            } catch (err) {
-              alert("Failed to delete: " + err.message);
-            }
-          });
-        });
-      }
-
-      // ===============================
-      // SETTINGS UI
-      // ===============================
-
-      const paycheckAmountInput = document.getElementById("paycheck-amount");
-      const paycheckFreqInput = document.getElementById("paycheck-frequency");
-      const paycheckSaveBtn = document.getElementById("paycheck-save-btn");
-      const paycheckNote = document.getElementById("paycheck-settings-note");
-
-      const startBalanceInput = document.getElementById("start-balance");
-      const startDateInput = document.getElementById("start-date");
-      const startSaveBtn = document.getElementById("start-balance-save-btn");
-      const startNote = document.getElementById("start-balance-note");
-
-      paycheckSaveBtn.addEventListener("click", async () => {
-        if (!paycheckAmountInput.value || !paycheckFreqInput.value) return;
-        const payload = {
-          amount: Number(paycheckAmountInput.value),
-          frequencyDays: Number(paycheckFreqInput.value)
-        };
-        try {
-          const res = await apiRequest("/api/paycheck-settings", {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-          paycheckSettings.amount = res.amount;
-          paycheckSettings.frequencyDays = res.frequencyDays;
-          renderPaycheckNote();
-          buildCalendar();
-        } catch (err) {
-          alert("Failed to save paycheck: " + err.message);
-        }
-      });
-
-      startSaveBtn.addEventListener("click", async () => {
-        if (!startBalanceInput.value || !startDateInput.value) return;
-        const payload = {
-          balance: Number(startBalanceInput.value),
-          date: startDateInput.value
-        };
-        try {
-          const res = await apiRequest("/api/starting-balance", {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-          startingSettings.balance = res.balance;
-          startingSettings.date = res.date;
-          calendarState.startingBalance = startingSettings.balance;
-          calendarBalanceInput.value = calendarState.startingBalance.toFixed(2);
-          renderStartNote();
-          buildCalendar();
-        } catch (err) {
-          alert("Failed to save starting balance: " + err.message);
-        }
-      });
-
-      async function loadSettings() {
-        try {
-          const ps = await apiRequest("/api/paycheck-settings");
-          paycheckSettings.amount = ps.amount || 0;
-          paycheckSettings.frequencyDays = ps.frequencyDays || 14;
-        } catch {
-          paycheckSettings = { amount: 0, frequencyDays: 14 };
-        }
-
-        try {
-          const sb = await apiRequest("/api/starting-balance");
-          startingSettings.balance = sb.balance || 0;
-          startingSettings.date = sb.date || null;
-          calendarState.startingBalance = startingSettings.balance;
-        } catch {
-          startingSettings = { balance: 0, date: null };
-          calendarState.startingBalance = 0;
-        }
-
-        paycheckAmountInput.value = paycheckSettings.amount || "";
-        paycheckFreqInput.value = paycheckSettings.frequencyDays || "";
-        startBalanceInput.value =
-          startingSettings.balance !== null && startingSettings.balance !== undefined
-            ? startingSettings.balance
-            : "";
-        startDateInput.value = startingSettings.date || "";
-
-        calendarBalanceInput.value = calendarState.startingBalance.toFixed(2);
-
-        renderPaycheckNote();
-        renderStartNote();
-      }
-
-      function renderPaycheckNote() {
-        if (!paycheckSettings.amount || !paycheckSettings.frequencyDays) {
-          paycheckNote.textContent =
-            "No paycheck configured yet. Add amount and frequency to include it in the calendar.";
-        } else {
-          paycheckNote.textContent =
-            `Using paycheck of ${formatCurrency(paycheckSettings.amount)} every ` +
-            `${paycheckSettings.frequencyDays} days in calendar projections.`;
-        }
-      }
-
-      function renderStartNote() {
-        if (!startingSettings.date) {
-          startNote.textContent =
-            "No saved starting balance yet. You can also set it directly on the calendar.";
-        } else {
-          startNote.textContent =
-            `Starting balance ${formatCurrency(startingSettings.balance)} from ${startingSettings.date}.`;
-        }
-      }
-
-      // ===============================
-      // CALENDAR ENGINE
-      // ===============================
-
-      const calendarMonthLabel = document.getElementById("calendar-month-label");
-      const calendarGrid = document.getElementById("calendar-grid");
-      const prevMonthBtn = document.getElementById("prev-month-btn");
-      const nextMonthBtn = document.getElementById("next-month-btn");
-      const calendarBalanceInput = document.getElementById("calendar-balance-input");
-      const calendarBalanceApply = document.getElementById("calendar-balance-apply");
-
-      const summaryMonthLabel = document.getElementById("summary-month-label");
-      const summaryEndBalance = document.getElementById("summary-end-balance");
-      const summaryIncome = document.getElementById("summary-income");
-      const summaryBills = document.getElementById("summary-bills");
-      const pressurePoints = document.getElementById("pressure-points");
-
-      const detailDateLabel = document.getElementById("detail-date-label");
-      const detailTypeLabel = document.getElementById("detail-type-label");
-      const detailBalanceLabel = document.getElementById("detail-balance-label");
-      const detailList = document.getElementById("calendar-detail-list");
-      const detailIncomeSummary = document.getElementById("detail-income-summary");
-      const detailBillSummary = document.getElementById("detail-bill-summary");
-
-      calendarBalanceApply.addEventListener("click", () => {
-        const value = Number(calendarBalanceInput.value || 0);
-        calendarState.startingBalance = value;
-        buildCalendar();
-      });
-
-      prevMonthBtn.addEventListener("click", () => {
-        calendarState.month--;
-        if (calendarState.month < 0) {
-          calendarState.month = 11;
-          calendarState.year--;
-        }
-        buildCalendar();
-      });
-
-      nextMonthBtn.addEventListener("click", () => {
-        calendarState.month++;
-        if (calendarState.month > 11) {
-          calendarState.month = 0;
-          calendarState.year++;
-        }
-        buildCalendar();
-      });
-
-      function generateCalendarLedger() {
-        const year = calendarState.year;
-        const month = calendarState.month;
-        const startOfMonth = new Date(year, month, 1);
-        const endOfMonth = new Date(year, month + 1, 0);
-        const daysInMonth = endOfMonth.getDate();
-
-        let running = calendarState.startingBalance || 0;
-        const ledger = [];
-
-        const extraIncomeBills = [];
-        if (paycheckSettings.amount && paycheckSettings.frequencyDays) {
-          extraIncomeBills.push({
-            name: "Paycheck",
-            amount: paycheckSettings.amount,
-            type: "income",
-            frequency: paycheckSettings.frequencyDays,
-            startDate: startingSettings.date || new Date(year, month, 1).toISOString().slice(0, 10)
-          });
-        }
-
-        const items = [...recurringBills, ...extraIncomeBills];
-
-        function occursOnDate(bill, dateObj) {
-          if (!bill.startDate || !bill.frequency) return false;
-          const start = new Date(bill.startDate);
-          if (dateObj < start) return false;
-          const diffMs = dateObj.getTime() - start.getTime();
-          const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-          if (diffDays < 0) return false;
-          return diffDays % bill.frequency === 0;
-        }
-
-        for (let day = 1; day <= daysInMonth; day++) {
-          const dateObj = new Date(year, month, day);
-          const dateStr = dateObj.toISOString().slice(0, 10);
-          let incomeTotal = 0;
-          let billTotal = 0;
-          const dayItems = [];
-
-          for (const bill of items) {
-            if (occursOnDate(bill, dateObj)) {
-              const amt = Number(bill.amount || 0);
-              if (bill.type === "income") {
-                incomeTotal += amt;
-                dayItems.push({
-                  name: bill.name || "Income",
-                  amount: amt,
-                  type: "income"
-                });
-              } else {
-                billTotal += amt;
-                dayItems.push({
-                  name: bill.name || "Bill",
-                  amount: amt,
-                  type: "bill"
-                });
-              }
-            }
-          }
-
-          running = running + incomeTotal - billTotal;
-
-          ledger.push({
-            dateStr,
-            dateObj,
-            incomeTotal,
-            billTotal,
-            balance: running,
-            items: dayItems
-          });
-        }
-
-        calendarState.ledger = ledger;
-      }
-
-      function buildCalendar() {
-        generateCalendarLedger();
-
-        const year = calendarState.year;
-        const month = calendarState.month;
-        const monthLabel = formatMonthYear(year, month);
-        calendarMonthLabel.textContent = monthLabel;
-        summaryMonthLabel.textContent = monthLabel;
-
-        const ledger = calendarState.ledger;
-        const endDay = ledger[ledger.length - 1];
-        const totalIncome = ledger.reduce((s, d) => s + d.incomeTotal, 0);
-        const totalBills = ledger.reduce((s, d) => s + d.billTotal, 0);
-
-        summaryEndBalance.textContent = formatCurrency(endDay.balance);
-        summaryIncome.textContent = formatCurrency(totalIncome);
-        summaryBills.textContent = formatCurrency(totalBills);
-
-        const daysWithHeavyBills = ledger.filter((d) => d.billTotal >= (totalBills / 10 || 1));
-        if (!ledger.length || !daysWithHeavyBills.length) {
-          pressurePoints.textContent =
-            "Once you add bills and income, we’ll highlight days where a lot hits at once.";
-        } else {
-          const worst = [...daysWithHeavyBills].sort((a, b) => b.billTotal - a.billTotal).slice(0, 3);
-          const lines = worst.map(
-            (d) =>
-              `${d.dateStr}: ${formatCurrency(-d.billTotal)} in bills, ending at ${formatCurrency(d.balance)}`
-          );
-          pressurePoints.textContent =
-            "Heaviest bill days this month:\n• " + lines.join("\n• ");
-        }
-
-        renderCalendarGrid();
-      }
-
-      function renderCalendarGrid() {
-        const year = calendarState.year;
-        const month = calendarState.month;
-        const firstDay = new Date(year, month, 1);
-        const startWeekday = firstDay.getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        const weekNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-        let html = "";
-        for (const w of weekNames) {
-          html += `<div class="calendar-weekday">${w}</div>`;
-        }
-
-        for (let i = 0; i < startWeekday; i++) {
-          html += `<div class="calendar-cell outside"></div>`;
-        }
-
-        const ledger = calendarState.ledger;
-
-        function findDayLedger(day) {
-          const m = month + 1;
-          const dayStr = day.toString().padStart(2, "0");
-          const monthStr = m.toString().padStart(2, "0");
-          const dateStr = `${year}-${monthStr}-${dayStr}`;
-          return ledger.find((d) => d.dateStr === dateStr);
-        }
-
-        for (let day = 1; day <= daysInMonth; day++) {
-          const info = findDayLedger(day);
-          const hasIncome = info && info.incomeTotal > 0;
-          const hasBill = info && info.billTotal > 0;
-          const balanceText = info ? formatCurrency(info.balance) : "";
-
-          let dotRow = "";
-          if (hasIncome) dotRow += `<span class="dot-income"></span>`;
-          if (hasBill) dotRow += `<span class="dot-bill"></span>`;
-
-          html += `
-            <div class="calendar-cell" data-day="${day}">
-              <div class="day-number">${day}</div>
-              <div class="dot-row">${dotRow}</div>
-              <div class="balance">${balanceText}</div>
-            </div>
-          `;
-        }
-
-        calendarGrid.innerHTML = html;
-
-        calendarGrid.querySelectorAll(".calendar-cell").forEach((cell) => {
-          const day = cell.getAttribute("data-day");
-          if (!day) return;
-          cell.addEventListener("click", () => showDayDetail(Number(day)));
-        });
-
-        const todayDate = new Date();
-        if (
-          todayDate.getFullYear() === year &&
-          todayDate.getMonth() === month
-        ) {
-          const cell = calendarGrid.querySelector(
-            `.calendar-cell[data-day="${todayDate.getDate()}"]`
-          );
-          if (cell) {
-            cell.style.boxShadow = "0 0 0 1px rgba(79, 209, 197, 0.8)";
-          }
-        }
-
-        detailList.innerHTML =
-          '<p class="empty">Click a day with dots to see details.</p>';
-        detailDateLabel.textContent = "Tap a day";
-        detailTypeLabel.textContent = "You’ll see bills + income here";
-        detailBalanceLabel.textContent = "$0";
-        detailIncomeSummary.textContent = "Income: $0";
-        detailBillSummary.textContent = "Bills: $0";
-      }
-
-      function showDayDetail(day) {
-        const ledger = calendarState.ledger;
-        const year = calendarState.year;
-        const month = calendarState.month + 1;
-        const dateStr = `${year}-${month.toString().padStart(2, "0")}-${day
-          .toString()
-          .padStart(2, "0")}`;
-
-        const info = ledger.find((d) => d.dateStr === dateStr);
-        if (!info) {
-          detailList.innerHTML =
-            '<p class="empty">No recurring items for this day.</p>';
-          detailDateLabel.textContent = dateStr;
-          detailTypeLabel.textContent = "No bills or income scheduled.";
-          detailBalanceLabel.textContent = "$0";
-          detailIncomeSummary.textContent = "Income: $0";
-          detailBillSummary.textContent = "Bills: $0";
-          return;
-        }
-
-        detailDateLabel.textContent = dateStr;
-        detailTypeLabel.textContent =
-          "End-of-day balance after the items below.";
-        detailBalanceLabel.textContent = formatCurrency(info.balance);
-
-        const totalIncome = info.incomeTotal;
-        const totalBills = info.billTotal;
-
-        detailIncomeSummary.textContent = "Income: " + formatCurrency(totalIncome);
-        detailBillSummary.textContent = "Bills: " + formatCurrency(-totalBills);
-
-        if (!info.items.length) {
-          detailList.innerHTML =
-            '<p class="empty">No recurring items for this day.</p>';
-          return;
-        }
-
-        let html = "";
-        for (const item of info.items) {
-          html += `
-            <div class="calendar-item-row">
-              <div class="calendar-item-left">
-                <div class="calendar-item-name">${item.name}</div>
-                <div class="calendar-item-type">
-                  ${item.type === "income" ? "Income" : "Bill"}
-                </div>
-              </div>
-              <div class="calendar-item-amount ${
-                item.type === "income" ? "income" : "bill"
-              }">
-                ${formatCurrency(item.type === "income" ? item.amount : -item.amount)}
-              </div>
-            </div>
-          `;
-        }
-
-        detailList.innerHTML = html;
-      }
-
-      // ===============================
-      // ENTER APP (AFTER LOGIN)
-      // ===============================
-
-      async function enterApp() {
-        showAppShell();
-        await Promise.all([loadRecurringBills(), loadSettings()]);
-        buildCalendar();
-      }
-
-      // ===============================
-      // INIT
-      // ===============================
-
-      (async function init() {
-        if (authToken) {
-          try {
-            await apiRequest("/api/auth/verify");
-            await enterApp();
-          } catch {
-            authToken = null;
-            localStorage.removeItem("token");
-            showAuthScreen();
-          }
-        } else {
-          showAuthScreen();
-        }
-      })();
-    })();
-  </script>
+  <!-- Frontend App (modular JS) -->
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>

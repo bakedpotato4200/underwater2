@@ -1,44 +1,64 @@
+// backend/routes/transactionRoutes.js
+// ========================================
+// Underground Water 2 - Transaction Routes
+// ========================================
+
 import express from "express";
 import Transaction from "../models/Transaction.js";
-import authMiddleware from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-// Get all transactions for user
-router.get("/", authMiddleware, async (req, res) => {
+// ========================================
+// GET ALL TRANSACTIONS FOR USER
+// GET /api/transactions
+// ========================================
+router.get("/", auth, async (req, res) => {
   try {
-    const transactions = await Transaction.find({ userId: req.userId }).sort({
-      date: -1,
-    });
+    const transactions = await Transaction.find({
+      userId: req.userId
+    }).sort({ date: -1 });
+
     res.json(transactions);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Get transactions error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-// Create a new transaction
-router.post("/", authMiddleware, async (req, res) => {
+// ========================================
+// CREATE A NEW TRANSACTION
+// POST /api/transactions
+// ========================================
+router.post("/", auth, async (req, res) => {
   try {
     const transaction = await Transaction.create({
       ...req.body,
       userId: req.userId,
     });
+
     res.json(transaction);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Create transaction error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-// Delete transaction
-router.delete("/:id", authMiddleware, async (req, res) => {
+// ========================================
+// DELETE A TRANSACTION
+// DELETE /api/transactions/:id
+// ========================================
+router.delete("/:id", auth, async (req, res) => {
   try {
     await Transaction.findOneAndDelete({
       _id: req.params.id,
       userId: req.userId,
     });
-    res.json({ message: "Deleted" });
+
+    res.json({ message: "Transaction deleted" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Delete transaction error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 

@@ -1,0 +1,348 @@
+/* =========================================
+   Underground Water 2 - Clean UI Styles
+   ========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  background: #f5f5f7;
+  color: #1a1a1a;
+  min-height: 100vh;
+}
+
+/* -------------------------------
+   AUTH SCREEN
+   ------------------------------- */
+.auth-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #111;
+  color: #fff;
+}
+
+.auth-card {
+  background: #1e1e1e;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.app-title {
+  font-size: 2rem;
+  margin-bottom: 0.4rem;
+}
+
+.app-subtitle {
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+}
+
+.auth-toggle {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+.auth-tab-active {
+  background: #4c8bf5;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.auth-form-hidden {
+  display: none;
+}
+
+.auth-error {
+  color: #ff4f4f;
+  font-size: 0.85rem;
+  min-height: 18px;
+}
+
+input, select {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.btn {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background: #4c8bf5;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #2ecc71;
+  color: #fff;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #333;
+}
+
+.form-error, .form-status {
+  font-size: 0.85rem;
+  min-height: 18px;
+}
+
+/* -------------------------------
+   APP SHELL
+   ------------------------------- */
+.app-shell {
+  display: flex;
+  height: 100vh;
+}
+
+.app-shell-hidden {
+  display: none;
+}
+
+/* -------------------------------
+   SIDEBAR
+   ------------------------------- */
+.sidebar {
+  width: 240px;
+  background: #1e1e1e;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.sidebar-header {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sidebar-logo {
+  background: #4c8bf5;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-item {
+  text-align: left;
+  background: none;
+  border: none;
+  color: #ddd;
+  padding: 0.7rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.nav-item-active {
+  background: #333;
+  color: #fff;
+  border-radius: 6px;
+}
+
+.sidebar-footer {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sidebar-user {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* -------------------------------
+   MAIN CONTENT
+   ------------------------------- */
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.view {
+  display: none;
+}
+
+.view-active {
+  display: block;
+}
+
+.view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cards-row {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  flex: 1;
+  min-width: 200px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.card-wide {
+  flex: 2;
+}
+
+.big-number {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-top: 0.6rem;
+}
+
+.simple-list {
+  padding: 0.5rem;
+  list-style: none;
+}
+
+/* -------------------------------
+   CALENDAR
+   ------------------------------- */
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.calendar-summary {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar-day {
+  background: #fff;
+  padding: 0.6rem;
+  min-height: 90px;
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.calendar-day-header {
+  font-weight: bold;
+}
+
+.calendar-event-income {
+  color: #2ecc71;
+  font-size: 0.75rem;
+}
+
+.calendar-event-expense {
+  color: #e74c3c;
+  font-size: 0.75rem;
+}
+
+/* -------------------------------
+   TABLES
+   ------------------------------- */
+.data-table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.6rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.data-table button {
+  padding: 0.4rem 0.6rem;
+}
+
+/* -------------------------------
+   FORMS
+   ------------------------------- */
+.form-row {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+/* Mobile adjustments */
+@media (max-width: 700px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .cards-row {
+    flex-direction: column;
+  }
+
+  .calendar-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

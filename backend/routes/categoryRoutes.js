@@ -1,42 +1,61 @@
+// backend/routes/categoryRoutes.js
+// ========================================
+// Underground Water 2 - Category Routes
+// ========================================
+
 import express from "express";
 import Category from "../models/Category.js";
-import authMiddleware from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-// Get categories for user
-router.get("/", authMiddleware, async (req, res) => {
+// ========================================
+// GET CATEGORIES FOR USER
+// GET /api/categories
+// ========================================
+router.get("/", auth, async (req, res) => {
   try {
     const categories = await Category.find({ userId: req.userId });
     res.json(categories);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Get categories error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-// Create category
-router.post("/", authMiddleware, async (req, res) => {
+// ========================================
+// CREATE CATEGORY
+// POST /api/categories
+// ========================================
+router.post("/", auth, async (req, res) => {
   try {
     const category = await Category.create({
       ...req.body,
       userId: req.userId,
     });
+
     res.json(category);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Create category error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-// Delete category
-router.delete("/:id", authMiddleware, async (req, res) => {
+// ========================================
+// DELETE CATEGORY
+// DELETE /api/categories/:id
+// ========================================
+router.delete("/:id", auth, async (req, res) => {
   try {
     await Category.findOneAndDelete({
       _id: req.params.id,
       userId: req.userId,
     });
-    res.json({ message: "Deleted" });
+
+    res.json({ message: "Category deleted" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Delete category error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 

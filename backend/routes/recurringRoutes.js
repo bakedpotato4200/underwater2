@@ -1,48 +1,84 @@
+// backend/routes/recurringRoutes.js
+// ========================================
+// Underground Water 2 - Recurring Items
+// Handles recurring bills & recurring income.
+// ========================================
+
 import express from "express";
-import RecurringTransaction from "../models/recurringTransaction.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import Recurring from "../models/Recurring.js";  // NEW clean model
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-// GET ALL RECURRING TRANSACTIONS
-router.get("/", authMiddleware, async (req, res) => {
+// ========================================
+// GET ALL RECURRING ITEMS (bills + income)
+// GET /api/recurring
+// ========================================
+router.get("/", auth, async (req, res) => {
   try {
-    const recurringItems = await RecurringTransaction.find({ userId: req.user.id });
-    res.json(recurringItems);
-  } catch (error) {
-    console.error("Error fetching recurring:", error);
-    res.status(500).json({ message: "Server error fetching recurring transactions" });
+    const items = await Recurring.find({ userId: req.userId });
+    res.json(items);
+  } catch (err) {
+    console.error("Get recurring error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-// CREATE RECURRING
-router.post("/", authMiddleware, async (req, res) => {
+// ========================================
+// CREATE RECURRING ITEM
+// POST /api/recurring
+// ========================================
+router.post("/", auth, async (req, res) => {
   try {
-    const newRecurring = new RecurringTransaction({
+    const item = await Recurring.create({
       ...req.body,
-      userId: req.user.id,
+      userId: req.userId,
     });
 
-    await newRecurring.save();
-    res.json(newRecurring);
-  } catch (error) {
-    console.error("Error creating recurring:", error);
-    res.status(500).json({ message: "Server error creating recurring transaction" });
+    res.json(item);
+  } catch (err) {
+    console.error("Create recurring error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-// DELETE RECURRING
-router.delete("/:id", authMiddleware, async (req, res) => {
+// ========================================
+// UPDATE RECURRING ITEM
+// PUT /api/recurring/:id
+// ========================================
+router.put("/:id", auth, async (req, res) => {
   try {
-    await RecurringTransaction.findOneAndDelete({
+    const updated = await Recurring.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.userId,
+      },
+      req.body,
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    console.error("Update recurring error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ========================================
+// DELETE RECURRING ITEM
+// DELETE /api/recurring/:id
+// ========================================
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    await Recurring.findOneAndDelete({
       _id: req.params.id,
-      userId: req.user.id,
+      userId: req.userId,
     });
 
-    res.json({ message: "Recurring transaction deleted" });
-  } catch (error) {
-    console.error("Error deleting recurring:", error);
-    res.status(500).json({ message: "Server error deleting recurring transaction" });
+    res.json({ message: "Recurring item deleted" });
+  } catch (err) {
+    console.error("Delete recurring error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 

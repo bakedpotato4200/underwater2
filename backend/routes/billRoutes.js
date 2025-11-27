@@ -1,64 +1,80 @@
+// backend/routes/billRoutes.js
+// ========================================
+// Underground Water 2 - Bill Routes
+// ========================================
+
 import express from "express";
 import Bill from "../models/Bill.js";
-import authMiddleware from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-/**
- * GET ALL BILLS FOR USER
- */
-router.get("/", authMiddleware, async (req, res) => {
+// ========================================
+// GET ALL BILLS FOR THE USER
+// GET /api/bills
+// ========================================
+router.get("/", auth, async (req, res) => {
   try {
     const bills = await Bill.find({ userId: req.userId });
     res.json(bills);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Get bills error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-/**
- * CREATE A NEW BILL
- */
-router.post("/", authMiddleware, async (req, res) => {
+// ========================================
+// CREATE A NEW BILL
+// POST /api/bills
+// ========================================
+router.post("/", auth, async (req, res) => {
   try {
     const bill = await Bill.create({
       ...req.body,
       userId: req.userId,
     });
+
     res.json(bill);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Create bill error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-/**
- * UPDATE BILL
- */
-router.put("/:id", authMiddleware, async (req, res) => {
+// ========================================
+// UPDATE A BILL
+// PUT /api/bills/:id
+// ========================================
+router.put("/:id", auth, async (req, res) => {
   try {
     const bill = await Bill.findOneAndUpdate(
       { _id: req.params.id, userId: req.userId },
       req.body,
       { new: true }
     );
+
     res.json(bill);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Update bill error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-/**
- * DELETE BILL
- */
-router.delete("/:id", authMiddleware, async (req, res) => {
+// ========================================
+// DELETE A BILL
+// DELETE /api/bills/:id
+// ========================================
+router.delete("/:id", auth, async (req, res) => {
   try {
     await Bill.findOneAndDelete({
       _id: req.params.id,
       userId: req.userId,
     });
+
     res.json({ message: "Bill deleted" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Delete bill error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
