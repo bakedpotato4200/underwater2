@@ -1,0 +1,1171 @@
+<!-- ========================================= -->
+<!-- 🎉 UNDERWATER BUDGET APP - INDEX.HTML     -->
+<!-- 🎉 VERSION: WITH FULL CALENDAR ENGINE     -->
+<!-- 🎉 CHUNK 1: HTML + HEAD + GLOBAL STYLES   -->
+<!-- ========================================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Underwater Budget</title>
+
+    <!-- ========================================= -->
+    <!-- 🌈 GLOBAL STYLES                          -->
+    <!-- ========================================= -->
+    <style>
+
+        /* ------------------------------
+           🟦 GENERAL APP RESET + BODY STYLE
+        ------------------------------ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom right, #0d1b3d, #13254b, #0f1e45);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* ------------------------------
+           🟦 GLOBAL BUTTONS
+        ------------------------------ */
+        button {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button.primary {
+            background: #4a90e2;
+            color: white;
+        }
+
+        button.danger {
+            background: #c62828;
+            color: white;
+        }
+
+        button.success {
+            background: #2e7d32;
+            color: white;
+        }
+
+        /* ------------------------------
+           🟦 GLOBAL CARD STYLE
+        ------------------------------ */
+        .card {
+            background: rgba(255, 255, 255, 0.07);
+            padding: 20px;
+            border-radius: 14px;
+            margin: 20px 0;
+            width: 95%;
+            max-width: 1050px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #77b7ff;
+        }
+
+        /* ------------------------------
+           🟦 INPUTS / FIELDS
+        ------------------------------ */
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        /* ------------------------------
+           🟦 LOGIN / SIGNUP CONTAINER 
+        ------------------------------ */
+        #authContainer {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #loginDiv, #signupDiv {
+            display: none;
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        /* ------------------------------
+           🟦 DASHBOARD MAIN LAYOUT
+        ------------------------------ */
+        #appContainer {
+            display: none;
+            padding-bottom: 50px;
+        }
+
+        /* Left Menu */
+        #leftMenu {
+            width: 90%;
+            margin: auto;
+            margin-top: 20px;
+        }
+
+        .menuButton {
+            background: rgba(255,255,255,0.08);
+            color: #dbe8ff;
+            width: 100%;
+            text-align: left;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .menuButton.active {
+            background: #4a90e2;
+            color: white;
+        }
+
+        /* Page Content Wrapper */
+        #pageWrapper {
+            width: 95%;
+            max-width: 1050px;
+            margin: auto;
+            margin-top: 15px;
+        }
+
+        /* ------------------------------
+           🟦 PLACEHOLDER FOR CALENDAR CSS
+           (Real calendar CSS comes in CHUNK 4)
+        ------------------------------ */
+        /* ✨ DO NOT DELETE — CALENDAR STYLES GO HERE LATER */
+        
+/* ===========================
+      📅 CALENDAR STYLES  
+   =========================== */
+
+.calendar-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.calendar-month-label {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #a5c8ff;
+}
+
+.calendar-balance-box {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.calendar-balance-box input {
+    width: 140px;
+    padding: 6px;
+    margin-right: 5px;
+    border-radius: 6px;
+    border: 1px solid #3a4a6a;
+    background: #0d1117;
+    color: #d0e1ff;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.calendar-cell {
+    background: #0f1624;
+    border-radius: 10px;
+    padding: 8px;
+    min-height: 95px;
+    color: white;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid #1e2a3a;
+    transition: 0.15s ease;
+}
+
+.calendar-cell:hover {
+    background: #1a2435;
+    transform: scale(1.02);
+}
+
+.calendar-cell .day-number {
+    font-weight: 700;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    color: #cfe1ff;
+}
+
+.calendar-cell .balance {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    font-size: 0.75rem;
+    opacity: 0.85;
+    color: #9fbaff;
+}
+
+.dot-income, .dot-bill {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 3px;
+}
+
+.dot-income {
+    background-color: #3ac76b;
+}
+
+.dot-bill {
+    background-color: #e04e4e;
+}
+
+/* Floating detail card */
+
+.calendar-detail-box {
+    position: fixed;
+    background: #111a28;
+    border: 1px solid #2d3f59;
+    padding: 22px;
+    width: 340px;
+    top: 15%;
+    right: 15px;
+    border-radius: 12px;
+    z-index: 20;
+    color: #cddcff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.calendar-detail-box.hidden {
+    display: none;
+}
+
+.close-btn {
+    float: right;
+    background: transparent;
+    border: none;
+    color: #cddcff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+    </style>
+</head>
+
+<body>
+
+<!-- ========================================= -->
+<!-- 🎉 CHUNK 1 COMPLETE                       -->
+<!-- NEXT: CHUNK 2 (LOGIN / SIGNUP UI)        -->
+<!-- ========================================= -->
+    <!-- ========================================= -->
+    <!-- 🔐 AUTH CONTAINER (LOGIN + SIGNUP)       -->
+    <!-- ========================================= -->
+    <div id="authContainer">
+        <h1 style="margin-bottom: 15px;">Underwater Budget</h1>
+        <p style="opacity: 0.8; margin-bottom: 20px;">
+            Smart cash-flow planning with recurring bills, paychecks, and a live calendar.
+        </p>
+
+        <!-- Toggle Buttons -->
+        <div style="margin-bottom: 20px;">
+            <button id="showLoginBtn" class="primary" type="button">Login</button>
+            <button id="showSignupBtn" style="margin-left: 10px;" type="button">Sign up</button>
+        </div>
+
+        <!-- LOGIN BOX -->
+        <div id="loginDiv">
+            <h2 style="margin-bottom: 10px;">Login</h2>
+            <form id="loginForm">
+                <label for="loginEmail">Email</label>
+                <input id="loginEmail" type="email" placeholder="you@example.com" required />
+
+                <label for="loginPassword">Password</label>
+                <input id="loginPassword" type="password" placeholder="Password" required />
+
+                <button id="loginBtn" class="primary" type="submit" style="width: 100%; margin-top: 10px;">
+                    Log In
+                </button>
+            </form>
+            <p style="margin-top: 10px; font-size: 13px; opacity: 0.8;">
+                Need an account? <span id="loginToSignup" style="color:#77b7ff; cursor:pointer;">Sign up here.</span>
+            </p>
+        </div>
+
+        <!-- SIGNUP BOX -->
+        <div id="signupDiv">
+            <h2 style="margin-bottom: 10px;">Create Account</h2>
+            <form id="signupForm">
+                <label for="signupEmail">Email</label>
+                <input id="signupEmail" type="email" placeholder="you@example.com" required />
+
+                <label for="signupPassword">Password</label>
+                <input id="signupPassword" type="password" placeholder="Minimum 4 characters" required />
+
+                <button id="signupBtn" class="primary" type="submit" style="width: 100%; margin-top: 10px;">
+                    Sign Up
+                </button>
+            </form>
+            <p style="margin-top: 10px; font-size: 13px; opacity: 0.8;">
+                Already have an account? <span id="signupToLogin" style="color:#77b7ff; cursor:pointer;">Log in here.</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 🧠 MAIN APP CONTAINER (AFTER LOGIN)      -->
+    <!-- ========================================= -->
+    <div id="appContainer">
+
+        <!-- ===== TOP BAR / HEADER ===== -->
+        <div style="width:95%; max-width:1050px; margin:15px auto 5px auto; display:flex; align-items:center; justify-content:space-between;">
+            <div>
+                <h1 style="font-size:24px; margin-bottom: 4px;">Underwater Budget</h1>
+                <div style="font-size: 13px; opacity:0.8;">
+                    Signed in as <span id="userEmailDisplay">...</span>
+                </div>
+            </div>
+            <button id="logoutBtn" class="danger" type="button">Log out</button>
+        </div>
+
+        <!-- ===== LEFT MENU BUTTONS ===== -->
+        <div id="leftMenu">
+            <!-- 📌 MENU: Dashboard (default) -->
+            <button class="menuButton active" data-page="dashboardPage">
+                🏠 Dashboard
+            </button>
+            <!-- 📌 MENU: Bills / Recurring -->
+            <button class="menuButton" data-page="billsPage">
+                📅 Bills &amp; Paychecks
+            </button>
+            <!-- 📌 MENU: Transactions -->
+            <button class="menuButton" data-page="transactionsPage">
+                🧾 Transactions
+            </button>
+            <!-- 📌 MENU: Settings -->
+            <button class="menuButton" data-page="settingsPage">
+                ⚙️ Settings
+            </button>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- 📄 PAGE WRAPPER - HOLDS ALL MAIN PAGES   -->
+        <!-- ========================================= -->
+        <div id="pageWrapper">
+
+            <!-- ===================================== -->
+            <!-- 🏠 DASHBOARD PAGE (DEFAULT)           -->
+            <!-- ===================================== -->
+            <section id="dashboardPage">
+
+                <!-- ========================== -->
+                <!-- 💰 QUICK SUMMARY STRIP     -->
+                <!-- ========================== -->
+                <div class="card">
+                    <div class="card-title">This Month Overview</div>
+                    <div style="display:flex; flex-wrap:wrap; gap:15px;">
+                        <div style="flex:1 1 150px;">
+                            <div style="font-size:12px; opacity:0.8;">Projected Income</div>
+                            <div id="dashProjectedIncome" style="font-size:20px; font-weight:bold;">$0</div>
+                        </div>
+                        <div style="flex:1 1 150px;">
+                            <div style="font-size:12px; opacity:0.8;">Projected Bills</div>
+                            <div id="dashProjectedBills" style="font-size:20px; font-weight:bold;">$0</div>
+                        </div>
+                        <div style="flex:1 1 150px;">
+                            <div style="font-size:12px; opacity:0.8;">Net After Bills</div>
+                            <div id="dashNetAfterBills" style="font-size:20px; font-weight:bold;">$0</div>
+                        </div>
+                        <div style="flex:1 1 150px;">
+                            <div style="font-size:12px; opacity:0.8;">Bank Balance (Manual)</div>
+                            <div id="dashBankBalance" style="font-size:20px; font-weight:bold;">$0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================== -->
+                <!-- 📅 BILL / PAYCHECK CALENDAR -->
+                <!-- ========================== -->
+                <div class="card" id="calendarCard">
+                    <div class="card-title">
+                        Cash-Flow Calendar
+                    </div>
+
+                    <!-- 🔄 MONTH HEADER + NAV -->
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+                        <button id="calendarPrevBtn" type="button">&lt;</button>
+                        <div id="calendarMonthLabel" style="font-weight:bold; font-size:18px;">
+                            <!-- JS will fill: e.g. November 2025 -->
+                        </div>
+                        <button id="calendarNextBtn" type="button">&gt;</button>
+                    </div>
+
+                    <!-- 🔵 LEGEND -->
+                    <div style="display:flex; gap:15px; font-size:12px; margin-bottom:10px;">
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#2e7d32;"></span>
+                            <span>Income</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#c62828;"></span>
+                            <span>Bill</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg,#2e7d32 0%,#2e7d32 50%,#c62828 50%,#c62828 100%);"></span>
+                            <span>Income + Bill</span>
+                        </div>
+                    </div>
+
+                    <!-- 🔢 WEEKDAY HEADERS -->
+                    <div style="display:grid; grid-template-columns:repeat(7,1fr); text-align:center; font-size:12px; opacity:0.8; margin-bottom:5px;">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+
+                    <!-- 🧩 CALENDAR GRID (JS FILLS THIS) -->
+                    <div id="calendarGrid"
+                         style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px; min-height:160px;">
+                        <!-- JS will insert individual day cells here -->
+                    </div>
+
+                    <!-- 📌 DAY DETAIL PANEL (WHEN YOU TAP A DAY) -->
+                    <div id="calendarDayDetails" style="margin-top:15px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+                        <div style="font-size:14px; margin-bottom:5px;">
+                            <strong id="calendarSelectedDateLabel">Select a day on the calendar</strong>
+                        </div>
+                        <div id="calendarDaySummary" style="font-size:13px; opacity:0.9;">
+                            <!-- JS will show: end balance + list of bills/income for that day -->
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            <!-- END DASHBOARD PAGE -->
+
+            <!-- ===================================== -->
+            <!-- 📅 BILLS & PAYCHECKS PAGE            -->
+            <!-- ===================================== -->
+            <section id="billsPage" style="display:none;">
+                <div class="card">
+                    <div class="card-title">Recurring Bills &amp; Paychecks</div>
+                    <p style="font-size:13px; opacity:0.85; margin-bottom:10px;">
+                        Everything you enter here feeds the calendar engine.  
+                        Bills = red dots, Paychecks = green dots, both = split dot.
+                    </p>
+
+                    <!-- FORM: ADD / EDIT BILL OR PAYCHECK -->
+                    <form id="billForm" style="margin-bottom:15px;">
+                        <label for="billName">Name</label>
+                        <input id="billName" placeholder="Rent, Social Security, Paycheck, etc" required />
+
+                        <label for="billAmount">Amount</label>
+                        <input id="billAmount" type="number" step="0.01" placeholder="e.g. 400" required />
+
+                        <label for="billType">Type</label>
+                        <select id="billType">
+                            <option value="expense">Bill (money out)</option>
+                            <option value="income">Income (money in)</option>
+                        </select>
+
+                        <label for="billFrequency">Frequency (days)</label>
+                        <input id="billFrequency" type="number" min="1" placeholder="14 for bi-weekly, 30 for monthly" required />
+
+                        <label for="billStartDate">Start Date</label>
+                        <input id="billStartDate" type="date" required />
+
+                        <!-- Projected vs Actual income only matters for income items;
+                             JS will handle logic, UI just gives a field. -->
+                        <label for="billProjectedActual" style="margin-top:10px;">Actual income (optional, used instead of projected)</label>
+                        <input id="billProjectedActual" type="number" step="0.01" placeholder="Only for income if you want actual" />
+
+                        <button id="saveBillBtn" class="success" type="submit" style="width:100%; margin-top:5px;">
+                            Save Recurring Item
+                        </button>
+                    </form>
+
+                    <!-- LIST: ALL BILLS/PAYCHECKS -->
+                    <div id="billsList" style="font-size:13px;">
+                        <!-- JS will list current recurring bills/paychecks here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================== -->
+            <!-- 🧾 TRANSACTIONS PAGE (PDF UPLOAD, ETC) -->
+            <!-- ===================================== -->
+            <section id="transactionsPage" style="display:none;">
+                <div class="card">
+                    <div class="card-title">Transactions (PDF Statements)</div>
+                    <p style="font-size:13px; opacity:0.85; margin-bottom:10px;">
+                        Upload bank PDF statements to load expenses into your transaction list.  
+                        We’ll ignore income here so it won’t double count your paychecks.
+                    </p>
+
+                    <form id="statementUploadForm" enctype="multipart/form-data">
+                        <input id="statementFileInput" type="file" accept="application/pdf" />
+                        <button id="uploadStatementBtn" class="primary" type="submit" style="margin-top:10px;">
+                            Upload Statement
+                        </button>
+                    </form>
+
+                    <div id="transactionSummary" style="font-size:13px; margin-top:10px;">
+                        <!-- JS will show counts, amounts, etc. -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Transaction List</div>
+                    <div id="transactionsTableContainer" style="font-size:12px;">
+                        <!-- JS will render a table of transactions with categories, exclude toggles, etc. -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================== -->
+            <!-- ⚙️ SETTINGS PAGE                     -->
+            <!-- ===================================== -->
+            <section id="settingsPage" style="display:none;">
+                <div class="card">
+                    <div class="card-title">Bank Balance &amp; Paycheck Settings</div>
+
+                    <form id="startingBalanceForm" style="margin-bottom:15px;">
+                        <label for="startingBalanceInput">Bank Balance (manual)</label>
+                        <input id="startingBalanceInput" type="number" step="0.01" placeholder="e.g. 1200.00" />
+
+                        <label for="startingBalanceDateInput">As of Date</label>
+                        <input id="startingBalanceDateInput" type="date" />
+
+                        <button id="saveStartingBalanceBtn" class="success" type="submit" style="width:100%; margin-top:5px;">
+                            Save Bank Balance
+                        </button>
+                    </form>
+
+                    <form id="paycheckSettingsForm">
+                        <label for="paycheckAmountInput">Projected Paycheck Amount</label>
+                        <input id="paycheckAmountInput" type="number" step="0.01" placeholder="e.g. 1500" />
+
+                        <label for="paycheckFrequencyInput">Paycheck Frequency (days)</label>
+                        <input id="paycheckFrequencyInput" type="number" min="1" placeholder="14 for bi-weekly" />
+
+                        <button id="savePaycheckSettingsBtn" class="success" type="submit" style="width:100%; margin-top:5px;">
+                            Save Paycheck Settings
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </div> <!-- /#pageWrapper -->
+
+    </div> <!-- /#appContainer -->
+<!-- ===========================
+      📅 MONTHLY CALENDAR SECTION
+     =========================== -->
+<section id="calendarSection" class="app-section">
+
+    <h2 class="section-title">Monthly Cash-Flow Calendar</h2>
+
+    <div class="calendar-controls">
+        <button id="calendarPrevBtn" class="secondary">&lt; Prev</button>
+
+        <h3 id="calendarMonthLabel" class="calendar-month-label">Month</h3>
+
+        <button id="calendarNextBtn" class="secondary">Next &gt;</button>
+    </div>
+
+    <!-- Starting Bank Balance -->
+    <div class="calendar-balance-box">
+        <label>Starting Balance:</label>
+        <input id="calendarBalanceInput" type="number" step="0.01" placeholder="0.00" />
+        <button id="calendarBalanceApply" class="primary">Apply</button>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div id="calendarGrid" class="calendar-grid"></div>
+
+    <!-- Calendar Detail Panel -->
+    <div id="calendarDetail" class="calendar-detail-box hidden">
+        <button id="calendarDetailClose" class="close-btn">✖</button>
+        <h3 id="calendarDetailDate">Date</h3>
+
+        <p><strong>Start Balance:</strong> <span id="calendarDetailStart"></span></p>
+        <p><strong>End Balance:</strong> <span id="calendarDetailEnd"></span></p>
+
+        <p><strong>Total Income:</strong> <span id="calendarDetailIncome"></span></p>
+        <p><strong>Total Bills:</strong> <span id="calendarDetailBills"></span></p>
+
+        <h4>Details</h4>
+        <ul id="calendarDetailList"></ul>
+    </div>
+
+</section>
+
+    <!-- ========================================= -->
+    <!-- 🎉 END OF CHUNK 2 (UI STRUCTURE)         -->
+    <!-- NEXT: CHUNK 3 = ALL JAVASCRIPT           -->
+    <!-- ========================================= -->
+<!-- ========================================= -->
+<!-- 📌 CHUNK 3 — CORE JAVASCRIPT (AUTH + NAV) -->
+<!-- ========================================= -->
+
+<script>
+/* ============================================================
+   🔧 GLOBAL SETTINGS
+   ============================================================ */
+const API_BASE = "http://localhost:3000";  // Change later for Render/Railway
+
+let authToken = null;
+let currentUser = null;
+
+
+/* ============================================================
+   🔧 SIMPLE FETCH WRAPPER (AUTO ATTACHES TOKEN)
+   ============================================================ */
+async function apiCall(endpoint, method = "GET", body = null) {
+    const headers = { "Content-Type": "application/json" };
+    if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
+
+    const options = { method, headers };
+    if (body) options.body = JSON.stringify(body);
+
+    const res = await fetch(`${API_BASE}${endpoint}`, options);
+
+    // Handle auth expiration
+    if (res.status === 401) {
+        alert("Session expired. Please sign in again.");
+        logout();
+        return null;
+    }
+
+    return res.json();
+}
+
+
+/* ============================================================
+   🔐 LOGIN / SIGNUP UI TOGGLING
+   ============================================================ */
+const loginDiv = document.getElementById("loginDiv");
+const signupDiv = document.getElementById("signupDiv");
+const showLoginBtn = document.getElementById("showLoginBtn");
+const showSignupBtn = document.getElementById("showSignupBtn");
+const loginToSignup = document.getElementById("loginToSignup");
+const signupToLogin = document.getElementById("signupToLogin");
+
+function showLogin() {
+    loginDiv.style.display = "block";
+    signupDiv.style.display = "none";
+}
+
+function showSignup() {
+    loginDiv.style.display = "none";
+    signupDiv.style.display = "block";
+}
+
+showLoginBtn.onclick = showLogin;
+showSignupBtn.onclick = showSignup;
+loginToSignup.onclick = showSignup;
+signupToLogin.onclick = showLogin;
+
+// Default page
+showLogin();
+
+
+/* ============================================================
+   🔐 SIGNUP
+   ============================================================ */
+document.getElementById("signupForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("signupEmail").value;
+    const password = document.getElementById("signupPassword").value;
+
+    const data = await apiCall("/auth/signup", "POST", { email, password });
+
+    if (data?.token) {
+        authToken = data.token;
+        currentUser = data.user;
+        loadApp();
+    } else {
+        alert(data?.message || "Signup failed.");
+    }
+});
+
+
+/* ============================================================
+   🔐 LOGIN
+   ============================================================ */
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const data = await apiCall("/auth/login", "POST", { email, password });
+
+    if (data?.token) {
+        authToken = data.token;
+        currentUser = data.user;
+        loadApp();
+    } else {
+        alert(data?.message || "Login failed.");
+    }
+});
+
+
+/* ============================================================
+   🚪 LOGOUT
+   ============================================================ */
+function logout() {
+    authToken = null;
+    currentUser = null;
+    document.getElementById("appContainer").style.display = "none";
+    document.getElementById("authContainer").style.display = "block";
+    showLogin();
+}
+
+document.getElementById("logoutBtn").onclick = logout;
+
+
+/* ============================================================
+   🧠 SHOW APP AFTER LOGIN
+   ============================================================ */
+function loadApp() {
+    document.getElementById("authContainer").style.display = "none";
+    document.getElementById("appContainer").style.display = "block";
+
+    document.getElementById("userEmailDisplay").innerText = currentUser.email;
+
+    loadRecurringItems();
+    loadStartingBalance();
+    renderDashboardSummary();
+
+    // CHUNK 4 will insert:
+    // buildCalendar();
+}
+
+
+/* ============================================================
+   📄 PAGE SWITCHING (LEFT MENU)
+   ============================================================ */
+const menuButtons = document.querySelectorAll(".menuButton");
+const pages = document.querySelectorAll("#pageWrapper > section");
+
+menuButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        menuButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const target = btn.getAttribute("data-page");
+
+        pages.forEach((page) => {
+            page.style.display = page.id === target ? "block" : "none";
+        });
+    });
+});
+
+
+/* ============================================================
+   📅 RECURRING ITEMS (Bills + Paychecks)
+   ============================================================ */
+const billsListDiv = document.getElementById("billsList");
+
+async function loadRecurringItems() {
+    const data = await apiCall("/recurring/all", "GET");
+
+    if (!data || !Array.isArray(data)) return;
+
+    billsListDiv.innerHTML = "";
+
+    data.forEach((item) => {
+        const row = document.createElement("div");
+        row.style.marginBottom = "8px";
+
+        row.innerHTML = `
+            <strong>${item.name}</strong>  
+            ($${item.amount})  
+            every ${item.frequency} days  
+            <span style="opacity:0.8;">— ${item.type}</span>
+            <button class="danger" style="float:right;" onclick="deleteRecurring('${item._id}')">Delete</button>
+        `;
+
+        billsListDiv.appendChild(row);
+    });
+}
+
+async function deleteRecurring(id) {
+    if (!confirm("Delete this item?")) return;
+    await apiCall(`/recurring/${id}`, "DELETE");
+    loadRecurringItems();
+}
+
+
+/* ============================================================
+   ➕ ADD RECURRING BILL / PAYCHECK
+   ============================================================ */
+document.getElementById("billForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const item = {
+        name: document.getElementById("billName").value,
+        amount: Number(document.getElementById("billAmount").value),
+        type: document.getElementById("billType").value,
+        frequency: Number(document.getElementById("billFrequency").value),
+        startDate: document.getElementById("billStartDate").value,
+        actualAmount: Number(document.getElementById("billProjectedActual").value || 0)
+    };
+
+    await apiCall("/recurring/add", "POST", item);
+
+    e.target.reset();
+    loadRecurringItems();
+});
+
+
+/* ============================================================
+   💰 STARTING BALANCE
+   ============================================================ */
+async function loadStartingBalance() {
+    const data = await apiCall("/settings/balance", "GET");
+    if (!data) return;
+
+    document.getElementById("startingBalanceInput").value = data.balance || 0;
+    document.getElementById("startingBalanceDateInput").value = data.asOfDate || "";
+}
+
+document.getElementById("startingBalanceForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const payload = {
+        balance: Number(document.getElementById("startingBalanceInput").value),
+        asOfDate: document.getElementById("startingBalanceDateInput").value
+    };
+
+    await apiCall("/settings/balance", "POST", payload);
+
+    alert("Balance saved.");
+    renderDashboardSummary();  // Optional refresh
+});
+
+
+/* ============================================================
+   🧮 DASHBOARD SUMMARY CALCULATIONS
+   ============================================================ */
+async function renderDashboardSummary() {
+    const recurring = await apiCall("/recurring/all", "GET");
+    if (!recurring || !Array.isArray(recurring)) return;
+
+    let income = 0;
+    let bills = 0;
+
+    recurring.forEach((item) => {
+        if (item.type === "income") {
+            income += item.actualAmount && item.actualAmount > 0 ? item.actualAmount : item.amount;
+        } else {
+            bills += item.amount;
+        }
+    });
+
+    document.getElementById("dashProjectedIncome").innerText = `$${income.toFixed(2)}`;
+    document.getElementById("dashProjectedBills").innerText = `$${bills.toFixed(2)}`;
+    document.getElementById("dashNetAfterBills").innerText = `$${(income - bills).toFixed(2)}`;
+}
+
+/* ============================================================
+   📅 CHUNK 4 — MONTHLY CASH-FLOW CALENDAR ENGINE
+   ------------------------------------------------------------
+   Uses recurring items + starting bank balance to show
+   daily end-of-day balances in a month.
+   ============================================================ */
+
+/* ---------- 1) GLOBAL CALENDAR STATE ---------- */
+const CAL_MONTH_NAMES = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+];
+
+const calendarState = {
+    currentYear: new Date().getFullYear(),
+    currentMonth: new Date().getMonth(), // 0–11
+    startingBalance: 0,
+    recurringItems: [],
+    initialized: false
+};
+
+/* ---------- DOM HOOKS (MUST MATCH YOUR HTML) ---------- */
+const calMonthLabel = document.getElementById("calendarMonthLabel");
+const calGrid = document.getElementById("calendarGrid");
+
+const calPrevBtn = document.getElementById("calendarPrev");
+const calNextBtn = document.getElementById("calendarNext");
+
+const calBalanceInput = document.getElementById("calendarBalanceInput");
+const calBalanceApply = document.getElementById("calendarBalanceApply");
+
+const calDetailDate = document.getElementById("calendarDetailDate");
+const calDetailStart = document.getElementById("calendarDetailStart");
+const calDetailEnd = document.getElementById("calendarDetailEnd");
+const calDetailIncome = document.getElementById("calendarDetailIncome");
+const calDetailBills = document.getElementById("calendarDetailBills");
+const calDetailList = document.getElementById("calendarDetailList");
+
+/* ---------- 2) STORAGE HELPERS ---------- */
+function calendarStorageKey(year, month) {
+    return `uw_calendar_${year}_${month}`;
+}
+
+function saveCalendarBalance(year, month, balance) {
+    localStorage.setItem(calendarStorageKey(year, month), balance);
+}
+
+function loadCalendarBalance(year, month) {
+    const v = localStorage.getItem(calendarStorageKey(year, month));
+    return v ? Number(v) : null;
+}
+
+/* ---------- 3) LOAD BACKEND RECURRING DATA ---------- */
+async function loadCalendarRecurring() {
+    const recurring = await apiCall("/recurring/all", "GET");
+    if (!recurring || !Array.isArray(recurring)) return [];
+    return recurring;
+}
+
+/* ---------- 4) RENDER CALENDAR GRID ---------- */
+function renderCalendarGrid() {
+    const year = calendarState.currentYear;
+    const month = calendarState.currentMonth;
+
+    calMonthLabel.innerText = `${CAL_MONTH_NAMES[month]} ${year}`;
+    calGrid.innerHTML = "";
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    let day = 1;
+
+    for (let i = 0; i < 42; i++) {
+        const cell = document.createElement("div");
+        cell.className = "calendar-cell";
+
+        const isValidDay = (i >= firstDay && day <= lastDate);
+
+        if (isValidDay) {
+            cell.innerHTML = `
+                <div class="cal-day-num">${day}</div>
+                <div class="cal-day-balance" id="bal_${year}_${month}_${day}"></div>
+                <div class="cal-day-dot-holder" id="dot_${year}_${month}_${day}"></div>
+            `;
+            cell.addEventListener("click", () => showCalendarDayDetails(day));
+            day++;
+        }
+
+        calGrid.appendChild(cell);
+    }
+}
+
+/* ---------- 5) CALCULATE ALL DAILY BALANCES ---------- */
+function calculateCalendarBalances() {
+    const year = calendarState.currentYear;
+    const month = calendarState.currentMonth;
+
+    let balance =
+        loadCalendarBalance(year, month) ??
+        calendarState.startingBalance ??
+        0;
+
+    const recurring = calendarState.recurringItems;
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Prepare balance map
+    const balances = {};
+    for (let d = 1; d <= daysInMonth; d++) {
+        balances[d] = { start: balance, income: 0, bills: 0, end: balance, items: [] };
+    }
+
+    // Apply recurring items
+    recurring.forEach(item => {
+        let cur = new Date(item.startDate);
+        const amt = item.actualAmount && item.actualAmount > 0
+            ? item.actualAmount
+            : item.amount;
+
+        while (cur.getMonth() === month) {
+            const d = cur.getDate();
+            if (d >= 1 && d <= daysInMonth) {
+                if (item.type === "income") {
+                    balances[d].income += amt;
+                } else {
+                    balances[d].bills += amt;
+                }
+                balances[d].items.push(item);
+            }
+            cur.setDate(cur.getDate() + item.frequency);
+        }
+    });
+
+    // Compute end-of-day balances
+    let rolling = balance;
+    for (let d = 1; d <= daysInMonth; d++) {
+        const b = balances[d];
+        b.start = rolling;
+        rolling += b.income;
+        rolling -= b.bills;
+        b.end = rolling;
+    }
+
+    return balances;
+}
+
+/* ---------- 6) RENDER BALANCES + DOTS ON CALENDAR ---------- */
+function renderCalendarBalances() {
+    const year = calendarState.currentYear;
+    const month = calendarState.currentMonth;
+
+    const balances = calculateCalendarBalances();
+    const daysInMonth = Object.keys(balances).length;
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const info = balances[d];
+
+        const balCell = document.getElementById(`bal_${year}_${month}_${d}`);
+        const dotCell = document.getElementById(`dot_${year}_${month}_${d}`);
+
+        if (balCell) balCell.innerText = `$${info.end.toFixed(2)}`;
+
+        if (dotCell) {
+            dotCell.innerHTML = "";
+            if (info.income > 0) {
+                dotCell.innerHTML += `<span class="dot dot-income"></span>`;
+            }
+            if (info.bills > 0) {
+                dotCell.innerHTML += `<span class="dot dot-bill"></span>`;
+            }
+        }
+    }
+}
+
+/* ---------- 7) SHOW DAY DETAILS ---------- */
+function showCalendarDayDetails(day) {
+    const year = calendarState.currentYear;
+    const month = calendarState.currentMonth;
+
+    const balances = calculateCalendarBalances();
+    const info = balances[day];
+
+    calDetailDate.innerText = `${CAL_MONTH_NAMES[month]} ${day}, ${year}`;
+    calDetailStart.innerText = `$${info.start.toFixed(2)}`;
+    calDetailEnd.innerText = `$${info.end.toFixed(2)}`;
+    calDetailIncome.innerText = `$${info.income.toFixed(2)}`;
+    calDetailBills.innerText = `$${info.bills.toFixed(2)}`;
+
+    calDetailList.innerHTML = "";
+    info.items.forEach(item => {
+        const li = document.createElement("li");
+        li.innerText = `${item.name} — $${item.amount}`;
+        calDetailList.appendChild(li);
+    });
+}
+
+/* ---------- 8) MONTH NAVIGATION ---------- */
+function changeCalendarMonth(delta) {
+    calendarState.currentMonth += delta;
+    if (calendarState.currentMonth < 0) {
+        calendarState.currentMonth = 11;
+        calendarState.currentYear--;
+    } else if (calendarState.currentMonth > 11) {
+        calendarState.currentMonth = 0;
+        calendarState.currentYear++;
+    }
+
+    renderCalendarGrid();
+    renderCalendarBalances();
+}
+
+/* ---------- BUTTON EVENTS ---------- */
+calPrevBtn?.addEventListener("click", () => changeCalendarMonth(-1));
+calNextBtn?.addEventListener("click", () => changeCalendarMonth(1));
+
+calBalanceApply?.addEventListener("click", () => {
+    const v = Number(calBalanceInput.value);
+    if (!isNaN(v)) {
+        saveCalendarBalance(calendarState.currentYear, calendarState.currentMonth, v);
+        renderCalendarBalances();
+    }
+});
+
+/* ---------- 9) INITIALIZE WHEN LOGGED IN ---------- */
+async function initCalendarEngine() {
+    calendarState.recurringItems = await loadCalendarRecurring();
+    renderCalendarGrid();
+    renderCalendarBalances();
+    calendarState.initialized = true;
+}
+
+/* Auto-start when enterApp() runs */
+window.addEventListener("uw_enterApp", () => {
+    initCalendarEngine();
+});
+/* ============================================================
+   🔗 FINAL LOGIN HOOK — Sync calendar with login flow
+   ============================================================ */
+
+async function initializeAppAfterLogin() {
+    await loadRecurringItems();          // load recurring incomes/bills
+    await renderDashboardSummary();      // refresh dashboard totals
+    await initCalendarEngine();          // load calendar grid + balances
+}
+
+/* Auto-run when page loads AND token already exists */
+document.addEventListener("DOMContentLoaded", async () => {
+    const token = localStorage.getItem("uw_token");
+    if (token) {
+        authToken = token;
+
+        // Hide login, show app
+        document.getElementById("authContainer").classList.add("hidden");
+        document.getElementById("appContainer").classList.remove("hidden");
+
+        await initializeAppAfterLogin();
+    }
+});
+
+/* Modify existing login success flow */
+async function enterApp() {
+    document.getElementById("authContainer").classList.add("hidden");
+    document.getElementById("appContainer").classList.remove("hidden");
+
+    window.dispatchEvent(new CustomEvent("uw_enterApp"));
+    await initializeAppAfterLogin();
+}
+
+</script>
