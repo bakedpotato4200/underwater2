@@ -127,7 +127,7 @@ function renderCalendar(data) {
 
           if (event.type === "income") {
             ev.className = "calendar-event-income";
-            ev.textContent = `+${formatMoney(event.amount)}`;
+            ev.textContent = formatMoney(event.amount);
           } else {
             ev.className = "calendar-event-expense";
             ev.textContent = `-${formatMoney(event.amount)}`;
