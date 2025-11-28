@@ -667,6 +667,27 @@ input::placeholder {
   color: var(--accent-teal);
 }
 
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.85rem;
+  background: var(--bg-secondary);
+  padding: 0.75rem 2px;
+  border-radius: 8px 8px 0 0;
+}
+
+.weekday {
+  padding: 0.5rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -1055,6 +1076,17 @@ input::placeholder {
     gap: 0.8rem;
   }
 
+  .calendar-weekdays {
+    gap: 1px;
+    padding: 0.5rem 1px;
+    font-size: 0.75rem;
+  }
+
+  .weekday {
+    padding: 0.4rem;
+    font-size: 0.7rem;
+  }
+
   .calendar-grid {
     gap: 1px;
     padding: 1px;
@@ -1148,10 +1180,23 @@ input::placeholder {
     font-size: 1.2rem;
   }
 
+  .calendar-weekdays {
+    gap: 0px;
+    padding: 0.4rem 0px;
+    border-radius: 6px 6px 0 0;
+    font-size: 0.65rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .weekday {
+    padding: 0.3rem;
+    font-size: 0.65rem;
+  }
+
   .calendar-grid {
     gap: 0px;
     padding: 0px;
-    border-radius: 8px;
+    border-radius: 0 0 8px 8px;
   }
 
   .calendar-day {
@@ -1276,8 +1321,21 @@ input::placeholder {
     font-size: 0.9rem;
   }
 
+  .calendar-weekdays {
+    gap: 0px;
+    padding: 0.3rem 0px;
+    border-radius: 4px 4px 0 0;
+    font-size: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .weekday {
+    padding: 0.25rem;
+    font-size: 0.6rem;
+  }
+
   .calendar-grid {
-    border-radius: 6px;
+    border-radius: 0 0 4px 4px;
   }
 
   .calendar-day {
