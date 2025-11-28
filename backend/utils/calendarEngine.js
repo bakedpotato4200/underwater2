@@ -386,7 +386,7 @@ export async function buildMonthlyCalendar(
       },
       pressurePoints: pressurePoints.map(p => ({
         date: p.dateKey,
-        balance: p.endBalance,
+        balance: p.expenseTotal,
       })),
     };
   } catch (err) {
