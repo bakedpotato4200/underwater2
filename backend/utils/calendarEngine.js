@@ -359,16 +359,20 @@ export async function buildMonthlyCalendar(
       endBalance: d.endBalance,
     }));
 
-  return {
-    year,
-    month,
-    startDate: startOfMonth,
-    endDate: endOfMonth,
-    startingBalance: baseStartingBalance,
-    days,
-    monthSummary,
-    pressurePoints,
-  };
+    return {
+      year,
+      month,
+      startDate: startOfMonth,
+      endDate: endOfMonth,
+      startingBalance: baseStartingBalance,
+      days,
+      monthSummary,
+      pressurePoints,
+    };
+  } catch (err) {
+    console.error("Error building monthly calendar:", err.message);
+    throw err;
+  }
 }
 
 // -----------------------------
