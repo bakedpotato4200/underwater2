@@ -11,7 +11,11 @@
 //   CHANGE API_BASE_URL to your Railway URL.
 // ========================================
 
-export const API_BASE_URL = "http://localhost:3000/api";
+// Detect if running on Replit and use appropriate backend URL
+const isReplit = window.location.hostname.includes('replit.dev');
+export const API_BASE_URL = isReplit 
+  ? `${window.location.protocol}//${window.location.hostname}:3000/api`
+  : "http://localhost:3000/api";
 
 // --------------------------------------------
 // Token Helpers
