@@ -215,7 +215,7 @@ export async function buildMonthlyCalendar(
       const amount = Number(rec.amount || 0);
 
       day.events.push({
-        kind: "income",
+        type: "income",
         name: rec.name,
         amount,
         projected: true,
@@ -245,7 +245,7 @@ export async function buildMonthlyCalendar(
       const amount = Number(rec.amount || 0);
 
       day.events.push({
-        kind: "bill",
+        type: "expense",
         name: rec.name,
         amount,
         projected: true,
@@ -275,7 +275,7 @@ export async function buildMonthlyCalendar(
       const amount = Number(paycheckSettings.payAmount || 0);
 
       day.events.push({
-        kind: "paycheck",
+        type: "income",
         name: "Paycheck",
         amount,
         projected: true,
@@ -300,7 +300,7 @@ export async function buildMonthlyCalendar(
     const absAmount = Math.abs(amt);
 
     day.events.push({
-      kind: isExpense ? "actual_expense" : "actual_income",
+      type: isExpense ? "expense" : "income",
       name: tx.description,
       amount: absAmount,
       projected: false,
