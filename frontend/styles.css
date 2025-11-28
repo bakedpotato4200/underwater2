@@ -410,14 +410,16 @@ input, select {
 
 .calendar-event-income {
   color: #2ecc71;
-  font-size: 0.6rem;
+  font-size: 1.3rem;
+  font-weight: bold;
   margin: 0;
   display: inline-block;
 }
 
 .calendar-event-expense {
   color: #e74c3c;
-  font-size: 0.6rem;
+  font-size: 1.3rem;
+  font-weight: bold;
   margin: 0;
   display: inline-block;
 }
@@ -746,7 +748,8 @@ input, select {
 
   .calendar-event-income,
   .calendar-event-expense {
-    font-size: 0.55rem;
+    font-size: 1.15rem;
+    font-weight: bold;
     margin: 0;
     display: inline-block;
   }
@@ -925,7 +928,8 @@ input, select {
 
   .calendar-event-income,
   .calendar-event-expense {
-    font-size: 0.52rem;
+    font-size: 1.1rem;
+    font-weight: bold;
     margin: 0;
     display: inline-block;
   }
