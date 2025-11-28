@@ -57,24 +57,29 @@
 
     <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">UW2</div>
+        <div class="sidebar-logo-text">Underground Water</div>
+      </div>
+      
       <nav class="sidebar-nav">
         <button class="nav-item nav-item-active" data-view="dashboard-view">
-          Dashboard
+          📊 Dashboard
         </button>
         <button class="nav-item" data-view="calendar-view">
-          Calendar
+          📅 Calendar
         </button>
         <button class="nav-item" data-view="recurring-view">
-          Recurring
+          🔄 Recurring
         </button>
         <button class="nav-item" data-view="settings-view">
-          Settings
+          ⚙️ Settings
         </button>
       </nav>
 
       <div class="sidebar-footer">
         <span id="user-email-label" class="sidebar-user"></span>
-        <button id="logout-btn" class="btn btn-ghost">Logout</button>
+        <button id="logout-btn" class="btn btn-ghost">🚪 Logout</button>
       </div>
     </aside>
 
@@ -96,26 +101,26 @@
             <h3>Starting Balance</h3>
             <p id="dash-starting-balance" class="big-number">$0</p>
           </div>
-          <div class="card">
+          <div class="card positive">
             <h3>This Month Income</h3>
             <p id="dash-income" class="big-number">$0</p>
           </div>
-          <div class="card">
+          <div class="card negative">
             <h3>This Month Bills</h3>
             <p id="dash-expenses" class="big-number">$0</p>
           </div>
-          <div class="card">
+          <div class="card positive">
             <h3>End of Month Balance</h3>
             <p id="dash-end-balance" class="big-number">$0</p>
           </div>
         </div>
 
         <div class="cards-row">
-          <div class="card">
+          <div class="card negative">
             <h3>Lowest Balance</h3>
             <p id="dash-lowest-balance" class="big-number">$0</p>
           </div>
-          <div class="card">
+          <div class="card positive">
             <h3>Highest Balance</h3>
             <p id="dash-highest-balance" class="big-number">$0</p>
           </div>
