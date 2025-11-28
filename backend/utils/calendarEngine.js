@@ -257,39 +257,11 @@ export async function buildMonthlyCalendar(
   }
 
   // --------------------------------
-  // Add paycheck settings as extra recurring income stream
-  // --------------------------------
-  if (paycheckSettings && paycheckSettings.startDate && paycheckSettings.payAmount) {
-    const occurrences = generateOccurrences(
-      paycheckSettings.startDate,
-      startOfMonth,
-      endOfMonth,
-      paycheckSettings.frequency || "biweekly"
-    );
-
-    for (const occ of occurrences) {
-      const key = dateKey(occ);
-      const day = dayMap[key];
-      if (!day) continue;
-
-      const amount = Number(paycheckSettings.payAmount || 0);
-
-      day.events.push({
-        type: "income",
-        name: "Paycheck",
-        amount,
-        projected: true,
-        source: "paycheckSettings",
-      });
-
-      day.incomeTotal += amount;
-    }
-  }
-
-  // --------------------------------
-  // Optional: overlay actual transactions
-  // (If you want the calendar to ignore them completely, comment this block out)
+  // Optional: overlay actual transactions FIRST
+  // (Process actual transactions before projected so we can skip duplicates)
 // --------------------------------
+  const datesWithActualIncome = new Set();
+  
   for (const tx of actualTx) {
     const key = dateKey(tx.date);
     const day = dayMap[key];
@@ -312,6 +284,44 @@ export async function buildMonthlyCalendar(
       day.expenseTotal += absAmount;
     } else {
       day.incomeTotal += absAmount;
+      // Track dates with actual income so we don't add projected paycheck
+      datesWithActualIncome.add(key);
+    }
+  }
+
+  // --------------------------------
+  // Add paycheck settings as extra recurring income stream
+  // BUT skip if this date already has actual income recorded
+  // --------------------------------
+  if (paycheckSettings && paycheckSettings.startDate && paycheckSettings.payAmount) {
+    const occurrences = generateOccurrences(
+      paycheckSettings.startDate,
+      startOfMonth,
+      endOfMonth,
+      paycheckSettings.frequency || "biweekly"
+    );
+
+    for (const occ of occurrences) {
+      const key = dateKey(occ);
+      const day = dayMap[key];
+      if (!day) continue;
+
+      // Skip this projected paycheck if actual income already exists for this date
+      if (datesWithActualIncome.has(key)) {
+        continue;
+      }
+
+      const amount = Number(paycheckSettings.payAmount || 0);
+
+      day.events.push({
+        type: "income",
+        name: "Paycheck",
+        amount,
+        projected: true,
+        source: "paycheckSettings",
+      });
+
+      day.incomeTotal += amount;
     }
   }
 
