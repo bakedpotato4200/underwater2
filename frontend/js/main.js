@@ -35,3 +35,46 @@ if (document.readyState === "loading") {
   console.log("✅ DOM already loaded, checking auth...");
   checkAuthOnLoad();
 }
+
+// ========================================
+// SIDEBAR TOGGLE FUNCTIONALITY
+// ========================================
+function initSidebarToggle() {
+  const sidebar = document.getElementById('sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+  const menuToggleBtn = document.getElementById('menu-toggle-btn');
+  const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  function openSidebar() {
+    if (sidebar) sidebar.classList.add('active');
+    if (sidebarOverlay) sidebarOverlay.classList.add('active');
+  }
+
+  function closeSidebar() {
+    if (sidebar) sidebar.classList.remove('active');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+  }
+
+  if (menuToggleBtn) {
+    menuToggleBtn.addEventListener('click', openSidebar);
+  }
+
+  if (sidebarCloseBtn) {
+    sidebarCloseBtn.addEventListener('click', closeSidebar);
+  }
+
+  if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', closeSidebar);
+  }
+
+  navItems.forEach(item => {
+    item.addEventListener('click', closeSidebar);
+  });
+}
+
+// Initialize sidebar toggle when app is ready
+window.addEventListener('DOMContentLoaded', initSidebarToggle);
+if (document.readyState !== 'loading') {
+  initSidebarToggle();
+}
