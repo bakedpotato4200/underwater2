@@ -109,7 +109,7 @@ router.post("/login", async (req, res) => {
 // =========================================
 router.get("/verify", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select("email");
+    const user = await User.findById(req.userId).select("email");
     if (!user) {
       return res.status(401).json({ error: "Invalid token" });
     }
