@@ -30,10 +30,22 @@ const dayModal = document.getElementById("day-detail-modal");
 const dayModalClose = document.getElementById("day-modal-close");
 const dayModalContent = document.getElementById("day-modal-content");
 
+// Income modal elements
+const addIncomeModal = document.getElementById("add-income-modal");
+const addIncomeModalClose = document.getElementById("add-income-modal-close");
+const addIncomeForm = document.getElementById("add-income-form");
+const addIncomeDate = document.getElementById("add-income-date");
+const addIncomeAmount = document.getElementById("add-income-amount");
+const addIncomeDescription = document.getElementById("add-income-description");
+const addIncomeCategory = document.getElementById("add-income-category");
+const addIncomeError = document.getElementById("add-income-error");
+
 // Active calendar state
 let currentYear = nowYear();
 let currentMonth = nowMonth();
 let currentMonthData = null;
+let selectedIncomeDate = null;
+let selectedIncomeAmount = null;
 
 // ========================================
 // Load a month's calendar from backend
@@ -134,6 +146,11 @@ function renderCalendar(data) {
           if (event.type === "income") {
             ev.className = "calendar-event-income";
             ev.textContent = formatMoney(event.amount);
+            ev.style.cursor = "pointer";
+            ev.addEventListener("click", (e) => {
+              e.stopPropagation();
+              openAddIncomeModal(day.dateKey, day.date, event.amount);
+            });
           } else {
             ev.className = "calendar-event-expense";
             ev.textContent = `-${formatMoney(event.amount)}`;
@@ -208,6 +225,24 @@ function showDayDetails(day) {
 }
 
 // ========================================
+// Open Add Income Modal
+// ========================================
+function openAddIncomeModal(dateKey, dateObj, projectedAmount) {
+  selectedIncomeDate = dateKey;
+  selectedIncomeAmount = projectedAmount;
+  
+  const date = new Date(dateObj);
+  const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+  
+  addIncomeDate.textContent = `${dateStr} (Projected: ${formatMoney(projectedAmount)})`;
+  addIncomeAmount.value = projectedAmount;
+  addIncomeDescription.value = "Actual Paycheck";
+  addIncomeError.textContent = "";
+  
+  addIncomeModal.classList.add("modal-visible");
+}
+
+// ========================================
 // Helpers
 // ========================================
 function monthName(n) {
@@ -243,6 +278,51 @@ if (nextMonthBtn) {
 }
 
 // ========================================
+// Handle Add Income Form Submission
+// ========================================
+if (addIncomeForm) {
+  addIncomeForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    addIncomeError.textContent = "";
+    
+    const amount = Number(addIncomeAmount.value);
+    const description = addIncomeDescription.value.trim();
+    const category = addIncomeCategory.value.trim();
+    
+    if (!amount || amount <= 0) {
+      addIncomeError.textContent = "Amount must be greater than 0";
+      return;
+    }
+    
+    if (!description) {
+      addIncomeError.textContent = "Description is required";
+      return;
+    }
+    
+    try {
+      const { apiCreateTransaction } = await import("./api.js");
+      
+      // Create transaction for this specific date
+      await apiCreateTransaction({
+        description,
+        amount,
+        category,
+        date: selectedIncomeDate
+      });
+      
+      // Close modal and reload calendar
+      addIncomeModal.classList.remove("modal-visible");
+      addIncomeForm.reset();
+      loadCalendar();
+      
+    } catch (err) {
+      addIncomeError.textContent = `Error: ${err.message}`;
+      console.error("Failed to save income:", err);
+    }
+  });
+}
+
+// ========================================
 // Modal controls
 // ========================================
 if (dayModalClose) {
@@ -253,10 +333,26 @@ if (dayModalClose) {
   });
 }
 
+if (addIncomeModalClose) {
+  addIncomeModalClose.addEventListener("click", () => {
+    if (addIncomeModal) {
+      addIncomeModal.classList.remove("modal-visible");
+    }
+  });
+}
+
 if (dayModal) {
   dayModal.addEventListener("click", (e) => {
     if (e.target === dayModal) {
       dayModal.classList.remove("modal-visible");
+    }
+  });
+}
+
+if (addIncomeModal) {
+  addIncomeModal.addEventListener("click", (e) => {
+    if (e.target === addIncomeModal) {
+      addIncomeModal.classList.remove("modal-visible");
     }
   });
 }

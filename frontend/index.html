@@ -234,6 +234,31 @@
     </div>
   </div>
 
+  <!-- ADD ACTUAL INCOME MODAL -->
+  <div id="add-income-modal" class="modal">
+    <div class="modal-content">
+      <button id="add-income-modal-close" class="modal-close">&times;</button>
+      <h3>Record Actual Income</h3>
+      <p id="add-income-date" style="color: #666; margin-bottom: 1rem;"></p>
+      <form id="add-income-form" class="form-col">
+        <label>
+          Amount
+          <input type="number" id="add-income-amount" placeholder="Income amount" step="0.01" required />
+        </label>
+        <label>
+          Description
+          <input type="text" id="add-income-description" placeholder="e.g., Actual Paycheck" required />
+        </label>
+        <label>
+          Category
+          <input type="text" id="add-income-category" placeholder="e.g., Paycheck" value="Income" />
+        </label>
+        <button type="submit" class="btn btn-primary">Save Income</button>
+        <p id="add-income-error" style="color: red; margin-top: 0.5rem;"></p>
+      </form>
+    </div>
+  </div>
+
   <!-- Load App Entry Point (imports all modules) -->
   <script type="module" src="./js/main.js"></script>
 
