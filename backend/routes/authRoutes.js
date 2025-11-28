@@ -8,6 +8,8 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+import StartingBalance from "../models/StartingBalance.js";
+import PaycheckSettings from "../models/PaycheckSettings.js";
 import auth from "../middleware/auth.js";
 
 const router = express.Router();
@@ -47,6 +49,20 @@ router.post("/signup", async (req, res) => {
     const user = await User.create({
       email,
       password: hashed,
+    });
+
+    // Create default starting balance
+    await StartingBalance.create({
+      userId: user._id,
+      startingBalance: 0,
+    });
+
+    // Create default paycheck settings
+    await PaycheckSettings.create({
+      userId: user._id,
+      payAmount: 0,
+      frequency: "biweekly",
+      startDate: new Date(),
     });
 
     // Token

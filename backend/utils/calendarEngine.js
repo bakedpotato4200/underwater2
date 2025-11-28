@@ -366,8 +366,18 @@ export async function buildMonthlyCalendar(
       endDate: endOfMonth,
       startingBalance: baseStartingBalance,
       days,
-      monthSummary,
-      pressurePoints,
+      summary: {
+        startingBalance: baseStartingBalance,
+        income: monthSummary.totalIncome,
+        expenses: monthSummary.totalExpenses,
+        endingBalance: monthSummary.endBalance,
+        lowestBalance: monthSummary.lowestBalance,
+        highestBalance: monthSummary.highestBalance,
+      },
+      pressurePoints: pressurePoints.map(p => ({
+        date: p.dateKey,
+        balance: p.endBalance,
+      })),
     };
   } catch (err) {
     console.error("Error building monthly calendar:", err.message);
