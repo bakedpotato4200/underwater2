@@ -1325,9 +1325,11 @@ input::placeholder {
 .dashboard-logo-horizontal {
   width: 100%;
   height: auto;
-  max-height: 100px;
+  max-height: 150px;
   object-fit: contain;
   filter: none;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 /* Responsive icon sizing */
@@ -1344,7 +1346,7 @@ input::placeholder {
   }
 
   .dashboard-logo-horizontal {
-    max-height: 90px;
+    max-height: 130px;
   }
 }
 
@@ -1361,7 +1363,7 @@ input::placeholder {
   }
 
   .dashboard-logo-horizontal {
-    max-height: 80px;
+    max-height: 110px;
   }
 
   .sidebar-icon-img {
