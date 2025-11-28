@@ -900,45 +900,53 @@ input, select {
   }
 
   .calendar-grid {
-    padding: 0.3rem 0.2rem;
-    gap: 1px;
+    padding: 0.2rem 0.1rem;
+    gap: 0px;
     width: 100%;
     max-width: 100%;
     overflow: hidden;
   }
 
   .calendar-day {
-    padding: 0.2rem 0.12rem;
-    min-height: 75px;
-    gap: 0.05rem;
+    padding: 0.15rem 0.08rem;
+    min-height: 70px;
+    gap: 0.02rem;
     justify-content: flex-start;
     align-items: center;
+    border: none;
+    border-radius: 2px;
+    background: #f5f5f5;
+  }
+
+  .calendar-day:hover {
+    background: #f5f5f5;
+    border-color: transparent;
+    box-shadow: none;
   }
 
   .calendar-day-header {
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     font-weight: bold;
-    color: #666;
-    align-self: center;
+    color: #555;
   }
 
   .calendar-event-income,
   .calendar-event-expense {
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     font-weight: 600;
     display: block;
     text-align: center;
     width: 100%;
-    margin: 0.08rem 0 0 0;
+    margin: 0.02rem 0 0 0;
   }
 
   .day-balance {
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     font-weight: bold;
     margin-top: auto;
     color: #2d5a8c;
-    border-top: 1px solid #eee;
-    padding-top: 0.1rem;
+    border-top: none;
+    padding-top: 0.05rem;
     width: 100%;
     text-align: center;
   }
