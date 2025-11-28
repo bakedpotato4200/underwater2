@@ -54,5 +54,37 @@ navButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const view = btn.dataset.view;
     showView(view);
+    closeSidebar();
   });
 });
+
+// ================================================
+// SIDEBAR TOGGLE
+// ================================================
+const sidebar = document.getElementById("sidebar");
+const sidebarOverlay = document.getElementById("sidebar-overlay");
+const menuToggleBtn = document.getElementById("menu-toggle-btn");
+
+function openSidebar() {
+  if (sidebar) sidebar.classList.add("active");
+  if (sidebarOverlay) sidebarOverlay.classList.add("active");
+}
+
+function closeSidebar() {
+  if (sidebar) sidebar.classList.remove("active");
+  if (sidebarOverlay) sidebarOverlay.classList.remove("active");
+}
+
+if (menuToggleBtn) {
+  menuToggleBtn.addEventListener("click", () => {
+    if (sidebar.classList.contains("active")) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+}
+
+if (sidebarOverlay) {
+  sidebarOverlay.addEventListener("click", closeSidebar);
+}
