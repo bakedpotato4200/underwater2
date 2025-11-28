@@ -1,0 +1,72 @@
+4️⃣ Calendar View (#calendar-view)
+
+Goal: See money flow across the month.
+
+Header:
+	•	Title: “Calendar”
+	•	Left/right month navigation:
+	•	Buttons #prev-month-btn and #next-month-btn styled as circle or rounded ghost buttons.
+	•	Current month label: #calendar-month-label centered, visually prominent.
+
+Summary Bar (.calendar-summary):
+	•	Three items:
+	•	Income
+	•	Bills
+	•	Net
+	•	Style as three small cards or pills, aligned horizontally.
+
+Calendar Grid (#calendar-grid):
+	•	7-column grid for days of week, with rows for weeks.
+	•	Each day cell:
+	•	Date number
+	•	Daily net or balance summary (small text)
+	•	If there are events (income/bills), show one or two tags:
+	•	Green/teal for income
+	•	Red/orange for bills
+	•	For days with high “pressure” (from the engine):
+	•	Add a subtle highlight, border, or icon.
+
+Make sure:
+	•	You do NOT break whatever JS currently populates #calendar-grid.
+You can update the HTML structure pattern, but keep the container ID and work with the shape the JS produces (you may adjust JS slightly if needed, but keep logic the same).
+
+⸻
+
+5️⃣ Recurring View (#recurring-view)
+
+Goal: Simple list/table of recurring incomes/expenses.
+
+Form (#recurring-form):
+	•	Keep all fields:
+	•	Name, Amount, Type, Frequency, Start Date
+	•	Arrange them in a responsive row:
+	•	On desktop: inline row with wrapping.
+	•	On mobile: stacked.
+	•	Make the “Add / Save” button visually strong.
+
+Table (.data-table, #recurring-table-body):
+	•	Style the table with:
+	•	Header row with background
+	•	Striped or lightly separated rows
+	•	For each row show:
+	•	Name
+	•	Type (income/expense) with a colored badge
+	•	Frequency
+	•	Amount
+	•	Start Date
+	•	Action buttons (Edit/Delete) styled as icons or small buttons
+
+⸻
+
+6️⃣ Settings View (#settings-view)
+
+Goal: Friendly configuration panel.
+
+Sections:
+	•	Starting Balance
+	•	Paycheck Settings
+
+Style both as cards under .settings-section:
+	•	Title (<h3>) with small description under it.
+	•	Form fields in a neat row or column.
+	•	Status text (#starting-balance-status, #paycheck-status) styled as success/error messages.
