@@ -8,6 +8,7 @@ expertMode = true
 MONGO_URI = "mongodb+srv://18jacobemmer:Jacob112234@underwaterdb.5epugn3.mongodb.net/?appName=Underwaterdb"
 PORT = "3000"
 NODE_ENV = "development"
+JWT_SECRET = "your_jwt_secret_key_change_in_production"
 
 [workflows]
 runButton = "Project"
@@ -36,3 +37,7 @@ outputType = "console"
 [[ports]]
 localPort = 3000
 externalPort = 3000
+
+[[ports]]
+localPort = 36673
+externalPort = 80
