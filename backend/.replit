@@ -1,0 +1,10 @@
+run = "node server.js"
+
+[env]
+PORT = "5000"
+
+[packager]
+language = "nodejs"
+
+[deployment]
+run = ["node", "server.js"]
