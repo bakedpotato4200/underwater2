@@ -58,9 +58,5 @@ externalPort = 3003
 localPort = 45043
 externalPort = 3002
 
-[[ports]]
-localPort = 46799
-externalPort = 5000
-
 [nix]
 packages = ["zip"]

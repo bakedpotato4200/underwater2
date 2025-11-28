@@ -1262,17 +1262,21 @@ input::placeholder {
   }
 
   .data-table {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    overflow-x: auto;
+    display: block;
   }
 
   .data-table th,
   .data-table td {
-    padding: 0.5rem;
+    padding: 0.35rem;
+    white-space: nowrap;
   }
 
   .data-table button {
-    padding: 0.4rem 0.5rem;
-    font-size: 0.7rem;
+    padding: 0.3rem 0.4rem;
+    font-size: 0.65rem;
+    margin-right: 0.2rem;
   }
 
   .settings-section {
@@ -1408,12 +1412,15 @@ input::placeholder {
   }
 
   .data-table {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
+    overflow-x: auto;
+    display: block;
   }
 
   .data-table th,
   .data-table td {
-    padding: 0.4rem;
+    padding: 0.3rem;
+    white-space: nowrap;
   }
 
   .settings-section {
