@@ -34,10 +34,15 @@ let currentMonth = nowMonth();
 // ========================================
 export async function loadCalendar() {
   try {
+    console.log(`📅 Loading calendar for ${currentYear}-${String(currentMonth).padStart(2, '0')}...`);
     const data = await apiGetMonthlyCalendar(currentYear, currentMonth);
+    console.log("✅ Calendar data received:", data);
     renderCalendar(data);
   } catch (err) {
-    console.error("Calendar load error:", err);
+    console.error("❌ Calendar load error:", err);
+    if (calendarGrid) {
+      calendarGrid.innerHTML = `<div style="color: red; padding: 20px;">Error loading calendar: ${err.message}</div>`;
+    }
   }
 }
 
@@ -51,9 +56,10 @@ function renderCalendar(data) {
   calendarMonthLabel.textContent = `${monthName(month)} ${year}`;
 
   // Update summary
-  calIncomeLabel.textContent = formatMoney(summary.income);
-  calExpensesLabel.textContent = formatMoney(summary.expenses);
-  calNetLabel.textContent = formatMoney(summary.net);
+  const net = (summary.income || 0) - (summary.expenses || 0);
+  calIncomeLabel.textContent = formatMoney(summary.income || 0);
+  calExpensesLabel.textContent = formatMoney(summary.expenses || 0);
+  calNetLabel.textContent = formatMoney(net);
 
   // Clear grid
   calendarGrid.innerHTML = "";
