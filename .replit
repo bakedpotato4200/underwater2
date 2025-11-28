@@ -6,7 +6,7 @@ expertMode = true
 
 [userenv.shared]
 MONGO_URI = "mongodb+srv://18jacobemmer:Jacob112234@underwaterdb.5epugn3.mongodb.net/?appName=Underwaterdb"
-PORT = "3000"
+PORT = "5000"
 NODE_ENV = "development"
 JWT_SECRET = "your_jwt_secret_key_change_in_production"
 

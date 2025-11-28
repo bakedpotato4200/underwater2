@@ -59,7 +59,7 @@ app.use("/api/calendar", calendarRoutes);
 // ========================================
 // SPA Fallback: Serve index.html for all other routes
 // ========================================
-app.get("*", (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
