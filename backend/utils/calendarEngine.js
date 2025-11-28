@@ -144,34 +144,35 @@ export async function buildMonthlyCalendar(
   month,
   startingBalanceOverride = null
 ) {
-  // Range of this month
-  const startOfMonth = new Date(year, month - 1, 1);
-  const endOfMonth = new Date(year, month, 0); // last day of month
-  const daysInMonth = endOfMonth.getDate();
+  try {
+    // Range of this month
+    const startOfMonth = new Date(year, month - 1, 1);
+    const endOfMonth = new Date(year, month, 0); // last day of month
+    const daysInMonth = endOfMonth.getDate();
 
-  // Fetch all relevant data at once
-  const [recurringItems, paycheckSettings, startingBalanceDoc, actualTx] =
-    await Promise.all([
-      Recurring.find({ userId }), // income + expense, arbitrary names
-      PaycheckSettings.findOne({ userId }),
-      StartingBalance.findOne({ userId }),
-      Transaction.find({
-        userId,
-        date: { $gte: startOfMonth, $lte: endOfMonth },
-      }),
-    ]);
+    // Fetch all relevant data at once
+    const [recurringItems, paycheckSettings, startingBalanceDoc, actualTx] =
+      await Promise.all([
+        Recurring.find({ userId }).catch(() => []), // income + expense, arbitrary names
+        PaycheckSettings.findOne({ userId }).catch(() => null),
+        StartingBalance.findOne({ userId }).catch(() => null),
+        Transaction.find({
+          userId,
+          date: { $gte: startOfMonth, $lte: endOfMonth },
+        }).catch(() => []),
+      ]);
 
-  // Decide starting balance
-  const baseStartingBalance =
-    startingBalanceOverride != null
-      ? Number(startingBalanceOverride)
-      : startingBalanceDoc
-      ? Number(startingBalanceDoc.startingBalance || 0)
-      : 0;
+    // Decide starting balance
+    const baseStartingBalance =
+      startingBalanceOverride != null
+        ? Number(startingBalanceOverride)
+        : startingBalanceDoc
+        ? Number(startingBalanceDoc.startingBalance || 0)
+        : 0;
 
-  // Prepare day objects
-  const days = [];
-  const dayMap = {};
+    // Prepare day objects
+    const days = [];
+    const dayMap = {};
 
   for (let d = 1; d <= daysInMonth; d++) {
     const date = new Date(year, month - 1, d);
