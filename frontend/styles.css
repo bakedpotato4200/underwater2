@@ -171,26 +171,6 @@ input, select {
   transform: translateX(0);
 }
 
-.sidebar-header {
-  font-size: 1.3rem;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  position: relative;
-}
-
-.sidebar-close-btn {
-  position: absolute;
-  right: -35px;
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-}
-
 .sidebar-logo {
   background: #4c8bf5;
   padding: 0.4rem 0.6rem;
@@ -233,13 +213,16 @@ input, select {
 }
 
 /* -------------------------------
-   MENU TOGGLE BUTTON
+   APP HEADER
    ------------------------------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
 .menu-toggle-btn {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 1002;
   background: #4c8bf5;
   color: #fff;
   border: none;
@@ -247,10 +230,30 @@ input, select {
   border-radius: 6px;
   font-size: 1.2rem;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .menu-toggle-btn:hover {
   background: #3a6dd4;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.logo-icon {
+  background: #4c8bf5;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.logo-text {
+  color: #333;
 }
 
 /* -------------------------------

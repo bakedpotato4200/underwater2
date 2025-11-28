@@ -57,12 +57,6 @@
 
     <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar">
-      <div class="sidebar-header">
-        <button id="sidebar-close-btn" class="sidebar-close-btn">✕</button>
-        <span class="sidebar-logo">UW2</span>
-        <span class="sidebar-title">Underground Water</span>
-      </div>
-
       <nav class="sidebar-nav">
         <button class="nav-item nav-item-active" data-view="dashboard-view">
           Dashboard
@@ -86,7 +80,13 @@
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
-      <button id="menu-toggle-btn" class="menu-toggle-btn">☰</button>
+      <header class="app-header">
+        <button id="menu-toggle-btn" class="menu-toggle-btn">☰</button>
+        <div class="app-logo">
+          <span class="logo-icon">UW2</span>
+          <span class="logo-text">Underground Water</span>
+        </div>
+      </header>
       <!-- DASHBOARD VIEW -->
       <section id="dashboard-view" class="view view-active">
         <h2>Dashboard</h2>
