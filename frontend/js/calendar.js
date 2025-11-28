@@ -146,11 +146,6 @@ function renderCalendar(data) {
           if (event.type === "income") {
             ev.className = "calendar-event-income";
             ev.textContent = formatMoney(event.amount);
-            ev.style.cursor = "pointer";
-            ev.addEventListener("click", (e) => {
-              e.stopPropagation();
-              openAddIncomeModal(day.dateKey, day.date, event.amount);
-            });
           } else {
             ev.className = "calendar-event-expense";
             ev.textContent = `-${formatMoney(event.amount)}`;
@@ -202,9 +197,9 @@ function showDayDetails(day) {
   if (day.events && day.events.length > 0) {
     html += `<div class="day-events">`;
     html += `<h4>Transactions:</h4>`;
-    day.events.forEach((event) => {
+    day.events.forEach((event, idx) => {
       if (event.type === "income") {
-        html += `<div class="detail-income">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></div>`;
+        html += `<div class="detail-income" style="cursor: pointer; padding: 0.5rem; border-radius: 4px; transition: background 0.2s;" data-income-idx="${idx}" data-income-name="${event.name}" data-income-amount="${event.amount}">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></div>`;
       } else {
         html += `<div class="detail-expense">✗ ${event.name}: <strong>-${formatMoney(event.amount)}</strong></div>`;
       }
@@ -222,12 +217,30 @@ function showDayDetails(day) {
 
   dayModalContent.innerHTML = html;
   dayModal.classList.add("modal-visible");
+  
+  // Make income items clickable to record actual income
+  const incomeItems = dayModalContent.querySelectorAll(".detail-income");
+  incomeItems.forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      item.style.background = "#f0f0f0";
+    });
+    item.addEventListener("mouseleave", () => {
+      item.style.background = "transparent";
+    });
+    item.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const incomeAmount = parseFloat(item.dataset.incomeAmount);
+      const incomeName = item.dataset.incomeName;
+      dayModal.classList.remove("modal-visible");
+      openAddIncomeModal(day.dateKey, day.date, incomeAmount, incomeName);
+    });
+  });
 }
 
 // ========================================
 // Open Add Income Modal
 // ========================================
-function openAddIncomeModal(dateKey, dateObj, projectedAmount) {
+function openAddIncomeModal(dateKey, dateObj, projectedAmount, incomeName = null) {
   selectedIncomeDate = dateKey;
   selectedIncomeAmount = projectedAmount;
   
@@ -236,7 +249,7 @@ function openAddIncomeModal(dateKey, dateObj, projectedAmount) {
   
   addIncomeDate.textContent = `${dateStr} (Projected: ${formatMoney(projectedAmount)})`;
   addIncomeAmount.value = projectedAmount;
-  addIncomeDescription.value = "Actual Paycheck";
+  addIncomeDescription.value = incomeName || "Actual Paycheck";
   addIncomeError.textContent = "";
   
   addIncomeModal.classList.add("modal-visible");
