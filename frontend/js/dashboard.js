@@ -26,12 +26,15 @@ let activeMonth = nowMonth();
 // ========================================
 export async function loadDashboard() {
   dashPressureList.innerHTML = "";
+  console.log(`📊 Loading dashboard for ${activeYear}-${activeMonth}...`);
 
   try {
     const data = await apiGetMonthlyCalendar(activeYear, activeMonth);
+    console.log("✅ Dashboard data received:", data);
     renderDashboard(data);
   } catch (err) {
-    console.error("Dashboard load error:", err);
+    console.error("❌ Dashboard load error:", err);
+    dashPressureList.innerHTML = `<li style="color: red;">Error loading dashboard: ${err.message}</li>`;
   }
 }
 
