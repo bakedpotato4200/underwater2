@@ -71,40 +71,93 @@ function renderCalendar(data) {
   // Clear grid
   calendarGrid.innerHTML = "";
 
-  // Render each day
+  // Create day headers (Sun-Sat)
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const weekdayHeader = document.createElement("div");
+  weekdayHeader.className = "calendar-weekdays";
+  dayNames.forEach((name) => {
+    const header = document.createElement("div");
+    header.className = "weekday";
+    header.textContent = name.slice(0, 3);
+    weekdayHeader.appendChild(header);
+  });
+  calendarGrid.parentElement.insertBefore(weekdayHeader, calendarGrid);
+
+  // Create a map of days by dateKey for quick lookup
+  const dayMap = {};
   days.forEach((day) => {
+    dayMap[day.dateKey] = day;
+  });
+
+  // Get first day of month and how many days in month
+  const firstDayOfMonth = new Date(year, month - 1, 1);
+  const firstDayOfWeek = firstDayOfMonth.getDay(); // 0 = Sunday
+  const lastDayOfMonth = new Date(year, month, 0).getDate();
+
+  // Add empty cells for days before month starts
+  for (let i = 0; i < firstDayOfWeek; i++) {
+    const emptyDiv = document.createElement("div");
+    emptyDiv.className = "calendar-day calendar-day-empty";
+    calendarGrid.appendChild(emptyDiv);
+  }
+
+  // Add all days of the month
+  for (let d = 1; d <= lastDayOfMonth; d++) {
+    const dateObj = new Date(year, month - 1, d);
+    const keyStr = dateObj.toISOString().split("T")[0];
+    const day = dayMap[keyStr];
+
     const div = document.createElement("div");
     div.className = "calendar-day";
-    
-    // Make clickable
-    div.style.cursor = "pointer";
-    div.addEventListener("click", () => showDayDetails(day));
 
-    // Day number and balance header
-    const header = document.createElement("div");
-    header.className = "calendar-day-header";
-    header.innerHTML = `<strong>${day.day}</strong><br><span class="day-balance">${formatMoney(day.endBalance)}</span>`;
-    div.appendChild(header);
+    if (day) {
+      // Make clickable
+      div.addEventListener("click", () => showDayDetails(day));
 
-    // Render events
-    if (day.events && day.events.length > 0) {
-      day.events.forEach((event) => {
-        const ev = document.createElement("div");
+      // Day number and balance header
+      const header = document.createElement("div");
+      header.className = "calendar-day-header";
+      header.textContent = String(day.day);
+      div.appendChild(header);
 
-        if (event.type === "income") {
-          ev.className = "calendar-event-income";
-          ev.textContent = `+${formatMoney(event.amount)}`;
-        } else {
-          ev.className = "calendar-event-expense";
-          ev.textContent = `-${formatMoney(event.amount)}`;
-        }
+      // Render events
+      if (day.events && day.events.length > 0) {
+        day.events.forEach((event) => {
+          const ev = document.createElement("div");
 
-        div.appendChild(ev);
-      });
+          if (event.type === "income") {
+            ev.className = "calendar-event-income";
+            ev.textContent = `+${formatMoney(event.amount)}`;
+          } else {
+            ev.className = "calendar-event-expense";
+            ev.textContent = `-${formatMoney(event.amount)}`;
+          }
+
+          div.appendChild(ev);
+        });
+      }
+
+      // Add balance at bottom
+      const balance = document.createElement("div");
+      balance.className = "day-balance";
+      balance.textContent = formatMoney(day.endBalance);
+      div.appendChild(balance);
+    } else {
+      // Shouldn't happen, but fallback
+      div.className = "calendar-day calendar-day-empty";
     }
 
     calendarGrid.appendChild(div);
-  });
+  }
+
+  // Add empty cells for remaining grid (to fill out 6 rows)
+  const totalCells = calendarGrid.children.length;
+  const remainingCells = (42 - totalCells); // 6 weeks * 7 days
+  for (let i = 0; i < remainingCells; i++) {
+    const emptyDiv = document.createElement("div");
+    emptyDiv.className = "calendar-day calendar-day-empty";
+    calendarGrid.appendChild(emptyDiv);
+  }
 }
 
 // ========================================
