@@ -25,9 +25,15 @@ const calNetLabel = document.getElementById("cal-net");
 const prevMonthBtn = document.getElementById("prev-month-btn");
 const nextMonthBtn = document.getElementById("next-month-btn");
 
+// Modal elements
+const dayModal = document.getElementById("day-detail-modal");
+const dayModalClose = document.getElementById("day-modal-close");
+const dayModalContent = document.getElementById("day-modal-content");
+
 // Active calendar state
 let currentYear = nowYear();
 let currentMonth = nowMonth();
+let currentMonthData = null;
 
 // ========================================
 // Load a month's calendar from backend
@@ -51,6 +57,7 @@ export async function loadCalendar() {
 // ========================================
 function renderCalendar(data) {
   const { year, month, days, summary } = data;
+  currentMonthData = data;
 
   // Update header
   calendarMonthLabel.textContent = `${monthName(month)} ${year}`;
@@ -68,30 +75,77 @@ function renderCalendar(data) {
   days.forEach((day) => {
     const div = document.createElement("div");
     div.className = "calendar-day";
+    
+    // Make clickable
+    div.style.cursor = "pointer";
+    div.addEventListener("click", () => showDayDetails(day));
 
-    // Day number
+    // Day number and balance header
     const header = document.createElement("div");
     header.className = "calendar-day-header";
-    header.textContent = day.day;
+    header.innerHTML = `<strong>${day.day}</strong><br><span class="day-balance">${formatMoney(day.endBalance)}</span>`;
     div.appendChild(header);
 
     // Render events
-    day.events.forEach((event) => {
-      const ev = document.createElement("div");
+    if (day.events && day.events.length > 0) {
+      day.events.forEach((event) => {
+        const ev = document.createElement("div");
 
-      if (event.type === "income") {
-        ev.className = "calendar-event-income";
-        ev.textContent = `+${formatMoney(event.amount)}`;
-      } else {
-        ev.className = "calendar-event-expense";
-        ev.textContent = `-${formatMoney(event.amount)}`;
-      }
+        if (event.type === "income") {
+          ev.className = "calendar-event-income";
+          ev.textContent = `+${formatMoney(event.amount)}`;
+        } else {
+          ev.className = "calendar-event-expense";
+          ev.textContent = `-${formatMoney(event.amount)}`;
+        }
 
-      div.appendChild(ev);
-    });
+        div.appendChild(ev);
+      });
+    }
 
     calendarGrid.appendChild(div);
   });
+}
+
+// ========================================
+// Show Day Detail Modal
+// ========================================
+function showDayDetails(day) {
+  if (!dayModal || !dayModalContent) {
+    console.error("Modal elements not found");
+    return;
+  }
+
+  const date = new Date(day.date);
+  const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+
+  let html = `<h3>${dateStr}</h3>`;
+  html += `<div class="day-detail-section">`;
+  html += `<p><strong>Starting Balance:</strong> ${formatMoney(day.startBalance || 0)}</p>`;
+
+  if (day.events && day.events.length > 0) {
+    html += `<div class="day-events">`;
+    html += `<h4>Transactions:</h4>`;
+    day.events.forEach((event) => {
+      if (event.type === "income") {
+        html += `<div class="detail-income">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></div>`;
+      } else {
+        html += `<div class="detail-expense">✗ ${event.name}: <strong>-${formatMoney(event.amount)}</strong></div>`;
+      }
+    });
+    html += `</div>`;
+  } else {
+    html += `<p><em>No transactions this day</em></p>`;
+  }
+
+  html += `<div class="day-totals">`;
+  html += `<p><strong>Income:</strong> <span style="color: #2ecc71">+${formatMoney(day.incomeTotal || 0)}</span></p>`;
+  html += `<p><strong>Expenses:</strong> <span style="color: #e74c3c">-${formatMoney(day.expenseTotal || 0)}</span></p>`;
+  html += `<p style="border-top: 1px solid #ccc; padding-top: 0.5rem; margin-top: 0.5rem;"><strong>End of Day Balance:</strong> <span style="font-size: 1.2rem; font-weight: bold">${formatMoney(day.endBalance)}</span></p>`;
+  html += `</div>`;
+
+  dayModalContent.innerHTML = html;
+  dayModal.classList.add("modal-visible");
 }
 
 // ========================================
@@ -107,20 +161,43 @@ function monthName(n) {
 // ========================================
 // Month switching
 // ========================================
-prevMonthBtn.addEventListener("click", () => {
-  currentMonth--;
-  if (currentMonth < 1) {
-    currentMonth = 12;
-    currentYear--;
-  }
-  loadCalendar();
-});
+if (prevMonthBtn) {
+  prevMonthBtn.addEventListener("click", () => {
+    currentMonth--;
+    if (currentMonth < 1) {
+      currentMonth = 12;
+      currentYear--;
+    }
+    loadCalendar();
+  });
+}
 
-nextMonthBtn.addEventListener("click", () => {
-  currentMonth++;
-  if (currentMonth > 12) {
-    currentMonth = 1;
-    currentYear++;
-  }
-  loadCalendar();
-});
+if (nextMonthBtn) {
+  nextMonthBtn.addEventListener("click", () => {
+    currentMonth++;
+    if (currentMonth > 12) {
+      currentMonth = 1;
+      currentYear++;
+    }
+    loadCalendar();
+  });
+}
+
+// ========================================
+// Modal controls
+// ========================================
+if (dayModalClose) {
+  dayModalClose.addEventListener("click", () => {
+    if (dayModal) {
+      dayModal.classList.remove("modal-visible");
+    }
+  });
+}
+
+if (dayModal) {
+  dayModal.addEventListener("click", (e) => {
+    if (e.target === dayModal) {
+      dayModal.classList.remove("modal-visible");
+    }
+  });
+}
