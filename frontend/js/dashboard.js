@@ -58,7 +58,8 @@ function renderDashboard(data) {
     pressurePoints.forEach((p, idx) => {
       const li = document.createElement("li");
       const indicator = idx === 0 ? "🔴" : idx === 1 ? "🟠" : "🟡";
-      li.innerHTML = `<strong>${indicator} ${p.date}</strong><br><small>${formatMoney(p.balance)}</small>`;
+      const formattedDate = formatPressureDate(p.date);
+      li.innerHTML = `<strong>${indicator} ${formattedDate}</strong><br><small>${formatMoney(p.balance)}</small>`;
       dashPressureList.appendChild(li);
     });
   } else {
@@ -67,4 +68,17 @@ function renderDashboard(data) {
     li.style.color = "var(--success-green)";
     dashPressureList.appendChild(li);
   }
+}
+
+// ========================================
+// Format date for pressure days
+// Converts "2025-11-21" to "11-21-2025 (Friday)"
+// ========================================
+function formatPressureDate(dateStr) {
+  const date = new Date(dateStr + "T00:00:00Z");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const year = date.getUTCFullYear();
+  const dayName = date.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
+  return `${month}-${day}-${year} (${dayName})`
 }
