@@ -55,14 +55,20 @@ async function loadStartingBalance() {
 startBalForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   startBalStatus.textContent = "";
+  startBalStatus.className = "form-status";
 
   const value = Number(startBalInput.value);
 
   try {
     await apiSetStartingBalance(value);
-    startBalStatus.textContent = "Saved!";
+    startBalStatus.textContent = "✓ Saved successfully!";
+    startBalStatus.className = "form-status success";
+    setTimeout(() => {
+      startBalStatus.textContent = "";
+    }, 3000);
   } catch (err) {
-    startBalStatus.textContent = err.message;
+    startBalStatus.textContent = "✗ " + err.message;
+    startBalStatus.className = "form-status";
   }
 });
 
@@ -93,6 +99,7 @@ async function loadPaycheckSettings() {
 payForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   payStatus.textContent = "";
+  payStatus.className = "form-status";
 
   const amt = Number(payAmountInput.value);
   const freq = payFrequencyInput.value;
@@ -100,8 +107,13 @@ payForm.addEventListener("submit", async (e) => {
 
   try {
     await apiSetPaycheckSettings(amt, freq, date);
-    payStatus.textContent = "Saved!";
+    payStatus.textContent = "✓ Saved successfully!";
+    payStatus.className = "form-status success";
+    setTimeout(() => {
+      payStatus.textContent = "";
+    }, 3000);
   } catch (err) {
-    payStatus.textContent = err.message;
+    payStatus.textContent = "✗ " + err.message;
+    payStatus.className = "form-status";
   }
 });

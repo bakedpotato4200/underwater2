@@ -55,14 +55,16 @@ function renderDashboard(data) {
 
   // Pressure points list
   if (pressurePoints && pressurePoints.length > 0) {
-    pressurePoints.forEach((p) => {
+    pressurePoints.forEach((p, idx) => {
       const li = document.createElement("li");
-      li.textContent = `${p.date} → ${formatMoney(p.balance)}`;
+      const indicator = idx === 0 ? "🔴" : idx === 1 ? "🟠" : "🟡";
+      li.innerHTML = `<strong>${indicator} ${p.date}</strong><br><small>${formatMoney(p.balance)}</small>`;
       dashPressureList.appendChild(li);
     });
   } else {
     const li = document.createElement("li");
-    li.textContent = "No pressure days this month.";
+    li.textContent = "✓ No pressure days this month.";
+    li.style.color = "var(--success-green)";
     dashPressureList.appendChild(li);
   }
 }

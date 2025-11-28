@@ -43,16 +43,19 @@ export async function loadRecurringPage() {
 // ========================================
 function renderRow(item) {
   const tr = document.createElement("tr");
+  
+  const typeBadgeClass = item.type === "income" ? "badge-income" : "badge-expense";
+  const typeLabel = item.type.charAt(0).toUpperCase() + item.type.slice(1);
 
   tr.innerHTML = `
     <td>${item.name}</td>
-    <td>${item.type}</td>
+    <td><span class="badge ${typeBadgeClass}">${typeLabel}</span></td>
     <td>${item.frequency}</td>
     <td>${formatMoney(item.amount)}</td>
     <td>${item.startDate.split("T")[0]}</td>
     <td>
-      <button class="btn btn-ghost rec-edit" data-id="${item._id}">Edit</button>
-      <button class="btn btn-ghost rec-delete" data-id="${item._id}">Delete</button>
+      <button class="btn btn-ghost rec-edit" data-id="${item._id}" title="Edit">✏️</button>
+      <button class="btn btn-ghost rec-delete" data-id="${item._id}" title="Delete">🗑️</button>
     </td>
   `;
 

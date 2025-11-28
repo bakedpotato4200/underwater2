@@ -586,11 +586,22 @@ input::placeholder {
   font-size: 0.9rem;
   color: var(--text-secondary);
   transition: all 0.3s ease;
+  line-height: 1.5;
 }
 
 .simple-list li:hover {
   background: rgba(0, 212, 255, 0.1);
   transform: translateX(4px);
+}
+
+.simple-list li strong {
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.simple-list li small {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
 }
 
 /* ================================
@@ -856,6 +867,31 @@ input::placeholder {
 .day-totals p span:last-child {
   font-weight: 600;
   color: var(--accent-teal);
+}
+
+/* ================================
+   BADGES
+   ================================ */
+.badge {
+  display: inline-block;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-income {
+  background: rgba(0, 217, 126, 0.15);
+  color: var(--success-green);
+  border: 1px solid rgba(0, 217, 126, 0.3);
+}
+
+.badge-expense {
+  background: rgba(255, 71, 87, 0.15);
+  color: var(--danger-red);
+  border: 1px solid rgba(255, 71, 87, 0.3);
 }
 
 /* ================================
