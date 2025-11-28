@@ -444,11 +444,7 @@ input::placeholder {
 }
 
 .app-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+  display: none;
 }
 
 .logo-icon {
@@ -1316,12 +1312,11 @@ input::placeholder {
 
 .dashboard-header-banner {
   width: 100%;
-  max-width: 400px;
-  margin: 0 auto 1.5rem;
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 153, 255, 0.03) 100%);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 212, 255, 0.1);
+  margin: 0 0 1.5rem 0;
+  padding: 0.5rem 0;
+  background: transparent;
+  border-radius: 0;
+  border: none;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1330,9 +1325,9 @@ input::placeholder {
 .dashboard-logo-horizontal {
   width: 100%;
   height: auto;
-  max-height: 80px;
+  max-height: 100px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(0, 212, 255, 0.1));
+  filter: none;
 }
 
 /* Responsive icon sizing */
@@ -1344,13 +1339,12 @@ input::placeholder {
   }
 
   .dashboard-header-banner {
-    max-width: 350px;
-    margin: 0 auto 1.2rem;
-    padding: 0.8rem;
+    margin: 0 0 1.2rem 0;
+    padding: 0.4rem 0;
   }
 
   .dashboard-logo-horizontal {
-    max-height: 70px;
+    max-height: 90px;
   }
 }
 
@@ -1362,13 +1356,12 @@ input::placeholder {
   }
 
   .dashboard-header-banner {
-    max-width: 100%;
     margin: 0 0 1rem 0;
-    padding: 0.6rem;
+    padding: 0.3rem 0;
   }
 
   .dashboard-logo-horizontal {
-    max-height: 60px;
+    max-height: 80px;
   }
 
   .sidebar-icon-img {
