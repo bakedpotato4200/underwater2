@@ -263,12 +263,20 @@ input::placeholder {
 
 .form-error, .form-status {
   font-size: 0.85rem;
-  min-height: 18px;
+  min-height: 20px;
   color: var(--danger-red);
+  margin-top: 0.75rem;
 }
 
 .form-status.success {
   color: var(--success-green);
+}
+
+.form-error:not(:empty) {
+  padding: 0.6rem;
+  background: rgba(255, 71, 87, 0.1);
+  border-left: 3px solid var(--danger-red);
+  border-radius: 4px;
 }
 
 /* ================================
@@ -780,7 +788,19 @@ input::placeholder {
 
 .modal-content h3 {
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.modal-date-info {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(0, 212, 255, 0.05);
+  border-left: 3px solid var(--accent-teal);
+  border-radius: 6px;
 }
 
 .modal-close {
