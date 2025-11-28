@@ -1295,6 +1295,88 @@ input::placeholder {
   }
 }
 
+/* ================================
+   APP ICONS & LOGOS
+   ================================ */
+.auth-logo-badge {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1.5rem;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 212, 255, 0.15));
+}
+
+.sidebar-icon-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  display: inline-block;
+}
+
+.dashboard-header-banner {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 153, 255, 0.03) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-logo-horizontal {
+  width: 100%;
+  height: auto;
+  max-height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 212, 255, 0.1));
+}
+
+/* Responsive icon sizing */
+@media (max-width: 768px) {
+  .auth-logo-badge {
+    width: 85px;
+    height: 85px;
+    margin: 0 auto 1.2rem;
+  }
+
+  .dashboard-header-banner {
+    max-width: 350px;
+    margin: 0 auto 1.2rem;
+    padding: 0.8rem;
+  }
+
+  .dashboard-logo-horizontal {
+    max-height: 70px;
+  }
+}
+
+@media (max-width: 600px) {
+  .auth-logo-badge {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 1rem;
+  }
+
+  .dashboard-header-banner {
+    max-width: 100%;
+    margin: 0 0 1rem 0;
+    padding: 0.6rem;
+  }
+
+  .dashboard-logo-horizontal {
+    max-height: 60px;
+  }
+
+  .sidebar-icon-img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 @media (max-width: 400px) {
   html, body {
     font-size: 14px;

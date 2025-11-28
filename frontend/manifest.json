@@ -1,0 +1,33 @@
+{
+  "name": "Underground Water 2",
+  "short_name": "UW2",
+  "description": "Smart paycheck-to-paycheck budgeting app with fintech theme",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1628",
+  "theme_color": "#0a1628",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./assets/icons/icon-square-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/icon-square-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["finance", "productivity"],
+  "screenshots": [
+    {
+      "src": "./assets/icons/logo-horizontal.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}
