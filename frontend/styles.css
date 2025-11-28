@@ -402,7 +402,7 @@ input, select {
 
 .calendar-day-header {
   font-weight: bold;
-  font-size: 1.3rem;
+  font-size: 0.85rem;
   color: #333;
   margin: 0;
   padding: 0;
@@ -410,7 +410,7 @@ input, select {
 
 .calendar-event-income {
   color: #2ecc71;
-  font-size: 1.3rem;
+  font-size: 0.75rem;
   font-weight: bold;
   margin: 0;
   display: inline-block;
@@ -418,7 +418,7 @@ input, select {
 
 .calendar-event-expense {
   color: #e74c3c;
-  font-size: 1.3rem;
+  font-size: 0.75rem;
   font-weight: bold;
   margin: 0;
   display: inline-block;
@@ -426,7 +426,7 @@ input, select {
 
 .day-balance {
   color: #2d5a8c;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   font-weight: bold;
   margin-top: 0;
   padding-top: 0;
@@ -739,7 +739,7 @@ input, select {
   }
 
   .calendar-day-header {
-    font-size: 1.15rem;
+    font-size: 0.8rem;
     font-weight: bold;
     color: #333;
     margin: 0;
@@ -748,14 +748,14 @@ input, select {
 
   .calendar-event-income,
   .calendar-event-expense {
-    font-size: 1.15rem;
+    font-size: 0.7rem;
     font-weight: bold;
     margin: 0;
     display: inline-block;
   }
 
   .day-balance {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     margin-top: 0;
     padding-top: 0;
     font-weight: bold;
@@ -919,7 +919,7 @@ input, select {
   }
 
   .calendar-day-header {
-    font-size: 1.1rem;
+    font-size: 0.75rem;
     font-weight: bold;
     color: #333;
     margin: 0;
@@ -928,14 +928,14 @@ input, select {
 
   .calendar-event-income,
   .calendar-event-expense {
-    font-size: 1.1rem;
+    font-size: 0.65rem;
     font-weight: bold;
     margin: 0;
     display: inline-block;
   }
 
   .day-balance {
-    font-size: 0.8rem;
+    font-size: 0.65rem;
     margin-top: 0;
     padding-top: 0;
     font-weight: bold;
