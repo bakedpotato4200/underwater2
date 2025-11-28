@@ -71,6 +71,12 @@ function renderCalendar(data) {
   // Clear grid
   calendarGrid.innerHTML = "";
 
+  // Remove old weekday header if it exists
+  const oldWeekdayHeader = calendarGrid.parentElement.querySelector(".calendar-weekdays");
+  if (oldWeekdayHeader) {
+    oldWeekdayHeader.remove();
+  }
+
   // Create day headers (Sun-Sat)
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const weekdayHeader = document.createElement("div");
