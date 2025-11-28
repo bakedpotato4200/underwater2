@@ -24,11 +24,11 @@
       <form id="login-form" class="auth-form">
         <label>
           Email
-          <input type="email" id="login-email" required />
+          <input type="email" id="login-email" autocomplete="email" required />
         </label>
         <label>
           Password
-          <input type="password" id="login-password" required />
+          <input type="password" id="login-password" autocomplete="current-password" required />
         </label>
         <button type="submit" class="btn btn-primary">Login</button>
         <p class="auth-error" id="login-error"></p>
@@ -38,11 +38,11 @@
       <form id="signup-form" class="auth-form auth-form-hidden">
         <label>
           Email
-          <input type="email" id="signup-email" required />
+          <input type="email" id="signup-email" autocomplete="email" required />
         </label>
         <label>
           Password
-          <input type="password" id="signup-password" required />
+          <input type="password" id="signup-password" autocomplete="new-password" required />
         </label>
         <button type="submit" class="btn btn-secondary">Create Account</button>
         <p class="auth-error" id="signup-error"></p>

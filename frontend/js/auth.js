@@ -64,7 +64,7 @@ signupForm.addEventListener("submit", async (e) => {
   try {
     const res = await apiSignup(email, password);
     setToken(res.token);
-    userEmailLabel.textContent = res.email;
+    userEmailLabel.textContent = res.user.email;
 
     showApp();
   } catch (err) {
@@ -85,7 +85,7 @@ loginForm.addEventListener("submit", async (e) => {
   try {
     const res = await apiLogin(email, password);
     setToken(res.token);
-    userEmailLabel.textContent = res.email;
+    userEmailLabel.textContent = res.user.email;
 
     showApp();
   } catch (err) {
@@ -113,7 +113,7 @@ export async function checkAuthOnLoad() {
 
   try {
     const res = await apiVerify();
-    userEmailLabel.textContent = res.email;
+    userEmailLabel.textContent = res.user.email;
     showApp();
   } catch (err) {
     clearToken();
