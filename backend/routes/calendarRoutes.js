@@ -35,8 +35,8 @@ router.get("/month", auth, async (req, res) => {
     const calendar = await buildMonthlyCalendar(req.userId, year, month);
     res.json(calendar);
   } catch (err) {
-    console.error("Calendar /month error:", err);
-    res.status(500).json({ error: "Server error" });
+    console.error("Calendar /month error:", err.message, err);
+    res.status(500).json({ error: err.message || "Server error" });
   }
 });
 
@@ -58,8 +58,8 @@ router.get("/year", auth, async (req, res) => {
     const forecast = await buildYearForecast(req.userId, year);
     res.json(forecast);
   } catch (err) {
-    console.error("Calendar /year error:", err);
-    res.status(500).json({ error: "Server error" });
+    console.error("Calendar /year error:", err.message, err);
+    res.status(500).json({ error: err.message || "Server error" });
   }
 });
 
