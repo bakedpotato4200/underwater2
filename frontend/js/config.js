@@ -11,11 +11,9 @@
 //   CHANGE API_BASE_URL to your Railway URL.
 // ========================================
 
-// Detect if running on Replit and use appropriate backend URL
-const isReplit = window.location.hostname.includes('replit.dev');
-export const API_BASE_URL = isReplit 
-  ? `${window.location.protocol}//${window.location.hostname}:3000/api`
-  : "http://localhost:3000/api";
+// Use relative URL so it routes through the same domain
+// On Replit, we need to proxy API calls through the same port
+export const API_BASE_URL = "/api";
 
 // --------------------------------------------
 // Token Helpers
@@ -43,24 +41,30 @@ export async function apiRequest(endpoint, method = "GET", body = null) {
   const token = getToken();
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : null,
-  });
-
-  let data;
   try {
-    data = await response.json();
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : null,
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch (err) {
+      data = { error: "Invalid JSON response" };
+    }
+
+    if (!response.ok) {
+      console.error(`API Error [${response.status}]:`, data);
+      throw new Error(data.error || `API error: ${response.status}`);
+    }
+
+    return data;
   } catch (err) {
-    data = { error: "Invalid JSON response" };
+    console.error(`API Request Failed (${method} ${endpoint}):`, err.message);
+    throw err;
   }
-
-  if (!response.ok) {
-    throw new Error(data.error || "API error");
-  }
-
-  return data;
 }
 
 // --------------------------------------------
