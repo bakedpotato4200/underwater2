@@ -1788,6 +1788,6 @@ html[data-theme="light"] .calendar-summary-negative {
 
 /* Light mode theme label fix */
 html[data-theme="light"] .theme-label {
-  color: #0077b6;
+  color: #ffffff;
   font-weight: 600;
 }
