@@ -45,6 +45,9 @@ export async function apiRequest(endpoint, method = "GET", body = null) {
   const token = getToken();
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
+  // Debug: Log the full API URL being called
+  console.log(`🔗 API Call: ${API_BASE_URL}${endpoint}`);
+
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method,
