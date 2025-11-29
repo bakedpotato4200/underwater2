@@ -324,8 +324,8 @@ function showPaycheckDetails(paycheckNum, days) {
 
   html += `<div class="day-totals" style="border-top: 1px solid #ccc; padding-top: 1rem; margin-top: 1rem;">`;
   html += `<p><strong>Total Income:</strong> <span style="color: #2ecc71;">+${formatMoney(totalPeriodIncome)}</span></p>`;
-  html += `<p><strong>Total Bills:</strong> <span style="color: #e74c3c;">-${formatMoney(totalBills)}</span></p>`;
-  html += `<p style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>Income After Bills:</strong> <span style="color: ${totalPeriodIncome - totalBills >= 0 ? '#2ecc71' : '#e74c3c'}; font-size: 1.3rem;">${formatMoney(totalPeriodIncome - totalBills)}</span></p>`;
+  html += `<p><strong>Total Bills:</strong> <span style="color: #e74c3c;">-${formatMoney(foundBills ? (function() {let total = 0; if (days && days.length > 0) { days.forEach(day => { const dateKey = day.dateKey; const dayNum = parseInt(dateKey.split('-')[2], 10); const isInPeriod = (paycheckNum === 1) ? (dayNum >= 1 && dayNum <= 14) : (dayNum >= 15 && dayNum <= 31); if (isInPeriod && day.events) { day.events.forEach(event => { if (event.type === "expense") total += event.amount || 0; }); } }); } return total; })() : 0)}</span></p>`;
+  html += `<p style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>Income After Bills:</strong> <span style="color: ${totalPeriodIncome - foundBills >= 0 ? '#2ecc71' : '#e74c3c'}; font-size: 1.3rem;">${formatMoney(totalPeriodIncome - (function() {let total = 0; if (days && days.length > 0) { days.forEach(day => { const dateKey = day.dateKey; const dayNum = parseInt(dateKey.split('-')[2], 10); const isInPeriod = (paycheckNum === 1) ? (dayNum >= 1 && dayNum <= 14) : (dayNum >= 15 && dayNum <= 31); if (isInPeriod && day.events) { day.events.forEach(event => { if (event.type === "expense") total += event.amount || 0; }); } }); } return total; })())}</span></p>`;
   html += `</div>`;
   html += `</div>`;
 
