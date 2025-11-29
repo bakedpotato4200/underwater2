@@ -254,25 +254,39 @@ function showPaycheckDetails(paycheckNum, days) {
   let html = `<h3>Paycheck ${paycheckNum} (${startFormatted} - ${endFormatted})</h3>`;
   html += `<div class="day-detail-section">`;
   
+  // First pass: calculate totals
+  let totalPeriodIncome = 0;
+  let totalBills = 0;
+  
+  if (days && days.length > 0) {
+    days.forEach(day => {
+      const dateKey = day.dateKey;
+      const dayNum = parseInt(dateKey.split('-')[2], 10);
+      const isInPeriod = (paycheckNum === 1) ? (dayNum >= 1 && dayNum <= 14) : (dayNum >= 15 && dayNum <= 31);
+      
+      if (isInPeriod && day.events) {
+        day.events.forEach(event => {
+          if (event.type === "income") totalPeriodIncome += event.amount || 0;
+          if (event.type === "expense") totalBills += event.amount || 0;
+        });
+      }
+    });
+  }
+  
   // Show all income for the period
   html += `<h4 style="margin-bottom: 0.5rem;">Income for this Period:</h4>`;
   let foundIncome = false;
-  let totalPeriodIncome = 0;
 
   if (days && days.length > 0) {
     days.forEach(day => {
-      // Use dateKey to extract day number, avoiding timezone issues
-      const dateKey = day.dateKey; // Format: "2025-11-01"
-      const dayNum = parseInt(dateKey.split('-')[2], 10); // Extract day (1-31)
-      
-      // Check if day is in this period (using day number instead of Date object)
+      const dateKey = day.dateKey;
+      const dayNum = parseInt(dateKey.split('-')[2], 10);
       const isInPeriod = (paycheckNum === 1) ? (dayNum >= 1 && dayNum <= 14) : (dayNum >= 15 && dayNum <= 31);
       
       if (isInPeriod && day.events) {
         day.events.forEach(event => {
           if (event.type === "income") {
             foundIncome = true;
-            totalPeriodIncome += event.amount || 0;
             const dayDate = new Date(day.date);
             const dayFormatted = dayDate.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" });
             html += `<div class="detail-income" style="padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px;">
@@ -290,16 +304,12 @@ function showPaycheckDetails(paycheckNum, days) {
 
   html += `<h4 style="margin-top: 1rem; margin-bottom: 0.5rem;">Bills for this Period:</h4>`;
 
-  let billCount = 0;
   let foundBills = false;
 
   if (days && days.length > 0) {
     days.forEach(day => {
-      // Use dateKey to extract day number, avoiding timezone issues
-      const dateKey = day.dateKey; // Format: "2025-11-01"
-      const dayNum = parseInt(dateKey.split('-')[2], 10); // Extract day (1-31)
-      
-      // Check if day is in this period (using day number instead of Date object)
+      const dateKey = day.dateKey;
+      const dayNum = parseInt(dateKey.split('-')[2], 10);
       const isInPeriod = (paycheckNum === 1) ? (dayNum >= 1 && dayNum <= 14) : (dayNum >= 15 && dayNum <= 31);
       
       if (isInPeriod && day.events) {
@@ -311,7 +321,6 @@ function showPaycheckDetails(paycheckNum, days) {
             html += `<div class="detail-expense" style="padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px;">
               <small style="color: #999;">${dayFormatted}</small> - ${event.name}: <strong style="color: #e74c3c;">-${formatMoney(event.amount)}</strong>
             </div>`;
-            billCount++;
           }
         });
       }
@@ -322,10 +331,11 @@ function showPaycheckDetails(paycheckNum, days) {
     html += `<p><em style="color: #2ecc71;">✓ No bills this period</em></p>`;
   }
 
+  const netAmount = totalPeriodIncome - totalBills;
   html += `<div class="day-totals" style="border-top: 1px solid #ccc; padding-top: 1rem; margin-top: 1rem;">`;
   html += `<p><strong>Total Income:</strong> <span style="color: #2ecc71;">+${formatMoney(totalPeriodIncome)}</span></p>`;
-  html += `<p><strong>Total Bills:</strong> <span style="color: #e74c3c;">-${formatMoney(foundBills ? (function() {let total = 0; if (days && days.length > 0) { days.forEach(day => { const dateKey = day.dateKey; const dayNum = parseInt(dateKey.split('-')[2], 10); const isInPeriod = (paycheckNum === 1) ? (dayNum >= 1 && dayNum <= 14) : (dayNum >= 15 && dayNum <= 31); if (isInPeriod && day.events) { day.events.forEach(event => { if (event.type === "expense") total += event.amount || 0; }); } }); } return total; })() : 0)}</span></p>`;
-  html += `<p style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>Income After Bills:</strong> <span style="color: ${totalPeriodIncome - foundBills >= 0 ? '#2ecc71' : '#e74c3c'}; font-size: 1.3rem;">${formatMoney(totalPeriodIncome - (function() {let total = 0; if (days && days.length > 0) { days.forEach(day => { const dateKey = day.dateKey; const dayNum = parseInt(dateKey.split('-')[2], 10); const isInPeriod = (paycheckNum === 1) ? (dayNum >= 1 && dayNum <= 14) : (dayNum >= 15 && dayNum <= 31); if (isInPeriod && day.events) { day.events.forEach(event => { if (event.type === "expense") total += event.amount || 0; }); } }); } return total; })())}</span></p>`;
+  html += `<p><strong>Total Bills:</strong> <span style="color: #e74c3c;">-${formatMoney(totalBills)}</span></p>`;
+  html += `<p style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>Income After Bills:</strong> <span style="color: ${netAmount >= 0 ? '#2ecc71' : '#e74c3c'}; font-size: 1.3rem;">${formatMoney(netAmount)}</span></p>`;
   html += `</div>`;
   html += `</div>`;
 
