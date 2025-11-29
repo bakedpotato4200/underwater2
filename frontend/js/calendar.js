@@ -209,8 +209,8 @@ function showDayDetails(day) {
         const clickableAttrs = (isActualIncome || isPaycheck) ? `data-income-id="${event._id || ''}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" data-is-actual="${!event.projected}" data-is-paycheck="${isPaycheck}"` : '';
         const style = `padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; ${(isActualIncome || isPaycheck) ? 'cursor: pointer;' : ''}`;
         html += `<div style="${style}" class="income-clickable" ${clickableAttrs}>
-          <span style="flex: 1;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
-          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; margin-left: 0.5rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
+          <span style="flex: 1; pointer-events: none;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
+          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; margin-left: 0.5rem; pointer-events: auto;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
         </div>`;
       } else {
         html += `<div class="detail-expense" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
@@ -264,6 +264,7 @@ function showDayDetails(day) {
     const incomeItems = dayModalContent.querySelectorAll(".income-clickable");
     incomeItems.forEach(item => {
       item.addEventListener("click", (e) => {
+        e.stopPropagation();
         if (e.target.tagName === 'BUTTON') return; // Don't trigger if delete button clicked
         const incomeId = item.getAttribute("data-income-id");
         const incomeAmount = item.getAttribute("data-income-amount");
