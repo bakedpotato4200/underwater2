@@ -8,8 +8,6 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
 
 // Route imports
 import authRoutes from "./routes/authRoutes.js";
@@ -25,8 +23,6 @@ import calendarRoutes from "./routes/calendarRoutes.js";
 dotenv.config();
 
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // ========================================
 // Middleware
@@ -39,12 +35,6 @@ app.use(cors({
 app.use(express.json());
 
 // ========================================
-// Serve Frontend Static Files
-// ========================================
-const frontendPath = path.join(__dirname, "../frontend");
-app.use(express.static(frontendPath));
-
-// ========================================
 // API Routes
 // ========================================
 app.use("/api/auth", authRoutes);
@@ -55,13 +45,6 @@ app.use("/api/recurring", recurringRoutes);
 app.use("/api/starting-balance", startingBalanceRoutes);
 app.use("/api/paycheck-settings", paycheckSettingsRoutes);
 app.use("/api/calendar", calendarRoutes);
-
-// ========================================
-// SPA Fallback: Serve index.html for all other routes
-// ========================================
-app.use((req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
-});
 
 // ========================================
 // MongoDB Connection
@@ -87,7 +70,6 @@ mongoose
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📁 Serving frontend from: ${frontendPath}`);
+  console.log(`🚀 API Server running on port ${PORT}`);
   console.log(`🔗 API available at: /api`);
 });
