@@ -21,6 +21,14 @@ export function apiVerify() {
   return apiRequest("/auth/verify", "GET");
 }
 
+export function apiForgotPassword(email) {
+  return apiRequest("/auth/forgot-password", "POST", { email });
+}
+
+export function apiResetPassword(email, resetCode, newPassword) {
+  return apiRequest("/auth/reset-password", "POST", { email, resetCode, newPassword });
+}
+
 // -----------------------
 // STARTING BALANCE
 // -----------------------

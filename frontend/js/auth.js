@@ -14,6 +14,8 @@ import {
   apiLogin,
   apiSignup,
   apiVerify,
+  apiForgotPassword,
+  apiResetPassword,
 } from "./api.js";
 
 import { showView } from "./ui.js";
@@ -31,6 +33,14 @@ const signupForm = document.getElementById("signup-form");
 
 const loginError = document.getElementById("login-error");
 const signupError = document.getElementById("signup-error");
+const forgotError = document.getElementById("forgot-error");
+const resetError = document.getElementById("reset-error");
+
+const forgotPasswordForm = document.getElementById("forgot-password-form");
+const resetPasswordForm = document.getElementById("reset-password-form");
+const forgotPasswordLink = document.getElementById("forgot-password-link");
+const backToLoginFromForgot = document.getElementById("back-to-login-from-forgot");
+const backToLoginFromReset = document.getElementById("back-to-login-from-reset");
 
 const userEmailLabel = document.getElementById("user-email-label");
 const logoutBtn = document.getElementById("logout-btn");
@@ -50,6 +60,78 @@ signupTab.addEventListener("click", () => {
   loginTab.classList.remove("auth-tab-active");
   signupForm.classList.remove("auth-form-hidden");
   loginForm.classList.add("auth-form-hidden");
+  forgotPasswordForm.classList.add("auth-form-hidden");
+  resetPasswordForm.classList.add("auth-form-hidden");
+});
+
+// Forgot Password Link
+forgotPasswordLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  loginForm.classList.add("auth-form-hidden");
+  signupForm.classList.add("auth-form-hidden");
+  resetPasswordForm.classList.add("auth-form-hidden");
+  forgotPasswordForm.classList.remove("auth-form-hidden");
+  forgotError.textContent = "";
+});
+
+// Back to Login from Forgot
+backToLoginFromForgot.addEventListener("click", (e) => {
+  e.preventDefault();
+  forgotPasswordForm.classList.add("auth-form-hidden");
+  loginForm.classList.remove("auth-form-hidden");
+  forgotError.textContent = "";
+});
+
+// Back to Login from Reset
+backToLoginFromReset.addEventListener("click", (e) => {
+  e.preventDefault();
+  resetPasswordForm.classList.add("auth-form-hidden");
+  loginForm.classList.remove("auth-form-hidden");
+  resetError.textContent = "";
+});
+
+// Forgot Password Form
+forgotPasswordForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  forgotError.textContent = "";
+
+  const email = document.getElementById("forgot-email").value.trim();
+
+  try {
+    const res = await apiForgotPassword(email);
+    console.log("✅ Reset code sent:", res.resetCode);
+    alert(`Reset code: ${res.resetCode}\n\n(In production, this would be sent via email)`);
+    
+    // Move to reset password form
+    forgotPasswordForm.classList.add("auth-form-hidden");
+    resetPasswordForm.classList.remove("auth-form-hidden");
+    document.getElementById("reset-email").value = email;
+  } catch (err) {
+    forgotError.textContent = err.message;
+  }
+});
+
+// Reset Password Form
+resetPasswordForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  resetError.textContent = "";
+
+  const email = document.getElementById("reset-email").value.trim();
+  const resetCode = document.getElementById("reset-code").value.trim();
+  const newPassword = document.getElementById("reset-new-password").value.trim();
+
+  try {
+    await apiResetPassword(email, resetCode, newPassword);
+    alert("✅ Password reset successful! Please log in.");
+    
+    // Clear forms and go back to login
+    resetPasswordForm.classList.add("auth-form-hidden");
+    loginForm.classList.remove("auth-form-hidden");
+    loginForm.reset();
+    resetPasswordForm.reset();
+  } catch (err) {
+    resetError.textContent = err.message;
+  }
 });
 
 // ----------------------------------------------

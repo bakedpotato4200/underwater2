@@ -36,6 +36,7 @@
         </label>
         <button type="submit" class="btn btn-primary">Login</button>
         <p class="auth-error" id="login-error"></p>
+        <button type="button" id="forgot-password-link" class="btn-link">Forgot password?</button>
       </form>
 
       <!-- SIGNUP FORM -->
@@ -50,6 +51,36 @@
         </label>
         <button type="submit" class="btn btn-secondary">Create Account</button>
         <p class="auth-error" id="signup-error"></p>
+      </form>
+
+      <!-- FORGOT PASSWORD FORM -->
+      <form id="forgot-password-form" class="auth-form auth-form-hidden">
+        <label>
+          Email
+          <input type="email" id="forgot-email" autocomplete="email" required />
+        </label>
+        <button type="submit" class="btn btn-secondary">Send Reset Code</button>
+        <p class="auth-error" id="forgot-error"></p>
+        <button type="button" id="back-to-login-from-forgot" class="btn-link">Back to Login</button>
+      </form>
+
+      <!-- RESET PASSWORD FORM -->
+      <form id="reset-password-form" class="auth-form auth-form-hidden">
+        <label>
+          Email
+          <input type="email" id="reset-email" autocomplete="email" required />
+        </label>
+        <label>
+          Reset Code (6 digits)
+          <input type="text" id="reset-code" maxlength="6" required />
+        </label>
+        <label>
+          New Password
+          <input type="password" id="reset-new-password" autocomplete="new-password" required />
+        </label>
+        <button type="submit" class="btn btn-secondary">Reset Password</button>
+        <p class="auth-error" id="reset-error"></p>
+        <button type="button" id="back-to-login-from-reset" class="btn-link">Back to Login</button>
       </form>
     </div>
   </div>
