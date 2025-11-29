@@ -205,9 +205,11 @@ function showDayDetails(day) {
       const deleteType = event._id ? 'transaction' : (event.recurringId ? 'recurring' : 'paycheck');
       if (event.type === "income") {
         const isActualIncome = !event.projected && event._id;
-        const clickableClass = isActualIncome ? 'actual-income-clickable' : '';
-        const clickableAttrs = isActualIncome ? `data-income-id="${event._id}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}"` : '';
-        html += `<div class="detail-income ${clickableClass}" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; ${isActualIncome ? 'background: rgba(46, 204, 113, 0.1); cursor: pointer;' : ''}" ${clickableAttrs}>
+        const isPaycheck = event.projected && (event.name.toLowerCase().includes('paycheck') || event.recurringId || event.paycheckSettingsId);
+        const clickableClass = (isActualIncome || isPaycheck) ? 'income-clickable' : '';
+        const clickableAttrs = (isActualIncome || isPaycheck) ? `data-income-id="${event._id || ''}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" data-is-actual="${!event.projected}"` : '';
+        const bgColor = isActualIncome ? 'rgba(46, 204, 113, 0.1)' : (isPaycheck ? 'rgba(52, 152, 219, 0.1)' : '');
+        html += `<div class="income-clickable ${clickableClass}" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; ${(isActualIncome || isPaycheck) ? `background: ${bgColor}; cursor: pointer;` : ''}" ${clickableAttrs}>
           <span style="flex: 1;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
           <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; margin-left: 0.5rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
         </div>`;
@@ -259,8 +261,8 @@ function showDayDetails(day) {
       });
     });
     
-    // Add click listeners for actual income items to edit
-    const incomeItems = dayModalContent.querySelectorAll(".actual-income-clickable");
+    // Add click listeners for income items (actual income to edit, paychecks to record actual)
+    const incomeItems = dayModalContent.querySelectorAll(".income-clickable");
     incomeItems.forEach(item => {
       item.addEventListener("click", (e) => {
         if (e.target.tagName === 'BUTTON') return; // Don't trigger if delete button clicked
@@ -268,6 +270,7 @@ function showDayDetails(day) {
         const incomeAmount = item.getAttribute("data-income-amount");
         const incomeName = item.getAttribute("data-income-name");
         const incomeDate = item.getAttribute("data-income-date");
+        const isActual = item.getAttribute("data-is-actual") === 'true';
         
         selectedIncomeDate = incomeDate;
         selectedIncomeAmount = incomeAmount;
@@ -275,11 +278,19 @@ function showDayDetails(day) {
         const date = new Date(incomeDate);
         const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
         
-        addIncomeDate.textContent = `${dateStr} - Edit Income`;
+        if (isActual) {
+          // Edit actual income
+          addIncomeDate.textContent = `${dateStr} - Edit Income`;
+          addIncomeForm.dataset.transactionId = incomeId;
+        } else {
+          // Record actual income for projected (like paycheck)
+          addIncomeDate.textContent = `${dateStr} (Projected: ${formatMoney(incomeAmount)})`;
+          addIncomeForm.dataset.transactionId = "";
+        }
+        
         addIncomeAmount.value = incomeAmount;
         addIncomeDescription.value = incomeName;
         addIncomeError.textContent = "";
-        addIncomeForm.dataset.transactionId = incomeId;
         
         dayModal.classList.remove("modal-visible");
         addIncomeModal.classList.add("modal-visible");
