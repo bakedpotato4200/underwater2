@@ -275,11 +275,24 @@ function showDayDetails(day) {
         const date = new Date(incomeDate);
         const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
         
-        // Store data for submission
+        // Store data for submission - including any existing actual income ID for this date
         actualPayModal.dataset.incomeDate = incomeDate;
         actualPayModal.dataset.incomeName = incomeName;
         actualPayModal.dataset.recurringId = item.getAttribute("data-recurring-id") || '';
         actualPayModal.dataset.paycheckId = item.getAttribute("data-paycheck-id") || '';
+        actualPayModal.dataset.existingActualId = '';
+        
+        // Find any existing actual income for this date (to replace it)
+        if (currentMonthData && currentMonthData.days) {
+          const dayData = currentMonthData.days.find(d => d.dateKey === incomeDate);
+          if (dayData && dayData.events) {
+            const existingActual = dayData.events.find(e => e.type === 'income' && !e.projected && e._id);
+            if (existingActual) {
+              actualPayModal.dataset.existingActualId = existingActual._id;
+            }
+          }
+        }
+        
         actualPayAmount.value = incomeAmount;
         actualPayError.textContent = "";
         
@@ -350,13 +363,21 @@ if (actualPayForm) {
     }
     
     try {
-      const { apiCreateTransaction, apiDeleteRecurring, apiDeletePaycheck } = await import("./api.js");
+      const { apiCreateTransaction, apiDeleteRecurring, apiDeletePaycheck, apiDeleteTransaction } = await import("./api.js");
       
-      // Delete the projected paycheck/recurring item first
+      // Delete the projected paycheck/recurring item first (only on first entry)
       if (recurringId) {
         await apiDeleteRecurring(recurringId);
+        actualPayModal.dataset.recurringId = '';
       } else if (paycheckId) {
         await apiDeletePaycheck(paycheckId);
+        actualPayModal.dataset.paycheckId = '';
+      }
+      
+      // Delete any existing actual income for this date (to replace it)
+      const existingActualId = actualPayModal.dataset.existingActualId;
+      if (existingActualId) {
+        await apiDeleteTransaction(existingActualId);
       }
       
       // Create new transaction for the actual income
