@@ -244,6 +244,7 @@ export async function buildMonthlyCalendar(
         amount,
         projected: true,
         source: "recurring",
+        recurringId: rec._id,
       });
 
       day.incomeTotal += amount;
@@ -280,6 +281,7 @@ export async function buildMonthlyCalendar(
         amount,
         projected: true,
         source: "recurring",
+        recurringId: rec._id,
       });
 
       day.expenseTotal += amount;
@@ -344,6 +346,7 @@ export async function buildMonthlyCalendar(
         amount,
         projected: true,
         source: "paycheckSettings",
+        paycheckSettingsId: paycheckSettings._id,
       });
 
       day.incomeTotal += amount;

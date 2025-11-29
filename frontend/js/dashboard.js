@@ -4,7 +4,7 @@
 // Shows monthly summary + pressure days
 // ========================================
 
-import { apiGetMonthlyCalendar, apiDeleteTransaction } from "./api.js";
+import { apiGetMonthlyCalendar, apiDeleteTransaction, apiDeleteRecurring } from "./api.js";
 import { nowMonth, nowYear, formatMoney } from "./config.js";
 
 // DOM Elements
@@ -211,15 +211,17 @@ function showPressureDayDetails(dateStr, days) {
     html += `<div class="day-events">`;
     html += `<h4>Transactions:</h4>`;
     day.events.forEach((event, idx) => {
+      const deleteId = event._id || event.recurringId || event.paycheckSettingsId;
+      const deleteType = event._id ? 'transaction' : (event.recurringId ? 'recurring' : 'paycheck');
       if (event.type === "income") {
         html += `<div class="detail-income" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
           <span>✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
-          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-tx="${event._id || 'N/A'}">Delete</button>
+          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
         </div>`;
       } else {
         html += `<div class="detail-expense" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
           <span>✗ ${event.name}: <strong>-${formatMoney(event.amount)}</strong></span>
-          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-tx="${event._id || 'N/A'}">Delete</button>
+          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
         </div>`;
       }
     });
@@ -239,13 +241,14 @@ function showPressureDayDetails(dateStr, days) {
   
   // Add delete button event listeners
   setTimeout(() => {
-    const deleteButtons = dayModalContent.querySelectorAll("[data-delete-tx]");
+    const deleteButtons = dayModalContent.querySelectorAll("[data-delete-id]");
     deleteButtons.forEach(btn => {
       btn.addEventListener("click", async (e) => {
         e.stopPropagation();
-        const txId = btn.getAttribute("data-delete-tx");
-        if (txId && txId !== "N/A" && confirm("Are you sure you want to delete this transaction?")) {
-          await deleteTransactionItem(txId);
+        const deleteId = btn.getAttribute("data-delete-id");
+        const deleteType = btn.getAttribute("data-delete-type");
+        if (deleteId && confirm("Are you sure you want to delete this?")) {
+          await deleteItem(deleteId, deleteType);
         }
       });
     });
@@ -465,19 +468,28 @@ function showMonthlyExpensesDetails(days) {
 }
 
 // ========================================
-// Delete Transaction Item
+// Delete Item (Transaction, Recurring, or Paycheck)
 // ========================================
-async function deleteTransactionItem(txId) {
+async function deleteItem(itemId, itemType) {
   try {
-    console.log(`🗑️ Deleting transaction: ${txId}`);
-    await apiDeleteTransaction(txId);
-    console.log("✅ Transaction deleted");
+    if (itemType === "transaction") {
+      console.log(`🗑️ Deleting transaction: ${itemId}`);
+      await apiDeleteTransaction(itemId);
+      console.log("✅ Transaction deleted");
+    } else if (itemType === "recurring") {
+      console.log(`🗑️ Deleting recurring item: ${itemId}`);
+      await apiDeleteRecurring(itemId);
+      console.log("✅ Recurring item deleted");
+    } else if (itemType === "paycheck") {
+      alert("Paycheck settings must be deleted from Settings page");
+      return;
+    }
     
     // Reload the dashboard to reflect changes
     dayModal.classList.remove("modal-visible");
     loadDashboard();
   } catch (err) {
-    console.error("❌ Delete transaction error:", err);
-    alert("Failed to delete transaction");
+    console.error("❌ Delete error:", err);
+    alert("Failed to delete item");
   }
 }
