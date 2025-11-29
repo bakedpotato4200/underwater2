@@ -1785,3 +1785,9 @@ html[data-theme="light"] .calendar-summary-positive {
 html[data-theme="light"] .calendar-summary-negative {
   color: #c62828;
 }
+
+/* Light mode theme label fix */
+html[data-theme="light"] .theme-label {
+  color: #0077b6;
+  font-weight: 600;
+}
