@@ -11,9 +11,11 @@
 //   CHANGE API_BASE_URL to your Railway URL.
 // ========================================
 
-// Use relative URL so it routes through the same domain
-// On Replit, we need to proxy API calls through the same port
-export const API_BASE_URL = "/api";
+// API Base URL - configurable for different environments
+// Local development: "/api" (proxied through backend)
+// Vercel + Railway: use environment variable pointing to Railway backend
+const API_BASE_URL = process.env.REACT_APP_API_URL || process.env.VUE_APP_API_URL || window.__API_BASE_URL__ || "/api";
+export { API_BASE_URL };
 
 // --------------------------------------------
 // Token Helpers
