@@ -17,17 +17,20 @@ export const API_BASE_URL = "/api";
 
 // --------------------------------------------
 // Token Helpers
+// Note: Using sessionStorage instead of localStorage
+// so users must log in every browser session
+// (token is cleared when browser/tab closes)
 // --------------------------------------------
 export function getToken() {
-  return localStorage.getItem("uw2_token");
+  return sessionStorage.getItem("uw2_token");
 }
 
 export function setToken(token) {
-  localStorage.setItem("uw2_token", token);
+  sessionStorage.setItem("uw2_token", token);
 }
 
 export function clearToken() {
-  localStorage.removeItem("uw2_token");
+  sessionStorage.removeItem("uw2_token");
 }
 
 // --------------------------------------------
