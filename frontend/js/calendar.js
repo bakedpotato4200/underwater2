@@ -206,9 +206,9 @@ function showDayDetails(day) {
       if (event.type === "income") {
         const isActualIncome = !event.projected && event._id;
         const isPaycheck = event.projected && (event.name.toLowerCase().includes('paycheck') || event.recurringId || event.paycheckSettingsId);
-        const clickableClass = (isActualIncome || isPaycheck) ? 'income-clickable' : '';
         const clickableAttrs = (isActualIncome || isPaycheck) ? `data-income-id="${event._id || ''}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" data-is-actual="${!event.projected}" data-is-paycheck="${isPaycheck}"` : '';
-        html += `<div class="income-clickable ${clickableClass}" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; ${(isActualIncome || isPaycheck) ? `cursor: pointer;` : ''}" ${clickableAttrs}>
+        const style = `padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; ${(isActualIncome || isPaycheck) ? 'cursor: pointer;' : ''}`;
+        html += `<div style="${style}" class="income-clickable" ${clickableAttrs}>
           <span style="flex: 1;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
           <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; margin-left: 0.5rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
         </div>`;
