@@ -13,12 +13,16 @@ import "./calendar.js";
 import "./recurring.js";
 import "./settings.js";
 import "./inactivity.js";
+import { initTheme } from "./theme.js";
 import { checkAuthOnLoad } from "./auth.js";
 
 // ========================================
 // APP INIT
 // ========================================
 console.log("🚀 Under Water 2 - Starting...");
+
+// Initialize theme before anything else
+initTheme();
 
 window.addEventListener("DOMContentLoaded", () => {
   console.log("📄 DOM Content Loaded");

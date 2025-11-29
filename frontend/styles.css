@@ -1526,3 +1526,116 @@ input::placeholder {
     margin-bottom: 0.75rem;
   }
 }
+
+/* ================================
+   LIGHT MODE THEME
+   ================================ */
+html[data-theme="light"] {
+  --bg-primary: #f5f7fa;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e8ecf1;
+  --accent-teal: #0077b6;
+  --accent-cyan: #0096c7;
+  --accent-blue: #0077b6;
+  --success-green: #06a77d;
+  --danger-red: #d62828;
+  --warning-orange: #f77f00;
+  --text-primary: #1a1a1a;
+  --text-secondary: #555555;
+  --border-color: #d0d0d0;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="light"] .auth-screen {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 50%, #f5f7fa 100%);
+}
+
+html[data-theme="light"] .auth-screen::before {
+  background: radial-gradient(circle, rgba(0, 119, 182, 0.08) 0%, transparent 70%);
+}
+
+html[data-theme="light"] .auth-screen::after {
+  background: radial-gradient(circle, rgba(0, 119, 182, 0.06) 0%, transparent 70%);
+}
+
+html[data-theme="light"] .auth-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 119, 182, 0.15);
+}
+
+html[data-theme="light"] .sidebar {
+  background: #ffffff;
+  border-right: 1px solid #d0d0d0;
+}
+
+html[data-theme="light"] .main-content {
+  background: #f5f7fa;
+}
+
+html[data-theme="light"] .card {
+  background: #ffffff;
+  border: 1px solid #d0d0d0;
+}
+
+html[data-theme="light"] .view {
+  background: #f5f7fa;
+}
+
+html[data-theme="light"] input,
+html[data-theme="light"] select,
+html[data-theme="light"] textarea {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  border: 1px solid #d0d0d0;
+}
+
+html[data-theme="light"] input:focus,
+html[data-theme="light"] select:focus,
+html[data-theme="light"] textarea:focus {
+  border-color: #0077b6;
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.1);
+}
+
+html[data-theme="light"] .modal-content {
+  background: #ffffff;
+  border: 1px solid #d0d0d0;
+}
+
+html[data-theme="light"] .calendar-grid-item {
+  background: #ffffff;
+  border: 1px solid #d0d0d0;
+}
+
+html[data-theme="light"] .calendar-grid-item:hover {
+  background: #f0f4f8;
+}
+
+/* Theme toggle styles */
+.theme-toggle-group {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.theme-option:hover {
+  background: var(--bg-tertiary);
+}
+
+.theme-option input[type="radio"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
