@@ -1729,13 +1729,15 @@ html[data-theme="light"] .weekday {
 
 html[data-theme="light"] .calendar-day {
   background: #ffffff;
-  border: 2px solid #e0e0e0;
+  border: 1px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   color: #1a1a1a;
 }
 
 html[data-theme="light"] .calendar-day:hover {
-  background: #f0f7ff;
-  border-color: #0077b6;
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 119, 182, 0.15);
   transform: translateY(-2px);
 }
 
