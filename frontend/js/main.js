@@ -12,6 +12,7 @@ import "./dashboard.js";
 import "./calendar.js";
 import "./recurring.js";
 import "./settings.js";
+import "./inactivity.js";
 import { checkAuthOnLoad } from "./auth.js";
 
 // ========================================

@@ -17,6 +17,7 @@ import {
 } from "./api.js";
 
 import { showView } from "./ui.js";
+import { initInactivityTracking, stopInactivityTracking } from "./inactivity.js";
 
 // DOM elements
 const authScreen = document.getElementById("auth-screen");
@@ -97,6 +98,7 @@ loginForm.addEventListener("submit", async (e) => {
 // LOGOUT
 // ----------------------------------------------
 logoutBtn.addEventListener("click", () => {
+  stopInactivityTracking();
   clearToken();
   showAuth();
 });
@@ -124,7 +126,8 @@ export async function checkAuthOnLoad() {
 // ----------------------------------------------
 // Show Auth Screen
 // ----------------------------------------------
-function showAuth() {
+export function showAuth() {
+  stopInactivityTracking();
   authScreen.classList.remove("app-shell-hidden");
   appShell.classList.add("app-shell-hidden");
 }
@@ -135,6 +138,9 @@ function showAuth() {
 function showApp() {
   authScreen.classList.add("app-shell-hidden");
   appShell.classList.remove("app-shell-hidden");
+
+  // Start inactivity tracking when user logs in
+  initInactivityTracking();
 
   // Default view after login
   showView("dashboard-view");
