@@ -9,6 +9,7 @@ import { showAuth } from "./auth.js";
 
 const INACTIVITY_TIMEOUT = 15 * 60 * 1000; // 15 minutes in milliseconds
 let inactivityTimer = null;
+let isTrackingActive = false;
 
 // ========================================
 // Reset inactivity timer
@@ -41,6 +42,9 @@ function logoutDueToInactivity() {
 // Called when user logs in
 // ========================================
 export function initInactivityTracking() {
+  if (isTrackingActive) return; // Already tracking, don't start again
+  
+  isTrackingActive = true;
   console.log("✅ Inactivity tracking enabled (15 minute timeout)");
 
   // Track various user activities
@@ -58,6 +62,10 @@ export function initInactivityTracking() {
 // Stop inactivity tracking (on logout)
 // ========================================
 export function stopInactivityTracking() {
+  if (!isTrackingActive) return; // Not tracking, nothing to stop
+  
+  isTrackingActive = false;
+  
   if (inactivityTimer) {
     clearTimeout(inactivityTimer);
     inactivityTimer = null;

@@ -237,6 +237,27 @@ html, body {
   background: rgba(0, 212, 255, 0.05);
 }
 
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--accent-teal);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-link:hover {
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+
+.btn-link:active {
+  opacity: 0.8;
+}
+
 /* ================================
    FORM ELEMENTS
    ================================ */
