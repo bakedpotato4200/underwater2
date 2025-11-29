@@ -14,16 +14,19 @@ export function initTheme() {
   const savedTheme = localStorage.getItem(THEME_KEY) || DARK_MODE;
   applyTheme(savedTheme);
   
-  // Update radio buttons
-  const radios = document.querySelectorAll('input[name="theme"]');
-  radios.forEach(radio => {
-    radio.checked = radio.value === savedTheme;
-    radio.addEventListener("change", (e) => {
-      const newTheme = e.target.value;
+  // Update switch
+  const themeSwitch = document.getElementById('theme-switch');
+  if (themeSwitch) {
+    // Set checked state based on saved theme (light mode = checked)
+    themeSwitch.checked = savedTheme === LIGHT_MODE;
+    
+    // Listen for switch changes
+    themeSwitch.addEventListener("change", (e) => {
+      const newTheme = e.target.checked ? LIGHT_MODE : DARK_MODE;
       applyTheme(newTheme);
       localStorage.setItem(THEME_KEY, newTheme);
     });
-  });
+  }
 }
 
 // Apply theme to document

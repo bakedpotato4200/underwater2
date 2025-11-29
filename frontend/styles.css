@@ -1639,3 +1639,72 @@ html[data-theme="light"] .calendar-grid-item:hover {
   width: 18px;
   height: 18px;
 }
+
+/* ================================
+   THEME SWITCH STYLES
+   ================================ */
+.theme-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.theme-label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  min-width: 70px;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 60px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.theme-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 32px;
+}
+
+.theme-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.theme-switch input:checked + .theme-slider {
+  background-color: var(--accent-teal);
+}
+
+.theme-switch input:checked + .theme-slider:before {
+  transform: translateX(28px);
+}
+
+.theme-switch:active .theme-slider:before {
+  width: 28px;
+}
