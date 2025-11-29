@@ -25,6 +25,7 @@ const profileStatus = document.getElementById("profile-status");
 const changePasswordForm = document.getElementById("change-password-form");
 const currentPasswordInput = document.getElementById("current-password-input");
 const newPasswordInput = document.getElementById("new-password-input");
+const verifyPasswordInput = document.getElementById("verify-password-input");
 const changePasswordStatus = document.getElementById("change-password-status");
 
 // Starting balance DOM elements
@@ -104,6 +105,7 @@ changePasswordForm.addEventListener("submit", async (e) => {
 
   const currentPassword = currentPasswordInput.value.trim();
   const newPassword = newPasswordInput.value.trim();
+  const verifyPassword = verifyPasswordInput.value.trim();
 
   if (!currentPassword) {
     changePasswordStatus.textContent = "✗ Current password is required";
@@ -115,8 +117,23 @@ changePasswordForm.addEventListener("submit", async (e) => {
     changePasswordStatus.className = "form-status";
     return;
   }
+  if (!verifyPassword) {
+    changePasswordStatus.textContent = "✗ Password verification is required";
+    changePasswordStatus.className = "form-status";
+    return;
+  }
   if (newPassword.length < 6) {
     changePasswordStatus.textContent = "✗ New password must be at least 6 characters";
+    changePasswordStatus.className = "form-status";
+    return;
+  }
+  if (newPassword !== verifyPassword) {
+    changePasswordStatus.textContent = "✗ New passwords do not match";
+    changePasswordStatus.className = "form-status";
+    return;
+  }
+  if (currentPassword === newPassword) {
+    changePasswordStatus.textContent = "✗ New password cannot be the same as current password";
     changePasswordStatus.className = "form-status";
     return;
   }

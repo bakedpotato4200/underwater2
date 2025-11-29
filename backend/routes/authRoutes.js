@@ -352,6 +352,12 @@ router.post("/change-password", auth, async (req, res) => {
       return res.status(400).json({ error: "Current password is incorrect" });
     }
 
+    // Check if new password is same as current password
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      return res.status(400).json({ error: "New password cannot be the same as current password" });
+    }
+
     // Hash new password
     const hashed = await bcrypt.hash(newPassword, 10);
 
