@@ -85,8 +85,9 @@ router.post("/signup", async (req, res) => {
     // Token
     const token = createToken(user);
 
-    return res.json({
+    return res.status(201).json({
       token,
+      userId: user._id,
       user: {
         id: user._id,
         email: user.email,
