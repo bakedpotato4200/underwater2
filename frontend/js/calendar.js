@@ -33,15 +33,11 @@ const dayModal = document.getElementById("day-detail-modal");
 const dayModalClose = document.getElementById("day-modal-close");
 const dayModalContent = document.getElementById("day-modal-content");
 
-// Income modal elements
-const addIncomeModal = document.getElementById("add-income-modal");
-const addIncomeModalClose = document.getElementById("add-income-modal-close");
-const addIncomeForm = document.getElementById("add-income-form");
-const addIncomeDate = document.getElementById("add-income-date");
-const addIncomeAmount = document.getElementById("add-income-amount");
-const addIncomeDescription = document.getElementById("add-income-description");
-const addIncomeCategory = document.getElementById("add-income-category");
-const addIncomeError = document.getElementById("add-income-error");
+// Actual Pay modal elements
+const actualPayModal = document.getElementById("actual-pay-modal");
+const actualPayForm = document.getElementById("actual-pay-form");
+const actualPayAmount = document.getElementById("actual-pay-amount");
+const actualPayError = document.getElementById("actual-pay-error");
 
 // Active calendar state
 let currentYear = nowYear();
@@ -279,48 +275,22 @@ function showDayDetails(day) {
         const date = new Date(incomeDate);
         const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
         
-        // Update modal header - use data attribute to track type
-        if (isPaycheck) {
-          addIncomeModal.dataset.modalType = 'paycheck';
-          const incomeHeader = addIncomeModal.querySelector('h3');
-          if (incomeHeader) incomeHeader.textContent = 'Actual Pay';
-          addIncomeForm.dataset.transactionId = "";
-        } else {
-          addIncomeModal.dataset.modalType = 'edit';
-          const incomeHeader = addIncomeModal.querySelector('h3');
-          if (incomeHeader) incomeHeader.textContent = 'Record Actual Income';
-          addIncomeForm.dataset.transactionId = incomeId;
-        }
-        
-        addIncomeAmount.value = incomeAmount;
-        addIncomeDescription.value = incomeName;
-        addIncomeError.textContent = "";
+        // Store data for submission
+        actualPayModal.dataset.incomeDate = incomeDate;
+        actualPayModal.dataset.incomeName = incomeName;
+        actualPayAmount.value = incomeAmount;
+        actualPayError.textContent = "";
         
         dayModal.classList.remove("modal-visible");
-        addIncomeModal.classList.add("modal-visible");
+        actualPayModal.classList.add("modal-visible");
+        
+        // Focus input on mobile
+        setTimeout(() => actualPayAmount.focus(), 100);
       });
     });
   }, 0);
 }
 
-// ========================================
-// Open Add Income Modal
-// ========================================
-function openAddIncomeModal(dateKey, dateObj, projectedAmount, incomeName = null) {
-  selectedIncomeDate = dateKey;
-  selectedIncomeAmount = projectedAmount;
-  
-  const date = new Date(dateObj);
-  const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
-  
-  addIncomeDate.textContent = `${dateStr} (Projected: ${formatMoney(projectedAmount)})`;
-  addIncomeAmount.value = projectedAmount;
-  addIncomeDescription.value = incomeName || "Actual Paycheck";
-  addIncomeError.textContent = "";
-  addIncomeForm.dataset.transactionId = "";
-  
-  addIncomeModal.classList.add("modal-visible");
-}
 
 
 // ========================================
@@ -359,53 +329,42 @@ if (nextMonthBtn) {
 }
 
 // ========================================
-// Handle Add Income Form Submission
+// Handle Actual Pay Form Submission
 // ========================================
-if (addIncomeForm) {
-  addIncomeForm.addEventListener("submit", async (e) => {
+if (actualPayForm) {
+  actualPayForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    addIncomeError.textContent = "";
+    actualPayError.textContent = "";
     
-    const amount = Number(addIncomeAmount.value);
-    const description = addIncomeDescription.value.trim();
-    const category = addIncomeCategory.value.trim();
+    const amount = Number(actualPayAmount.value);
+    const incomeName = actualPayModal.dataset.incomeName || "Paycheck";
+    const incomeDate = actualPayModal.dataset.incomeDate;
     
     if (!amount || amount <= 0) {
-      addIncomeError.textContent = "Amount must be greater than 0";
-      return;
-    }
-    
-    if (!description) {
-      addIncomeError.textContent = "Description is required";
+      actualPayError.textContent = "Amount must be greater than 0";
       return;
     }
     
     try {
-      const { apiCreateTransaction, apiDeleteTransaction } = await import("./api.js");
-      const transactionId = addIncomeForm.dataset.transactionId;
+      const { apiCreateTransaction } = await import("./api.js");
       
-      if (transactionId) {
-        // Delete old transaction and create new one
-        await apiDeleteTransaction(transactionId);
-      }
-      
-      // Create new transaction for this specific date
+      // Create new transaction for the actual income
       await apiCreateTransaction({
-        description,
+        description: incomeName,
         amount,
-        category,
-        date: selectedIncomeDate
+        category: "Income",
+        date: incomeDate
       });
       
       // Close modal and reload calendar
-      addIncomeModal.classList.remove("modal-visible");
-      addIncomeForm.reset();
-      addIncomeForm.dataset.transactionId = "";
+      actualPayModal.classList.remove("modal-visible");
+      actualPayForm.reset();
+      dayModal.classList.remove("modal-visible");
       loadCalendar();
       
     } catch (err) {
-      addIncomeError.textContent = `Error: ${err.message}`;
-      console.error("Failed to save income:", err);
+      actualPayError.textContent = `Error: ${err.message}`;
+      console.error("Failed to save actual pay:", err);
     }
   });
 }
@@ -421,14 +380,6 @@ if (dayModalClose) {
   });
 }
 
-if (addIncomeModalClose) {
-  addIncomeModalClose.addEventListener("click", () => {
-    if (addIncomeModal) {
-      addIncomeModal.classList.remove("modal-visible");
-    }
-  });
-}
-
 if (dayModal) {
   dayModal.addEventListener("click", (e) => {
     if (e.target === dayModal) {
@@ -437,10 +388,10 @@ if (dayModal) {
   });
 }
 
-if (addIncomeModal) {
-  addIncomeModal.addEventListener("click", (e) => {
-    if (e.target === addIncomeModal) {
-      addIncomeModal.classList.remove("modal-visible");
+if (actualPayModal) {
+  actualPayModal.addEventListener("click", (e) => {
+    if (e.target === actualPayModal) {
+      actualPayModal.classList.remove("modal-visible");
     }
   });
 }
