@@ -57,6 +57,7 @@
 
       <!-- FORGOT PASSWORD FORM -->
       <form id="forgot-password-form" class="auth-form auth-form-hidden">
+        <input type="text" id="forgot-username-hidden" autocomplete="username" style="display:none;" />
         <label>
           Email
           <input type="email" id="forgot-email" autocomplete="email" required />
@@ -68,6 +69,7 @@
 
       <!-- RESET PASSWORD FORM -->
       <form id="reset-password-form" class="auth-form auth-form-hidden">
+        <input type="text" id="reset-username-hidden" autocomplete="username" style="display:none;" />
         <label>
           Email
           <input type="email" id="reset-email" autocomplete="email" required />
@@ -265,6 +267,7 @@
         <div class="settings-section">
           <h3>Change Password</h3>
           <form id="change-password-form" class="form-row">
+            <input type="text" id="change-password-username-hidden" autocomplete="username" style="display:none;" />
             <input type="password" id="current-password-input" placeholder="Current password" autocomplete="current-password" required />
             <input type="password" id="new-password-input" placeholder="New password" autocomplete="new-password" required />
             <input type="password" id="verify-password-input" placeholder="Verify new password" autocomplete="new-password" required />
