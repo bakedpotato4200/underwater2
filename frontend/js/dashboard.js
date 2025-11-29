@@ -15,6 +15,8 @@ const dashPaycheck1 = document.getElementById("dash-paycheck-1");
 const dashPaycheck1Detail = document.getElementById("dash-paycheck-1-detail");
 const dashPaycheck2 = document.getElementById("dash-paycheck-2");
 const dashPaycheck2Detail = document.getElementById("dash-paycheck-2-detail");
+const dashPaycheck1Card = document.getElementById("dash-paycheck-1-card");
+const dashPaycheck2Card = document.getElementById("dash-paycheck-2-card");
 const dashPressureList = document.getElementById("dash-pressure-days");
 
 // Modal elements (shared with calendar)
@@ -108,6 +110,10 @@ function renderDashboard(data) {
   dashPaycheck2.textContent = formatMoney(paycheck2Net);
   dashPaycheck2Detail.textContent = `Paycheck: ${formatMoney(paycheck2Total)} | Bills: ${formatMoney(paycheck2Bills)}`;
 
+  // Add click handlers for paycheck cards
+  dashPaycheck1Card.onclick = () => showPaycheckDetails(1, period1Start, period1End, days, paycheck1Total, paycheck1Bills);
+  dashPaycheck2Card.onclick = () => showPaycheckDetails(2, period2Start, period2End, days, paycheck2Total, paycheck2Bills);
+
   // Pressure points list
   if (pressurePoints && pressurePoints.length > 0) {
     pressurePoints.forEach((p, idx) => {
@@ -185,6 +191,60 @@ function showPressureDayDetails(dateStr, days) {
   html += `<p><strong>Income:</strong> <span style="color: #2ecc71">+${formatMoney(day.incomeTotal || 0)}</span></p>`;
   html += `<p><strong>Expenses:</strong> <span style="color: #e74c3c">-${formatMoney(day.expenseTotal || 0)}</span></p>`;
   html += `<p style="border-top: 1px solid #ccc; padding-top: 0.5rem; margin-top: 0.5rem;"><strong>End of Day Balance:</strong> <span style="font-size: 1.2rem; font-weight: bold">${formatMoney(day.endBalance)}</span></p>`;
+  html += `</div>`;
+
+  dayModalContent.innerHTML = html;
+  dayModal.classList.add("modal-visible");
+}
+
+// ========================================
+// Show Paycheck Details Modal
+// ========================================
+function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPaycheck, totalBills) {
+  if (!dayModal || !dayModalContent) {
+    console.error("Modal elements not found");
+    return;
+  }
+
+  const startFormatted = periodStart.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const endFormatted = periodEnd.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+  let html = `<h3>Paycheck ${paycheckNum} (${startFormatted} - ${endFormatted})</h3>`;
+  html += `<div class="day-detail-section">`;
+  html += `<p><strong>Total Paycheck:</strong> <span style="color: #2ecc71">+${formatMoney(totalPaycheck)}</span></p>`;
+  html += `<h4 style="margin-top: 1rem; margin-bottom: 0.5rem;">Bills for this Period:</h4>`;
+
+  let billCount = 0;
+  let foundBills = false;
+
+  if (days && days.length > 0) {
+    days.forEach(day => {
+      const dayDate = new Date(day.date);
+      
+      // Check if day is in this period
+      if (dayDate >= periodStart && dayDate <= periodEnd && day.events) {
+        day.events.forEach(event => {
+          if (event.type === "expense") {
+            foundBills = true;
+            const dayFormatted = dayDate.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" });
+            html += `<div class="detail-expense" style="padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px;">
+              <small style="color: #999;">${dayFormatted}</small> - ${event.name}: <strong style="color: #e74c3c;">-${formatMoney(event.amount)}</strong>
+            </div>`;
+            billCount++;
+          }
+        });
+      }
+    });
+  }
+
+  if (!foundBills) {
+    html += `<p><em style="color: #2ecc71;">✓ No bills this period</em></p>`;
+  }
+
+  html += `<div class="day-totals" style="border-top: 1px solid #ccc; padding-top: 1rem; margin-top: 1rem;">`;
+  html += `<p><strong>Total Bills:</strong> <span style="color: #e74c3c;">-${formatMoney(totalBills)}</span></p>`;
+  html += `<p style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>Paycheck After Bills:</strong> <span style="color: ${totalPaycheck - totalBills >= 0 ? '#2ecc71' : '#e74c3c'}; font-size: 1.3rem;">${formatMoney(totalPaycheck - totalBills)}</span></p>`;
+  html += `</div>`;
   html += `</div>`;
 
   dayModalContent.innerHTML = html;
