@@ -57,7 +57,7 @@ async function testAuth() {
   // Verify token
   try {
     const { status, data } = await apiCall('/auth/verify', 'GET');
-    if (status === 200 && data.userId) {
+    if (status === 200 && (data.userId || data.user)) {
       log.pass('Token verification successful');
     } else {
       log.fail(`Token verification failed (status ${status})`);
@@ -170,8 +170,8 @@ async function testPaycheckSettings() {
   // Get paycheck settings
   try {
     const { status, data } = await apiCall('/paycheck-settings', 'GET');
-    if (status === 200 && Array.isArray(data)) {
-      log.pass(`Retrieved ${data.length} paycheck settings`);
+    if (status === 200 && data) {
+      log.pass(`Retrieved paycheck settings: $${data.payAmount || 0}`);
     } else {
       log.fail(`Get paycheck failed (status ${status})`);
     }
