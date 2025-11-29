@@ -216,7 +216,7 @@ export async function buildMonthlyCalendar(
 
   // --------------------------------
   // Place recurring income (from Recurring model)
-  // SKIP if this date already has actual income
+  // Do NOT skip - allow multiple income items on same day
   // --------------------------------
   for (const rec of recurringIncome) {
     const occurrences = generateOccurrences(
@@ -230,11 +230,6 @@ export async function buildMonthlyCalendar(
       const key = dateKey(occ);
       const day = dayMap[key];
       if (!day) continue;
-
-      // Skip projected income if actual income exists for this date
-      if (datesWithActualIncome.has(key)) {
-        continue;
-      }
 
       const amount = Number(rec.amount || 0);
 
@@ -337,7 +332,7 @@ export async function buildMonthlyCalendar(
 
   // --------------------------------
   // Add paycheck settings as extra recurring income stream
-  // BUT skip if this date already has actual income recorded
+  // Do NOT skip - allow multiple income items on same day
   // --------------------------------
   if (paycheckSettings && paycheckSettings.startDate && paycheckSettings.payAmount) {
     const occurrences = generateOccurrences(
@@ -351,11 +346,6 @@ export async function buildMonthlyCalendar(
       const key = dateKey(occ);
       const day = dayMap[key];
       if (!day) continue;
-
-      // Skip this projected paycheck if actual income already exists for this date
-      if (datesWithActualIncome.has(key)) {
-        continue;
-      }
 
       const amount = Number(paycheckSettings.payAmount || 0);
 
