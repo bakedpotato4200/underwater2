@@ -209,6 +209,10 @@ export async function checkAuthOnLoad() {
 // Show Auth Screen
 // ----------------------------------------------
 export function showAuth() {
+  // Ensure visibility is set before removing hidden class
+  authScreen.style.visibility = "visible";
+  appShell.style.visibility = "hidden";
+  
   stopInactivityTracking();
   authScreen.classList.remove("app-shell-hidden");
   appShell.classList.add("app-shell-hidden");
@@ -218,6 +222,10 @@ export function showAuth() {
 // Show Main App
 // ----------------------------------------------
 function showApp() {
+  // Ensure visibility is set before removing hidden class
+  appShell.style.visibility = "visible";
+  authScreen.style.visibility = "hidden";
+  
   authScreen.classList.add("app-shell-hidden");
   appShell.classList.remove("app-shell-hidden");
 
