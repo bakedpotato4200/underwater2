@@ -242,6 +242,8 @@ function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPay
     return;
   }
 
+  const startDay = periodStart.getDate();
+  const endDay = periodEnd.getDate();
   const startFormatted = periodStart.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   const endFormatted = periodEnd.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
@@ -255,14 +257,19 @@ function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPay
 
   if (days && days.length > 0) {
     days.forEach(day => {
-      const dayDate = new Date(day.date);
+      // Use dateKey to extract day number, avoiding timezone issues
+      const dateKey = day.dateKey; // Format: "2025-11-01"
+      const dayNum = parseInt(dateKey.split('-')[2], 10); // Extract day (1-31)
       
-      // Check if day is in this period
-      if (dayDate >= periodStart && dayDate <= periodEnd && day.events) {
+      // Check if day is in this period (using day number instead of Date object)
+      const isInPeriod = (paycheckNum === 1) ? (dayNum >= 1 && dayNum <= 14) : (dayNum >= 15 && dayNum <= 31);
+      
+      if (isInPeriod && day.events) {
         day.events.forEach(event => {
           if (event.type === "income") {
             foundIncome = true;
             totalPeriodIncome += event.amount || 0;
+            const dayDate = new Date(day.date);
             const dayFormatted = dayDate.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" });
             html += `<div class="detail-income" style="padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px;">
               <small style="color: #999;">${dayFormatted}</small> - ${event.name}: <strong style="color: #2ecc71;">+${formatMoney(event.amount)}</strong>
@@ -284,13 +291,18 @@ function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPay
 
   if (days && days.length > 0) {
     days.forEach(day => {
-      const dayDate = new Date(day.date);
+      // Use dateKey to extract day number, avoiding timezone issues
+      const dateKey = day.dateKey; // Format: "2025-11-01"
+      const dayNum = parseInt(dateKey.split('-')[2], 10); // Extract day (1-31)
       
-      // Check if day is in this period
-      if (dayDate >= periodStart && dayDate <= periodEnd && day.events) {
+      // Check if day is in this period (using day number instead of Date object)
+      const isInPeriod = (paycheckNum === 1) ? (dayNum >= 1 && dayNum <= 14) : (dayNum >= 15 && dayNum <= 31);
+      
+      if (isInPeriod && day.events) {
         day.events.forEach(event => {
           if (event.type === "expense") {
             foundBills = true;
+            const dayDate = new Date(day.date);
             const dayFormatted = dayDate.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" });
             html += `<div class="detail-expense" style="padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px;">
               <small style="color: #999;">${dayFormatted}</small> - ${event.name}: <strong style="color: #e74c3c;">-${formatMoney(event.amount)}</strong>
