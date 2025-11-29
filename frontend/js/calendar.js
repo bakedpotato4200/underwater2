@@ -207,9 +207,8 @@ function showDayDetails(day) {
         const isActualIncome = !event.projected && event._id;
         const isPaycheck = event.projected && (event.name.toLowerCase().includes('paycheck') || event.recurringId || event.paycheckSettingsId);
         const clickableClass = (isActualIncome || isPaycheck) ? 'income-clickable' : '';
-        const clickableAttrs = (isActualIncome || isPaycheck) ? `data-income-id="${event._id || ''}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" data-is-actual="${!event.projected}"` : '';
-        const bgColor = isActualIncome ? 'rgba(46, 204, 113, 0.1)' : (isPaycheck ? 'rgba(52, 152, 219, 0.1)' : '');
-        html += `<div class="income-clickable ${clickableClass}" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; ${(isActualIncome || isPaycheck) ? `background: ${bgColor}; cursor: pointer;` : ''}" ${clickableAttrs}>
+        const clickableAttrs = (isActualIncome || isPaycheck) ? `data-income-id="${event._id || ''}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" data-is-actual="${!event.projected}" data-is-paycheck="${isPaycheck}"` : '';
+        html += `<div class="income-clickable ${clickableClass}" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; ${(isActualIncome || isPaycheck) ? `cursor: pointer;` : ''}" ${clickableAttrs}>
           <span style="flex: 1;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
           <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; margin-left: 0.5rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
         </div>`;
@@ -271,6 +270,7 @@ function showDayDetails(day) {
         const incomeName = item.getAttribute("data-income-name");
         const incomeDate = item.getAttribute("data-income-date");
         const isActual = item.getAttribute("data-is-actual") === 'true';
+        const isPaycheck = item.getAttribute("data-is-paycheck") === 'true';
         
         selectedIncomeDate = incomeDate;
         selectedIncomeAmount = incomeAmount;
@@ -278,14 +278,17 @@ function showDayDetails(day) {
         const date = new Date(incomeDate);
         const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
         
-        if (isActual) {
-          // Edit actual income
-          addIncomeDate.textContent = `${dateStr} - Edit Income`;
-          addIncomeForm.dataset.transactionId = incomeId;
-        } else {
-          // Record actual income for projected (like paycheck)
-          addIncomeDate.textContent = `${dateStr} (Projected: ${formatMoney(incomeAmount)})`;
+        // Update modal header - use data attribute to track type
+        if (isPaycheck) {
+          addIncomeModal.dataset.modalType = 'paycheck';
+          const incomeHeader = addIncomeModal.querySelector('h3');
+          if (incomeHeader) incomeHeader.textContent = 'Actual Pay';
           addIncomeForm.dataset.transactionId = "";
+        } else {
+          addIncomeModal.dataset.modalType = 'edit';
+          const incomeHeader = addIncomeModal.querySelector('h3');
+          if (incomeHeader) incomeHeader.textContent = 'Record Actual Income';
+          addIncomeForm.dataset.transactionId = incomeId;
         }
         
         addIncomeAmount.value = incomeAmount;
