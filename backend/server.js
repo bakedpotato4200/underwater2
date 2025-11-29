@@ -1,7 +1,3 @@
-// ===============================
-// Underwater Backend - CommonJS
-// ===============================
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -15,11 +11,32 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Test route
+// ----------------------------
+// Test Route
+// ----------------------------
 app.get("/", (req, res) => {
-  res.json({ message: "Backend running" });
+  res.json({ message: "Underwater Backend Running" });
 });
 
-// Start server
+// ----------------------------
+// Connect to MongoDB
+// ----------------------------
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  console.error("❌ Missing MONGO_URI in .env");
+  process.exit(1);
+}
+
+mongoose
+  .connect(MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB Error:", err));
+
+// ----------------------------
+// Start Server
+// ----------------------------
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
