@@ -36,8 +36,25 @@ router.post("/signup", async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Validation
+    if (!email || !email.trim()) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+    if (!password || !password.trim()) {
+      return res.status(400).json({ error: "Password is required" });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters" });
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
     // Check if exists
-    const existing = await User.findOne({ email });
+    const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) {
       return res.status(400).json({ error: "Email already in use" });
     }
@@ -47,7 +64,7 @@ router.post("/signup", async (req, res) => {
 
     // Create user
     const user = await User.create({
-      email,
+      email: email.toLowerCase(),
       password: hashed,
     });
 
@@ -90,16 +107,24 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Validation
+    if (!email || !email.trim()) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+    if (!password || !password.trim()) {
+      return res.status(400).json({ error: "Password is required" });
+    }
+
     // Find the user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
-      return res.status(400).json({ error: "Invalid email or password" });
+      return res.status(400).json({ error: "Email not found. Please sign up" });
     }
 
     // Compare password
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      return res.status(400).json({ error: "Invalid email or password" });
+      return res.status(400).json({ error: "Incorrect password" });
     }
 
     // Token
