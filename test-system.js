@@ -192,7 +192,8 @@ async function testRecurring() {
       name: 'Monthly Rent',
       type: 'expense',
       amount: 1200,
-      dayOfMonth: 1
+      frequency: 'monthly',
+      startDate: new Date()
     });
     if (status === 201 && data._id) {
       log.pass('Recurring item created');
@@ -249,7 +250,9 @@ async function testTransactions() {
       name: 'Test Payment',
       amount: 1500,
       date: new Date(),
-      projected: false
+      projected: false,
+      category: 'income',
+      description: 'Test income transaction'
     });
     if (status === 200) {
       log.pass('Transaction created');
