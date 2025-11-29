@@ -1,6 +1,6 @@
 // frontend/js/recurring.js
 // ========================================
-// Underground Water 2 - Recurring Items Page
+// Under Water 2 - Recurring Items Page
 // Handles loading, creating, updating, deleting
 // ========================================
 

@@ -1,6 +1,6 @@
 // frontend/js/calendar.js
 // ========================================
-// Underground Water 2 - Calendar Page Logic
+// Under Water 2 - Calendar Page Logic
 // Loads monthly calendar + renders grid + summary
 // ========================================
 

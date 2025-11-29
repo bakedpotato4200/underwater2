@@ -1,6 +1,6 @@
 // frontend/js/config.js
 // ========================================
-// Underground Water 2 - Frontend Config
+// Under Water 2 - Frontend Config
 // ========================================
 //
 // 🚨 IMPORTANT FOR LATER 🚨

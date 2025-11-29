@@ -1,6 +1,6 @@
 // frontend/js/inactivity.js
 // ========================================
-// Underground Water 2 - Inactivity Logout
+// Under Water 2 - Inactivity Logout
 // Auto-logout after 15 minutes of no activity
 // ========================================
 

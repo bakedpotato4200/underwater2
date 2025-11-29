@@ -1,6 +1,6 @@
 // frontend/js/ui.js
 // ========================================
-// Underground Water 2 - UI Controls
+// Under Water 2 - UI Controls
 // Handles sidebar navigation and view switching
 // ========================================
 

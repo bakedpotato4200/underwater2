@@ -1,6 +1,6 @@
 // frontend/js/main.js
 // ========================================
-// Underground Water 2 - App Entry Point
+// Under Water 2 - App Entry Point
 // Runs on startup and ties all modules together
 // ========================================
 
@@ -18,7 +18,7 @@ import { checkAuthOnLoad } from "./auth.js";
 // ========================================
 // APP INIT
 // ========================================
-console.log("🚀 Underground Water 2 - Starting...");
+console.log("🚀 Under Water 2 - Starting...");
 
 window.addEventListener("DOMContentLoaded", () => {
   console.log("📄 DOM Content Loaded");

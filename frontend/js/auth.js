@@ -1,6 +1,6 @@
 // frontend/js/auth.js
 // ========================================
-// Underground Water 2 - Authentication Logic
+// Under Water 2 - Authentication Logic
 // Handles login, signup, logout, and token verify
 // ========================================
 

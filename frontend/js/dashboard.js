@@ -1,6 +1,6 @@
 // frontend/js/dashboard.js
 // ========================================
-// Underground Water 2 - Dashboard
+// Under Water 2 - Dashboard
 // Shows monthly summary + pressure days
 // ========================================
 

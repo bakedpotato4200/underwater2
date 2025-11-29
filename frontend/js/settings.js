@@ -1,6 +1,6 @@
 // frontend/js/settings.js
 // ========================================
-// Underground Water 2 - Settings Page
+// Under Water 2 - Settings Page
 // Handles Account, Password, Starting Balance + Paycheck Settings
 // ========================================
 

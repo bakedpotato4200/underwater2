@@ -1,6 +1,6 @@
 // frontend/js/api.js
 // ========================================
-// Underground Water 2 - API Wrapper
+// Under Water 2 - API Wrapper
 // All API calls go through this module
 // ========================================
 
