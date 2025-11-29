@@ -11,16 +11,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// ----------------------------
 // Test Route
-// ----------------------------
 app.get("/", (req, res) => {
   res.json({ message: "Underwater Backend Running" });
 });
 
-// ----------------------------
-// Connect to MongoDB
-// ----------------------------
+// MongoDB Connect
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
@@ -33,10 +29,6 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Error:", err));
 
-// ----------------------------
 // Start Server
-// ----------------------------
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
