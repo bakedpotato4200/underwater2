@@ -85,21 +85,11 @@ function renderDashboard(data) {
       
       // Period 1 (days 1-14)
       if (dayDate >= period1Start && dayDate <= period1End && day.events) {
-        // For income: only count one per day (prefer actual over projected)
-        const paycheckIncomes = day.events.filter(e => e.type === "income" && e.name && e.name.toLowerCase().includes("paycheck"));
-        const otherIncomes = day.events.filter(e => e.type === "income" && (!e.name || !e.name.toLowerCase().includes("paycheck")));
-        
-        if (paycheckIncomes.length > 0) {
-          const hasActual = paycheckIncomes.some(e => !e.projected);
-          const incomeToCount = hasActual ? paycheckIncomes.find(e => !e.projected) : paycheckIncomes[0];
-          paycheck1Total += incomeToCount.amount || 0;
-        }
-        
-        if (otherIncomes.length > 0) {
-          const hasActual = otherIncomes.some(e => !e.projected);
-          const incomeToCount = hasActual ? otherIncomes.find(e => !e.projected) : otherIncomes[0];
-          paycheck1Income += incomeToCount.amount || 0;
-        }
+        // For income: count ALL income items this day (not just one per day)
+        const allIncomes = day.events.filter(e => e.type === "income");
+        allIncomes.forEach(income => {
+          paycheck1Total += income.amount || 0;
+        });
         
         // For expenses: only count one per day (prefer actual over projected)
         const expenses = day.events.filter(e => e.type === "expense");
@@ -111,21 +101,11 @@ function renderDashboard(data) {
       }
       // Period 2 (days 15-31)
       if (dayDate >= period2Start && dayDate <= period2End && day.events) {
-        // For income: only count one per day (prefer actual over projected)
-        const paycheckIncomes = day.events.filter(e => e.type === "income" && e.name && e.name.toLowerCase().includes("paycheck"));
-        const otherIncomes = day.events.filter(e => e.type === "income" && (!e.name || !e.name.toLowerCase().includes("paycheck")));
-        
-        if (paycheckIncomes.length > 0) {
-          const hasActual = paycheckIncomes.some(e => !e.projected);
-          const incomeToCount = hasActual ? paycheckIncomes.find(e => !e.projected) : paycheckIncomes[0];
-          paycheck2Total += incomeToCount.amount || 0;
-        }
-        
-        if (otherIncomes.length > 0) {
-          const hasActual = otherIncomes.some(e => !e.projected);
-          const incomeToCount = hasActual ? otherIncomes.find(e => !e.projected) : otherIncomes[0];
-          paycheck2Income += incomeToCount.amount || 0;
-        }
+        // For income: count ALL income items this day (not just one per day)
+        const allIncomes = day.events.filter(e => e.type === "income");
+        allIncomes.forEach(income => {
+          paycheck2Total += income.amount || 0;
+        });
         
         // For expenses: only count one per day (prefer actual over projected)
         const expenses = day.events.filter(e => e.type === "expense");
@@ -138,10 +118,13 @@ function renderDashboard(data) {
     });
   }
 
-  dashPaycheck1.textContent = `-${formatMoney(paycheck1Bills)}`;
-  dashPaycheck1Detail.textContent = ``;
-  dashPaycheck2.textContent = `-${formatMoney(paycheck2Bills)}`;
-  dashPaycheck2Detail.textContent = ``;
+  const paycheck1Net = paycheck1Total - paycheck1Bills;
+  const paycheck2Net = paycheck2Total - paycheck2Bills;
+  
+  dashPaycheck1.textContent = formatMoney(paycheck1Net);
+  dashPaycheck1Detail.textContent = `Income: ${formatMoney(paycheck1Total)} | Bills: ${formatMoney(paycheck1Bills)}`;
+  dashPaycheck2.textContent = formatMoney(paycheck2Net);
+  dashPaycheck2Detail.textContent = `Income: ${formatMoney(paycheck2Total)} | Bills: ${formatMoney(paycheck2Bills)}`;
 
   // Add click handlers for cards
   dashIncomeCard.onclick = () => showMonthlyIncomeDetails(days);
