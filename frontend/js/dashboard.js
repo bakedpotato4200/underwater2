@@ -114,9 +114,9 @@ function renderDashboard(data) {
   const paycheck2Net = paycheck2Total - paycheck2Bills;
 
   dashPaycheck1.textContent = formatMoney(paycheck1Net);
-  dashPaycheck1Detail.textContent = `Paycheck: ${formatMoney(paycheck1Total)} | Other Income: ${formatMoney(paycheck1Income)} | Bills: ${formatMoney(paycheck1Bills)}`;
+  dashPaycheck1Detail.textContent = `Bills: ${formatMoney(paycheck1Bills)}`;
   dashPaycheck2.textContent = formatMoney(paycheck2Net);
-  dashPaycheck2Detail.textContent = `Paycheck: ${formatMoney(paycheck2Total)} | Other Income: ${formatMoney(paycheck2Income)} | Bills: ${formatMoney(paycheck2Bills)}`;
+  dashPaycheck2Detail.textContent = `Bills: ${formatMoney(paycheck2Bills)}`;
 
   // Add click handlers for cards
   dashIncomeCard.onclick = () => showMonthlyIncomeDetails(days);
