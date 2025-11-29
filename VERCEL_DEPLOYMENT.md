@@ -17,14 +17,34 @@
 - **Build Command**: Leave blank (static files)
 - **Output Directory**: `.` (current directory)
 
-## Step 3: Set Environment Variables
-In Vercel dashboard, add this environment variable:
+## Step 3: Configure API URL
 
+You have two options:
+
+### Option A: Via Vercel Environment Variable (Recommended)
+1. In Vercel dashboard, add environment variable:
 ```
-REACT_APP_API_URL=https://your-railway-backend.up.railway.app/api
+VITE_API_URL=https://your-railway-backend.up.railway.app/api
 ```
 
-Replace `your-railway-backend` with your actual Railway app URL.
+2. Then create a `frontend/config.env.vercel` file:
+```
+VITE_API_URL=https://your-railway-backend.up.railway.app/api
+```
+
+### Option B: Direct HTML Configuration (Quick Fix)
+1. Open `frontend/index.html`
+2. Find this line near the top:
+```html
+<!-- <meta name="api-base-url" content="https://your-railway-backend.up.railway.app/api" /> -->
+```
+3. Uncomment it and replace the URL with your Railway backend URL:
+```html
+<meta name="api-base-url" content="https://your-railway-app.up.railway.app/api" />
+```
+4. Push to GitHub - Vercel will redeploy automatically
+
+Replace `your-railway-app` with your actual Railway app name.
 
 ## Step 4: Deploy
 Click "Deploy" and Vercel will:
