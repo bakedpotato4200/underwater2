@@ -271,21 +271,44 @@ function showMonthlyIncomeDetails(days) {
 
   let totalIncome = 0;
   let foundIncome = false;
+  const daysWithActualIncome = new Set();
 
+  // First pass: identify which days have actual income
   if (days && days.length > 0) {
     days.forEach(day => {
       if (day.events) {
         day.events.forEach(event => {
-          if (event.type === "income") {
+          if (event.type === "income" && !event.projected) {
+            daysWithActualIncome.add(day.dateKey);
+          }
+        });
+      }
+    });
+  }
+
+  // Second pass: display income (only one per day - prefer actual over projected)
+  if (days && days.length > 0) {
+    days.forEach(day => {
+      if (day.events) {
+        // For each day, find income events and only show actual if it exists
+        const incomeEvents = day.events.filter(e => e.type === "income");
+        if (incomeEvents.length > 0) {
+          // If there's actual income, only show actual. Otherwise show projected.
+          const hasActual = incomeEvents.some(e => !e.projected);
+          const eventToShow = hasActual 
+            ? incomeEvents.find(e => !e.projected) 
+            : incomeEvents[0];
+
+          if (eventToShow) {
             foundIncome = true;
-            totalIncome += event.amount || 0;
+            totalIncome += eventToShow.amount || 0;
             const dayDate = new Date(day.date);
             const dayFormatted = dayDate.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" });
             html += `<div class="detail-income" style="padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px;">
-              <small style="color: #999;">${dayFormatted}</small> - ${event.name}: <strong style="color: #2ecc71;">+${formatMoney(event.amount)}</strong>
+              <small style="color: #999;">${dayFormatted}</small> - ${eventToShow.name}: <strong style="color: #2ecc71;">+${formatMoney(eventToShow.amount)}</strong>
             </div>`;
           }
-        });
+        }
       }
     });
   }
@@ -320,20 +343,29 @@ function showMonthlyExpensesDetails(days) {
   let totalExpenses = 0;
   let foundExpenses = false;
 
+  // Display expenses (only one per day - prefer actual over projected)
   if (days && days.length > 0) {
     days.forEach(day => {
       if (day.events) {
-        day.events.forEach(event => {
-          if (event.type === "expense") {
+        // For each day, find expense events and only show actual if it exists
+        const expenseEvents = day.events.filter(e => e.type === "expense");
+        if (expenseEvents.length > 0) {
+          // If there's actual expense, only show actual. Otherwise show projected.
+          const hasActual = expenseEvents.some(e => !e.projected);
+          const eventToShow = hasActual 
+            ? expenseEvents.find(e => !e.projected) 
+            : expenseEvents[0];
+
+          if (eventToShow) {
             foundExpenses = true;
-            totalExpenses += event.amount || 0;
+            totalExpenses += eventToShow.amount || 0;
             const dayDate = new Date(day.date);
             const dayFormatted = dayDate.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" });
             html += `<div class="detail-expense" style="padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px;">
-              <small style="color: #999;">${dayFormatted}</small> - ${event.name}: <strong style="color: #e74c3c;">-${formatMoney(event.amount)}</strong>
+              <small style="color: #999;">${dayFormatted}</small> - ${eventToShow.name}: <strong style="color: #e74c3c;">-${formatMoney(eventToShow.amount)}</strong>
             </div>`;
           }
-        });
+        }
       }
     });
   }
