@@ -10,26 +10,25 @@
 
   <!-- Main Styles -->
   <link rel="stylesheet" href="./styles.css" />
-  
-  <!-- VERCEL DEPLOYMENT: Railway backend URL -->
-  <meta name="api-base-url" content="https://underwater-production.up.railway.app/api" />
-  
-  <!-- Configuration for API Base URL -->
-  <!-- This ensures all frontend API calls go to the Railway backend, not index.html -->
+
+  <!-- Correct production backend URL (no /api) -->
+  <meta name="api-base-url" content="https://underwater2-production.up.railway.app" />
+
+  <!-- Inject API base URL BEFORE JS loads -->
   <script>
-    // Determine API base URL based on environment
-    let apiUrl = 'https://underwater-production.up.railway.app/api';
-    
-    // Check for meta tag (set by Vercel build)
+    let apiUrl = "https://underwater2-production.up.railway.app";
+
     const metaApi = document.querySelector('meta[name="api-base-url"]');
     if (metaApi && metaApi.content) {
       apiUrl = metaApi.content;
     }
-    
+
     window.__API_BASE_URL__ = apiUrl;
   </script>
+
 </head>
 <body>
+
   <!-- AUTH SCREEN -->
   <div id="auth-screen" class="auth-screen app-shell-hidden">
     <div class="auth-card">
@@ -44,64 +43,36 @@
 
       <!-- LOGIN FORM -->
       <form id="login-form" class="auth-form">
-        <input type="text" id="login-username-hidden" autocomplete="username" style="display:none;" />
-        <label>
-          Email
-          <input type="email" id="login-email" autocomplete="email" required />
-        </label>
-        <label>
-          Password
-          <input type="password" id="login-password" autocomplete="current-password" required />
-        </label>
+        <label>Email <input type="email" id="login-email" required /></label>
+        <label>Password <input type="password" id="login-password" required /></label>
         <button type="submit" class="btn btn-primary">Login</button>
-        <p class="auth-error" id="login-error"></p>
+        <p id="login-error" class="auth-error"></p>
         <button type="button" id="forgot-password-link" class="btn-link">Forgot password?</button>
       </form>
 
       <!-- SIGNUP FORM -->
       <form id="signup-form" class="auth-form auth-form-hidden">
-        <input type="text" id="signup-username-hidden" autocomplete="username" style="display:none;" />
-        <label>
-          Email
-          <input type="email" id="signup-email" autocomplete="email" required />
-        </label>
-        <label>
-          Password
-          <input type="password" id="signup-password" autocomplete="new-password" required />
-        </label>
+        <label>Email <input type="email" id="signup-email" required /></label>
+        <label>Password <input type="password" id="signup-password" required /></label>
         <button type="submit" class="btn btn-secondary">Create Account</button>
-        <p class="auth-error" id="signup-error"></p>
+        <p id="signup-error" class="auth-error"></p>
       </form>
 
       <!-- FORGOT PASSWORD FORM -->
       <form id="forgot-password-form" class="auth-form auth-form-hidden">
-        <input type="text" id="forgot-username-hidden" autocomplete="username" style="display:none;" />
-        <label>
-          Email
-          <input type="email" id="forgot-email" autocomplete="email" required />
-        </label>
+        <label>Email <input type="email" id="forgot-email" required /></label>
         <button type="submit" class="btn btn-secondary">Send Reset Code</button>
-        <p class="auth-error" id="forgot-error"></p>
+        <p id="forgot-error" class="auth-error"></p>
         <button type="button" id="back-to-login-from-forgot" class="btn-link">Back to Login</button>
       </form>
 
       <!-- RESET PASSWORD FORM -->
       <form id="reset-password-form" class="auth-form auth-form-hidden">
-        <input type="text" id="reset-username-hidden" autocomplete="username" style="display:none;" />
-        <label>
-          Email
-          <input type="email" id="reset-email" autocomplete="email" required />
-        </label>
-        <label>
-          Reset Code (6 digits)
-          <input type="text" id="reset-code" maxlength="6" required />
-        </label>
-        <label>
-          New Password
-          <input type="password" id="reset-new-password" autocomplete="new-password" required />
-        </label>
+        <label>Email <input type="email" id="reset-email" required /></label>
+        <label>Reset Code (6 digits) <input type="text" id="reset-code" maxlength="6" required /></label>
+        <label>New Password <input type="password" id="reset-new-password" required /></label>
         <button type="submit" class="btn btn-secondary">Reset Password</button>
-        <p class="auth-error" id="reset-error"></p>
+        <p id="reset-error" class="auth-error"></p>
         <button type="button" id="back-to-login-from-reset" class="btn-link">Back to Login</button>
       </form>
     </div>
@@ -109,29 +80,20 @@
 
   <!-- MAIN APP SHELL -->
   <div id="app-shell" class="app-shell app-shell-hidden">
-    <!-- SIDEBAR OVERLAY (click to close) -->
+
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-logo">
         <img src="./assets/icons/icon-sidebar.png" alt="UW" class="sidebar-logo-icon sidebar-icon-img" />
         <div class="sidebar-logo-text">Under Water</div>
       </div>
-      
+
       <nav class="sidebar-nav">
-        <button class="nav-item nav-item-active" data-view="dashboard-view">
-          Dashboard
-        </button>
-        <button class="nav-item" data-view="calendar-view">
-          Calendar
-        </button>
-        <button class="nav-item" data-view="recurring-view">
-          Recurring
-        </button>
-        <button class="nav-item" data-view="settings-view">
-          Settings
-        </button>
+        <button class="nav-item nav-item-active" data-view="dashboard-view">Dashboard</button>
+        <button class="nav-item" data-view="calendar-view">Calendar</button>
+        <button class="nav-item" data-view="recurring-view">Recurring</button>
+        <button class="nav-item" data-view="settings-view">Settings</button>
       </nav>
 
       <div class="sidebar-footer">
@@ -140,8 +102,8 @@
       </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
+
       <header class="app-header">
         <button id="menu-toggle-btn" class="menu-toggle-btn">☰</button>
         <div class="app-logo">
@@ -149,39 +111,24 @@
           <span class="logo-text">Under Water</span>
         </div>
       </header>
-      <!-- DASHBOARD VIEW -->
+
+      <!-- DASHBOARD -->
       <section id="dashboard-view" class="view view-active">
         <div class="dashboard-header-banner">
-          <img src="./assets/icons/logo-horizontal.png" alt="Under Water" class="dashboard-logo-horizontal" />
+          <img src="./assets/icons/logo-horizontal.png" class="dashboard-logo-horizontal" />
         </div>
+
         <h2>Dashboard</h2>
 
         <div class="cards-row">
-          <div class="card positive" id="dash-income-card" style="cursor: pointer;">
-            <h3>This Month Income</h3>
-            <p id="dash-income" class="big-number">$0</p>
-          </div>
-          <div class="card negative" id="dash-expenses-card" style="cursor: pointer;">
-            <h3>This Month Bills</h3>
-            <p id="dash-expenses" class="big-number">$0</p>
-          </div>
-          <div class="card positive">
-            <h3>End of Month Balance</h3>
-            <p id="dash-end-balance" class="big-number">$0</p>
-          </div>
+          <div class="card positive" id="dash-income-card"><h3>This Month Income</h3><p id="dash-income">$0</p></div>
+          <div class="card negative" id="dash-expenses-card"><h3>This Month Bills</h3><p id="dash-expenses">$0</p></div>
+          <div class="card positive"><h3>End of Month Balance</h3><p id="dash-end-balance">$0</p></div>
         </div>
 
         <div class="cards-row">
-          <div class="card" id="dash-paycheck-1-card" style="cursor: pointer;">
-            <h3>Paycheck 1 + Bills</h3>
-            <p id="dash-paycheck-1" class="big-number">$0</p>
-            <small id="dash-paycheck-1-detail" style="display: block; margin-top: 0.5rem;"></small>
-          </div>
-          <div class="card" id="dash-paycheck-2-card" style="cursor: pointer;">
-            <h3>Paycheck 2 + Bills</h3>
-            <p id="dash-paycheck-2" class="big-number">$0</p>
-            <small id="dash-paycheck-2-detail" style="display: block; margin-top: 0.5rem;"></small>
-          </div>
+          <div class="card" id="dash-paycheck-1-card"><h3>Paycheck 1 + Bills</h3><p id="dash-paycheck-1">$0</p><small id="dash-paycheck-1-detail"></small></div>
+          <div class="card" id="dash-paycheck-2-card"><h3>Paycheck 2 + Bills</h3><p id="dash-paycheck-2">$0</p><small id="dash-paycheck-2-detail"></small></div>
           <div class="card card-wide">
             <h3>Top Pressure Days</h3>
             <ul id="dash-pressure-days" class="simple-list"></ul>
@@ -189,7 +136,7 @@
         </div>
       </section>
 
-      <!-- CALENDAR VIEW -->
+      <!-- CALENDAR -->
       <section id="calendar-view" class="view">
         <header class="view-header">
           <h2>Calendar</h2>
@@ -201,32 +148,21 @@
         </header>
 
         <div class="calendar-summary">
-          <div>
-            <span class="summary-label">Income:</span>
-            <span id="cal-income" class="summary-value">$0</span>
-          </div>
-          <div>
-            <span class="summary-label">Bills:</span>
-            <span id="cal-expenses" class="summary-value">$0</span>
-          </div>
-          <div>
-            <span class="summary-label">Net:</span>
-            <span id="cal-net" class="summary-value">$0</span>
-          </div>
+          <div><span class="summary-label">Income:</span> <span id="cal-income">$0</span></div>
+          <div><span class="summary-label">Bills:</span> <span id="cal-expenses">$0</span></div>
+          <div><span class="summary-label">Net:</span> <span id="cal-net">$0</span></div>
         </div>
 
-        <div id="calendar-grid" class="calendar-grid">
-          <!-- Filled by calendar.js -->
-        </div>
+        <div id="calendar-grid" class="calendar-grid"></div>
       </section>
 
-      <!-- RECURRING VIEW -->
+      <!-- RECURRING -->
       <section id="recurring-view" class="view">
         <h2>Recurring Items</h2>
 
         <form id="recurring-form" class="form-row">
           <input type="text" id="rec-name" placeholder="Name (Rent, Paycheck…)" required />
-          <input type="number" id="rec-amount" placeholder="Amount" step="0.01" required />
+          <input type="number" id="rec-amount" step="0.01" required />
           <select id="rec-type" required>
             <option value="expense">Expense</option>
             <option value="income">Income</option>
@@ -237,27 +173,20 @@
             <option value="weekly">Weekly</option>
           </select>
           <input type="date" id="rec-start-date" required />
-          <button type="submit" class="btn btn-primary">Add / Save</button>
+          <button class="btn btn-primary">Add / Save</button>
         </form>
 
         <p id="recurring-error" class="form-error"></p>
 
         <table class="data-table">
           <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Frequency</th>
-              <th>Amount</th>
-              <th>Start Date</th>
-              <th></th>
-            </tr>
+            <tr><th>Name</th><th>Type</th><th>Frequency</th><th>Amount</th><th>Start Date</th><th></th></tr>
           </thead>
           <tbody id="recurring-table-body"></tbody>
         </table>
       </section>
 
-      <!-- SETTINGS VIEW -->
+      <!-- SETTINGS -->
       <section id="settings-view" class="view">
         <h2>Settings</h2>
 
@@ -277,7 +206,7 @@
           <h3>Account Information</h3>
           <form id="profile-form" class="form-row">
             <input type="text" id="profile-name-input" placeholder="Your name" required />
-            <button type="submit" class="btn btn-secondary">Save Name</button>
+            <button class="btn btn-secondary">Save Name</button>
           </form>
           <p id="profile-status" class="form-status"></p>
         </div>
@@ -285,11 +214,10 @@
         <div class="settings-section">
           <h3>Change Password</h3>
           <form id="change-password-form" class="form-row">
-            <input type="text" id="change-password-username-hidden" autocomplete="username" style="display:none;" />
-            <input type="password" id="current-password-input" placeholder="Current password" autocomplete="current-password" required />
-            <input type="password" id="new-password-input" placeholder="New password" autocomplete="new-password" required />
-            <input type="password" id="verify-password-input" placeholder="Verify new password" autocomplete="new-password" required />
-            <button type="submit" class="btn btn-secondary">Change Password</button>
+            <input type="password" id="current-password-input" required placeholder="Current password" />
+            <input type="password" id="new-password-input" required placeholder="New password" />
+            <input type="password" id="verify-password-input" required placeholder="Verify new password" />
+            <button class="btn btn-secondary">Change Password</button>
           </form>
           <p id="change-password-status" class="form-status"></p>
         </div>
@@ -297,13 +225,14 @@
         <div class="settings-section">
           <h3>Starting Balance</h3>
           <form id="starting-balance-form" class="form-row">
-            <input type="number" id="starting-balance-input" placeholder="Starting balance" step="0.01" required />
-            <button type="submit" class="btn btn-secondary">Save</button>
+            <input type="number" id="starting-balance-input" step="0.01" required placeholder="Starting balance" />
+            <button class="btn btn-secondary">Save</button>
           </form>
           <p id="starting-balance-status" class="form-status"></p>
         </div>
 
       </section>
+
     </main>
   </div>
 
@@ -315,19 +244,19 @@
     </div>
   </div>
 
-  <!-- ACTUAL PAY MODAL (Simple) -->
+  <!-- ACTUAL PAY MODAL -->
   <div id="actual-pay-modal" class="modal">
     <div class="modal-content" style="max-width: 300px; text-align: center;">
-      <h3 style="margin: 0 0 1rem 0;">Actual Income</h3>
-      <form id="actual-pay-form" style="display: flex; flex-direction: column; gap: 1rem;">
-        <input type="number" id="actual-pay-amount" placeholder="Enter actual amount" step="0.01" required style="padding: 0.75rem; font-size: 1.1rem; border: 2px solid #ccc; border-radius: 4px;" />
-        <button type="submit" class="btn btn-primary">Submit</button>
+      <h3>Actual Income</h3>
+      <form id="actual-pay-form">
+        <input type="number" id="actual-pay-amount" step="0.01" required />
+        <button class="btn btn-primary">Submit</button>
         <p id="actual-pay-error" class="form-error"></p>
       </form>
     </div>
   </div>
 
-  <!-- Load App Entry Point (imports all modules) -->
+  <!-- Load main JS -->
   <script type="module" src="./js/main.js"></script>
 
 </body>
