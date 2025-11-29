@@ -197,7 +197,26 @@ export async function buildMonthlyCalendar(
   const recurringExpenses = recurringItems.filter((r) => r.type === "expense");
 
   // --------------------------------
+  // Track actual transactions FIRST to know which dates have real income/expenses
+  // --------------------------------
+  const datesWithActualIncome = new Set();
+  const datesWithActualExpense = new Set();
+  
+  for (const tx of actualTx) {
+    const key = dateKey(tx.date);
+    const amt = Number(tx.amount || 0);
+    const isExpense = amt < 0;
+
+    if (isExpense) {
+      datesWithActualExpense.add(key);
+    } else {
+      datesWithActualIncome.add(key);
+    }
+  }
+
+  // --------------------------------
   // Place recurring income (from Recurring model)
+  // SKIP if this date already has actual income
   // --------------------------------
   for (const rec of recurringIncome) {
     const occurrences = generateOccurrences(
@@ -211,6 +230,11 @@ export async function buildMonthlyCalendar(
       const key = dateKey(occ);
       const day = dayMap[key];
       if (!day) continue;
+
+      // Skip projected income if actual income exists for this date
+      if (datesWithActualIncome.has(key)) {
+        continue;
+      }
 
       const amount = Number(rec.amount || 0);
 
@@ -228,6 +252,7 @@ export async function buildMonthlyCalendar(
 
   // --------------------------------
   // Place recurring expenses (from Recurring model)
+  // SKIP if this date already has actual expenses
   // --------------------------------
   for (const rec of recurringExpenses) {
     const occurrences = generateOccurrences(
@@ -241,6 +266,11 @@ export async function buildMonthlyCalendar(
       const key = dateKey(occ);
       const day = dayMap[key];
       if (!day) continue;
+
+      // Skip projected expense if actual expense exists for this date
+      if (datesWithActualExpense.has(key)) {
+        continue;
+      }
 
       const amount = Number(rec.amount || 0);
 
@@ -257,11 +287,8 @@ export async function buildMonthlyCalendar(
   }
 
   // --------------------------------
-  // Optional: overlay actual transactions FIRST
-  // (Process actual transactions before projected so we can skip duplicates)
-// --------------------------------
-  const datesWithActualIncome = new Set();
-  
+  // Now overlay actual transactions
+  // --------------------------------
   for (const tx of actualTx) {
     const key = dateKey(tx.date);
     const day = dayMap[key];
@@ -284,8 +311,6 @@ export async function buildMonthlyCalendar(
       day.expenseTotal += absAmount;
     } else {
       day.incomeTotal += absAmount;
-      // Track dates with actual income so we don't add projected paycheck
-      datesWithActualIncome.add(key);
     }
   }
 
