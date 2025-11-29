@@ -242,6 +242,11 @@ function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPay
     return;
   }
 
+  // Close any open modals first
+  if (dayModal) {
+    dayModal.classList.remove("modal-visible");
+  }
+
   const startDay = periodStart.getDate();
   const endDay = periodEnd.getDate();
   const startFormatted = periodStart.toLocaleDateString("en-US", { month: "short", day: "numeric" });
