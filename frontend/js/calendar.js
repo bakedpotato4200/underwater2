@@ -202,7 +202,7 @@ function showDayDetails(day) {
       if (event.type === "income") {
         const isActualIncome = !event.projected && event._id;
         const isPaycheck = event.projected && (event.name.toLowerCase().includes('paycheck') || event.recurringId || event.paycheckSettingsId);
-        const clickableAttrs = (isActualIncome || isPaycheck) ? `data-income-id="${event._id || ''}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" data-is-actual="${!event.projected}" data-is-paycheck="${isPaycheck}"` : '';
+        const clickableAttrs = (isActualIncome || isPaycheck) ? `data-income-id="${event._id || ''}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" data-is-actual="${!event.projected}" data-is-paycheck="${isPaycheck}" data-recurring-id="${event.recurringId || ''}" data-paycheck-id="${event.paycheckSettingsId || ''}"` : '';
         const style = `padding: 0.5rem; padding-left: 0.75rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; background: rgba(46, 204, 113, 0.15); border-left: 4px solid #2ecc71; color: #1e7e34; ${(isActualIncome || isPaycheck) ? 'cursor: pointer;' : ''}`;
         html += `<div style="${style}" class="income-clickable" ${clickableAttrs}>
           <span style="flex: 1; pointer-events: none;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
@@ -278,6 +278,8 @@ function showDayDetails(day) {
         // Store data for submission
         actualPayModal.dataset.incomeDate = incomeDate;
         actualPayModal.dataset.incomeName = incomeName;
+        actualPayModal.dataset.recurringId = item.getAttribute("data-recurring-id") || '';
+        actualPayModal.dataset.paycheckId = item.getAttribute("data-paycheck-id") || '';
         actualPayAmount.value = incomeAmount;
         actualPayError.textContent = "";
         
@@ -339,6 +341,8 @@ if (actualPayForm) {
     const amount = Number(actualPayAmount.value);
     const incomeName = actualPayModal.dataset.incomeName || "Paycheck";
     const incomeDate = actualPayModal.dataset.incomeDate;
+    const recurringId = actualPayModal.dataset.recurringId;
+    const paycheckId = actualPayModal.dataset.paycheckId;
     
     if (!amount || amount <= 0) {
       actualPayError.textContent = "Amount must be greater than 0";
@@ -346,7 +350,14 @@ if (actualPayForm) {
     }
     
     try {
-      const { apiCreateTransaction } = await import("./api.js");
+      const { apiCreateTransaction, apiDeleteRecurring, apiDeletePaycheck } = await import("./api.js");
+      
+      // Delete the projected paycheck/recurring item first
+      if (recurringId) {
+        await apiDeleteRecurring(recurringId);
+      } else if (paycheckId) {
+        await apiDeletePaycheck(paycheckId);
+      }
       
       // Create new transaction for the actual income
       await apiCreateTransaction({
