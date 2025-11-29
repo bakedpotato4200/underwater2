@@ -463,3 +463,21 @@ function showMonthlyExpensesDetails(days) {
   dayModalContent.innerHTML = html;
   dayModal.classList.add("modal-visible");
 }
+
+// ========================================
+// Delete Transaction Item
+// ========================================
+async function deleteTransactionItem(txId) {
+  try {
+    console.log(`🗑️ Deleting transaction: ${txId}`);
+    await apiDeleteTransaction(txId);
+    console.log("✅ Transaction deleted");
+    
+    // Reload the dashboard to reflect changes
+    dayModal.classList.remove("modal-visible");
+    loadDashboard();
+  } catch (err) {
+    console.error("❌ Delete transaction error:", err);
+    alert("Failed to delete transaction");
+  }
+}
