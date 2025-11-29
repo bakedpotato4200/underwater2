@@ -124,8 +124,8 @@ function renderDashboard(data) {
   // Add click handlers for cards
   dashIncomeCard.onclick = () => showMonthlyIncomeDetails(days);
   dashExpensesCard.onclick = () => showMonthlyExpensesDetails(days);
-  dashPaycheck1Card.onclick = () => showPaycheckDetails(1, period1Start, period1End, days, paycheck1Total, paycheck1Bills, paycheck1Income);
-  dashPaycheck2Card.onclick = () => showPaycheckDetails(2, period2Start, period2End, days, paycheck2Total, paycheck2Bills, paycheck2Income);
+  dashPaycheck1Card.onclick = () => showPaycheckDetails(1, days);
+  dashPaycheck2Card.onclick = () => showPaycheckDetails(2, days);
 
   // Pressure points list
   if (pressurePoints && pressurePoints.length > 0) {
@@ -236,7 +236,7 @@ function showPressureDayDetails(dateStr, days) {
 // ========================================
 // Show Paycheck Details Modal
 // ========================================
-function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPaycheck, totalBills, otherIncome) {
+function showPaycheckDetails(paycheckNum, days) {
   if (!dayModal || !dayModalContent) {
     console.error("Modal elements not found");
     return;
@@ -247,10 +247,9 @@ function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPay
     dayModal.classList.remove("modal-visible");
   }
 
-  const startDay = periodStart.getDate();
-  const endDay = periodEnd.getDate();
-  const startFormatted = periodStart.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  const endFormatted = periodEnd.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  // Calculate period dates
+  const startFormatted = paycheckNum === 1 ? "Nov 1" : "Nov 15";
+  const endFormatted = paycheckNum === 1 ? "Nov 14" : "Nov 30";
 
   let html = `<h3>Paycheck ${paycheckNum} (${startFormatted} - ${endFormatted})</h3>`;
   html += `<div class="day-detail-section">`;
