@@ -13,9 +13,8 @@
 
 // API Base URL - configurable for different environments
 // Local development: "/api" (proxied through backend)
-// Vercel + Railway: use environment variable pointing to Railway backend
-const API_BASE_URL = process.env.REACT_APP_API_URL || process.env.VUE_APP_API_URL || window.__API_BASE_URL__ || "/api";
-export { API_BASE_URL };
+// Vercel + Railway: set via window.__API_BASE_URL__ variable injected in HTML
+export const API_BASE_URL = window.__API_BASE_URL__ || "/api";
 
 // --------------------------------------------
 // Token Helpers
