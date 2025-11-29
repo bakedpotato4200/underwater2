@@ -4,7 +4,7 @@
 // Shows monthly summary + pressure days
 // ========================================
 
-import { apiGetMonthlyCalendar } from "./api.js";
+import { apiGetMonthlyCalendar, apiDeleteTransaction } from "./api.js";
 import { nowMonth, nowYear, formatMoney } from "./config.js";
 
 // DOM Elements
@@ -212,9 +212,15 @@ function showPressureDayDetails(dateStr, days) {
     html += `<h4>Transactions:</h4>`;
     day.events.forEach((event, idx) => {
       if (event.type === "income") {
-        html += `<div class="detail-income" style="cursor: pointer; padding: 0.5rem; border-radius: 4px; transition: background 0.2s;" data-income-idx="${idx}" data-income-name="${event.name}" data-income-amount="${event.amount}">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></div>`;
+        html += `<div class="detail-income" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
+          <span>✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
+          ${event.source === "transaction" ? `<button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-tx="${event._id || 'N/A'}">Delete</button>` : ''}
+        </div>`;
       } else {
-        html += `<div class="detail-expense">✗ ${event.name}: <strong>-${formatMoney(event.amount)}</strong></div>`;
+        html += `<div class="detail-expense" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
+          <span>✗ ${event.name}: <strong>-${formatMoney(event.amount)}</strong></span>
+          ${event.source === "transaction" ? `<button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-tx="${event._id || 'N/A'}">Delete</button>` : ''}
+        </div>`;
       }
     });
     html += `</div>`;
@@ -230,6 +236,20 @@ function showPressureDayDetails(dateStr, days) {
 
   dayModalContent.innerHTML = html;
   dayModal.classList.add("modal-visible");
+  
+  // Add delete button event listeners
+  setTimeout(() => {
+    const deleteButtons = dayModalContent.querySelectorAll("[data-delete-tx]");
+    deleteButtons.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const txId = btn.getAttribute("data-delete-tx");
+        if (txId && txId !== "N/A" && confirm("Are you sure you want to delete this transaction?")) {
+          await deleteTransactionItem(txId);
+        }
+      });
+    });
+  }, 0);
 }
 
 // ========================================
