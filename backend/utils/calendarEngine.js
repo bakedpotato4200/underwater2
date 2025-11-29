@@ -474,20 +474,22 @@ export async function buildYearForecast(userId, year, startingBalanceOverride = 
 
     months.push(monthCal);
 
-    const ms = monthCal.monthSummary;
-    globalTotalIncome += ms.totalIncome;
-    globalTotalExpenses += ms.totalExpenses;
-    finalEndBalance = ms.endBalance;
+    const ms = monthCal?.monthSummary;
+    if (ms) {
+      globalTotalIncome += ms.totalIncome || 0;
+      globalTotalExpenses += ms.totalExpenses || 0;
+      finalEndBalance = ms.endBalance || 0;
 
-    if (globalLowest === null || ms.lowestBalance < globalLowest) {
-      globalLowest = ms.lowestBalance;
-    }
-    if (globalHighest === null || ms.highestBalance > globalHighest) {
-      globalHighest = ms.highestBalance;
-    }
+      if (globalLowest === null || ms.lowestBalance < globalLowest) {
+        globalLowest = ms.lowestBalance;
+      }
+      if (globalHighest === null || ms.highestBalance > globalHighest) {
+        globalHighest = ms.highestBalance;
+      }
 
-    // Next month starts from this month's end balance
-    currentStartBalanceOverride = ms.endBalance;
+      // Next month starts from this month's end balance
+      currentStartBalanceOverride = ms.endBalance || 0;
+    }
   }
 
   const summary = {

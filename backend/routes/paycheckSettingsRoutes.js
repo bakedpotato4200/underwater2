@@ -46,7 +46,7 @@ router.post("/", auth, async (req, res) => {
       { new: true, upsert: true }
     );
 
-    res.json(updated);
+    res.status(201).json(updated);
   } catch (err) {
     console.error("Save paycheck settings error:", err);
     res.status(500).json({ error: "Server error" });
