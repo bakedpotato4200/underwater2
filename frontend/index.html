@@ -11,30 +11,22 @@
   <!-- Main Styles -->
   <link rel="stylesheet" href="./styles.css" />
   
+  <!-- VERCEL DEPLOYMENT: Railway backend URL -->
+  <meta name="api-base-url" content="https://underwater-production.up.railway.app/api" />
+  
   <!-- Configuration for API Base URL -->
   <script>
     // Determine API base URL based on environment
-    let apiUrl = '/api';
+    let apiUrl = 'https://underwater-production.up.railway.app/api';
     
     // Check for meta tag (set by Vercel build)
     const metaApi = document.querySelector('meta[name="api-base-url"]');
     if (metaApi && metaApi.content) {
       apiUrl = metaApi.content;
-    } 
-    // Check if running on Vercel (not localhost)
-    else if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-      // For Vercel, construct the API URL from environment if available
-      // This can be injected via build process or set after page load
-      if (window.__API_BASE_URL__) {
-        apiUrl = window.__API_BASE_URL__;
-      }
     }
     
     window.__API_BASE_URL__ = apiUrl;
   </script>
-  
-  <!-- VERCEL DEPLOYMENT: Railway backend URL -->
-  <meta name="api-base-url" content="https://underwater-production.up.railway.app/api" />
 </head>
 <body>
   <!-- AUTH SCREEN -->

@@ -11,10 +11,10 @@
 //   CHANGE API_BASE_URL to your Railway URL.
 // ========================================
 
-// API Base URL - configurable for different environments
-// Local development: "/api" (proxied through backend)
-// Vercel + Railway: set via window.__API_BASE_URL__ variable injected in HTML
-export const API_BASE_URL = window.__API_BASE_URL__ || "/api";
+// API Base URL - always use Railway backend
+// Set via window.__API_BASE_URL__ variable injected in HTML
+// Fallback to full Railway URL to prevent hitting index.html
+export const API_BASE_URL = window.__API_BASE_URL__ || "https://underwater-production.up.railway.app/api";
 
 // --------------------------------------------
 // Token Helpers
