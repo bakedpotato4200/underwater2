@@ -1,23 +1,38 @@
 // frontend/js/settings.js
 // ========================================
 // Underground Water 2 - Settings Page
-// Handles Starting Balance + Paycheck Settings
+// Handles Account, Password, Starting Balance + Paycheck Settings
 // ========================================
 
 import {
   apiGetStartingBalance,
   apiSetStartingBalance,
   apiGetPaycheckSettings,
-  apiSetPaycheckSettings
+  apiSetPaycheckSettings,
+  apiGetProfile,
+  apiUpdateProfile,
+  apiChangePassword
 } from "./api.js";
 
 import { formatMoney } from "./config.js";
 
-// DOM elements
+// Profile DOM elements
+const profileForm = document.getElementById("profile-form");
+const profileNameInput = document.getElementById("profile-name-input");
+const profileStatus = document.getElementById("profile-status");
+
+// Change password DOM elements
+const changePasswordForm = document.getElementById("change-password-form");
+const currentPasswordInput = document.getElementById("current-password-input");
+const newPasswordInput = document.getElementById("new-password-input");
+const changePasswordStatus = document.getElementById("change-password-status");
+
+// Starting balance DOM elements
 const startBalInput = document.getElementById("starting-balance-input");
 const startBalForm = document.getElementById("starting-balance-form");
 const startBalStatus = document.getElementById("starting-balance-status");
 
+// Paycheck DOM elements
 const payForm = document.getElementById("paycheck-form");
 const payAmountInput = document.getElementById("pay-amount-input");
 const payFrequencyInput = document.getElementById("pay-frequency-input");
@@ -25,13 +40,100 @@ const payStartDateInput = document.getElementById("pay-start-date-input");
 const payStatus = document.getElementById("paycheck-status");
 
 // ========================================
-// Load both settings when the page is shown
+// Load all settings when the page is shown
 // Called by: ui.js → showView("settings-view")
 // ========================================
 export async function loadSettingsPage() {
+  loadProfile();
   loadStartingBalance();
   loadPaycheckSettings();
 }
+
+// ========================================
+// Profile: GET
+// ========================================
+async function loadProfile() {
+  profileStatus.textContent = "";
+
+  try {
+    const data = await apiGetProfile();
+    if (data && data.user) {
+      profileNameInput.value = data.user.name || "";
+    }
+  } catch (err) {
+    profileStatus.textContent = "Could not load profile.";
+  }
+}
+
+// ========================================
+// Profile: SAVE NAME
+// ========================================
+profileForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  profileStatus.textContent = "";
+  profileStatus.className = "form-status";
+
+  const name = profileNameInput.value.trim();
+
+  if (!name) {
+    profileStatus.textContent = "✗ Name cannot be empty";
+    profileStatus.className = "form-status";
+    return;
+  }
+
+  try {
+    await apiUpdateProfile(name);
+    profileStatus.textContent = "✓ Name saved successfully!";
+    profileStatus.className = "form-status success";
+    setTimeout(() => {
+      profileStatus.textContent = "";
+    }, 3000);
+  } catch (err) {
+    profileStatus.textContent = "✗ " + err.message;
+    profileStatus.className = "form-status";
+  }
+});
+
+// ========================================
+// Change Password
+// ========================================
+changePasswordForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  changePasswordStatus.textContent = "";
+  changePasswordStatus.className = "form-status";
+
+  const currentPassword = currentPasswordInput.value.trim();
+  const newPassword = newPasswordInput.value.trim();
+
+  if (!currentPassword) {
+    changePasswordStatus.textContent = "✗ Current password is required";
+    changePasswordStatus.className = "form-status";
+    return;
+  }
+  if (!newPassword) {
+    changePasswordStatus.textContent = "✗ New password is required";
+    changePasswordStatus.className = "form-status";
+    return;
+  }
+  if (newPassword.length < 6) {
+    changePasswordStatus.textContent = "✗ New password must be at least 6 characters";
+    changePasswordStatus.className = "form-status";
+    return;
+  }
+
+  try {
+    await apiChangePassword(currentPassword, newPassword);
+    changePasswordStatus.textContent = "✓ Password changed successfully!";
+    changePasswordStatus.className = "form-status success";
+    changePasswordForm.reset();
+    setTimeout(() => {
+      changePasswordStatus.textContent = "";
+    }, 3000);
+  } catch (err) {
+    changePasswordStatus.textContent = "✗ " + err.message;
+    changePasswordStatus.className = "form-status";
+  }
+});
 
 // ========================================
 // Starting Balance: GET

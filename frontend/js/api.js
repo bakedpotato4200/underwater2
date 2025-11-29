@@ -29,6 +29,18 @@ export function apiResetPassword(email, resetCode, newPassword) {
   return apiRequest("/auth/reset-password", "POST", { email, resetCode, newPassword });
 }
 
+export function apiGetProfile() {
+  return apiRequest("/auth/profile", "GET");
+}
+
+export function apiUpdateProfile(name) {
+  return apiRequest("/auth/profile", "PUT", { name });
+}
+
+export function apiChangePassword(currentPassword, newPassword) {
+  return apiRequest("/auth/change-password", "POST", { currentPassword, newPassword });
+}
+
 // -----------------------
 // STARTING BALANCE
 // -----------------------

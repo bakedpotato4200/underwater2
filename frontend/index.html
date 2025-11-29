@@ -242,6 +242,25 @@
         <h2>Settings</h2>
 
         <div class="settings-section">
+          <h3>Account Information</h3>
+          <form id="profile-form" class="form-row">
+            <input type="text" id="profile-name-input" placeholder="Your name" required />
+            <button type="submit" class="btn btn-secondary">Save Name</button>
+          </form>
+          <p id="profile-status" class="form-status"></p>
+        </div>
+
+        <div class="settings-section">
+          <h3>Change Password</h3>
+          <form id="change-password-form" class="form-row">
+            <input type="password" id="current-password-input" placeholder="Current password" autocomplete="current-password" required />
+            <input type="password" id="new-password-input" placeholder="New password" autocomplete="new-password" required />
+            <button type="submit" class="btn btn-secondary">Change Password</button>
+          </form>
+          <p id="change-password-status" class="form-status"></p>
+        </div>
+
+        <div class="settings-section">
           <h3>Starting Balance</h3>
           <form id="starting-balance-form" class="form-row">
             <input type="number" id="starting-balance-input" placeholder="Starting balance" step="0.01" required />

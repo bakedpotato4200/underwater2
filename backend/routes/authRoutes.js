@@ -265,4 +265,107 @@ router.post("/reset-password", async (req, res) => {
   }
 });
 
+// =========================================
+// GET USER PROFILE
+// GET /api/auth/profile
+// =========================================
+router.get("/profile", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select("email name -password");
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    return res.json({
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name || ""
+      }
+    });
+
+  } catch (err) {
+    console.error("Get profile error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// =========================================
+// UPDATE USER PROFILE
+// PUT /api/auth/profile
+// =========================================
+router.put("/profile", auth, async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: "Name is required" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { name: name.trim() },
+      { new: true }
+    ).select("email name");
+
+    return res.json({
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name
+      }
+    });
+
+  } catch (err) {
+    console.error("Update profile error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// =========================================
+// CHANGE PASSWORD
+// POST /api/auth/change-password
+// =========================================
+router.post("/change-password", auth, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !currentPassword.trim()) {
+      return res.status(400).json({ error: "Current password is required" });
+    }
+    if (!newPassword || !newPassword.trim()) {
+      return res.status(400).json({ error: "New password is required" });
+    }
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: "New password must be at least 6 characters" });
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    // Verify current password
+    const match = await bcrypt.compare(currentPassword, user.password);
+    if (!match) {
+      return res.status(400).json({ error: "Current password is incorrect" });
+    }
+
+    // Hash new password
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    await User.updateOne(
+      { _id: req.userId },
+      { password: hashed }
+    );
+
+    return res.json({ message: "Password changed successfully" });
+
+  } catch (err) {
+    console.error("Change password error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 export default router;
