@@ -67,6 +67,10 @@ export function apiSetPaycheckSettings(payAmount, frequency, startDate) {
   });
 }
 
+export function apiDeletePaycheck(id) {
+  return apiRequest(`/paycheck-settings/${id}`, "DELETE");
+}
+
 // -----------------------
 // RECURRING ITEMS
 // -----------------------

@@ -7,7 +7,8 @@
 import {
   apiGetMonthlyCalendar,
   apiDeleteTransaction,
-  apiDeleteRecurring
+  apiDeleteRecurring,
+  apiDeletePaycheck
 } from "./api.js";
 
 import {
@@ -243,8 +244,7 @@ function showDayDetails(day) {
             } else if (deleteType === "recurring") {
               await apiDeleteRecurring(deleteId);
             } else if (deleteType === "paycheck") {
-              alert("Paycheck settings must be deleted from Settings page");
-              return;
+              await apiDeletePaycheck(deleteId);
             }
             dayModal.classList.remove("modal-visible");
             loadCalendar();
