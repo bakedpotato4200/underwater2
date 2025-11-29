@@ -8,7 +8,6 @@ import { apiGetMonthlyCalendar } from "./api.js";
 import { nowMonth, nowYear, formatMoney } from "./config.js";
 
 // DOM Elements
-const dashStartingBal = document.getElementById("dash-starting-balance");
 const dashIncome = document.getElementById("dash-income");
 const dashExpenses = document.getElementById("dash-expenses");
 const dashEndBal = document.getElementById("dash-end-balance");
@@ -54,7 +53,6 @@ function renderDashboard(data) {
   currentMonthData = data;
 
   // Summary values
-  dashStartingBal.textContent = formatMoney(summary.startingBalance);
   dashIncome.textContent = formatMoney(summary.income);
   dashExpenses.textContent = formatMoney(summary.expenses);
   dashEndBal.textContent = formatMoney(summary.endingBalance);
