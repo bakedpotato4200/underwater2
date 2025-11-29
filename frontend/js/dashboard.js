@@ -9,6 +9,7 @@ import { nowMonth, nowYear, formatMoney } from "./config.js";
 
 // DOM Elements
 const dashIncome = document.getElementById("dash-income");
+const dashIncomeCard = document.getElementById("dash-income-card");
 const dashExpenses = document.getElementById("dash-expenses");
 const dashEndBal = document.getElementById("dash-end-balance");
 const dashPaycheck1 = document.getElementById("dash-paycheck-1");
@@ -110,7 +111,8 @@ function renderDashboard(data) {
   dashPaycheck2.textContent = formatMoney(paycheck2Net);
   dashPaycheck2Detail.textContent = `Paycheck: ${formatMoney(paycheck2Total)} | Bills: ${formatMoney(paycheck2Bills)}`;
 
-  // Add click handlers for paycheck cards
+  // Add click handlers for cards
+  dashIncomeCard.onclick = () => showMonthlyIncomeDetails(days);
   dashPaycheck1Card.onclick = () => showPaycheckDetails(1, period1Start, period1End, days, paycheck1Total, paycheck1Bills);
   dashPaycheck2Card.onclick = () => showPaycheckDetails(2, period2Start, period2End, days, paycheck2Total, paycheck2Bills);
 
@@ -244,6 +246,54 @@ function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPay
   html += `<div class="day-totals" style="border-top: 1px solid #ccc; padding-top: 1rem; margin-top: 1rem;">`;
   html += `<p><strong>Total Bills:</strong> <span style="color: #e74c3c;">-${formatMoney(totalBills)}</span></p>`;
   html += `<p style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>Paycheck After Bills:</strong> <span style="color: ${totalPaycheck - totalBills >= 0 ? '#2ecc71' : '#e74c3c'}; font-size: 1.3rem;">${formatMoney(totalPaycheck - totalBills)}</span></p>`;
+  html += `</div>`;
+  html += `</div>`;
+
+  dayModalContent.innerHTML = html;
+  dayModal.classList.add("modal-visible");
+}
+
+// ========================================
+// Show Monthly Income Details Modal
+// ========================================
+function showMonthlyIncomeDetails(days) {
+  if (!dayModal || !dayModalContent) {
+    console.error("Modal elements not found");
+    return;
+  }
+
+  const monthName = new Date(activeYear, activeMonth - 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+  let html = `<h3>Income for ${monthName}</h3>`;
+  html += `<div class="day-detail-section">`;
+
+  let totalIncome = 0;
+  let foundIncome = false;
+
+  if (days && days.length > 0) {
+    days.forEach(day => {
+      if (day.events) {
+        day.events.forEach(event => {
+          if (event.type === "income") {
+            foundIncome = true;
+            totalIncome += event.amount || 0;
+            const dayDate = new Date(day.date);
+            const dayFormatted = dayDate.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" });
+            html += `<div class="detail-income" style="padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px;">
+              <small style="color: #999;">${dayFormatted}</small> - ${event.name}: <strong style="color: #2ecc71;">+${formatMoney(event.amount)}</strong>
+            </div>`;
+          }
+        });
+      }
+    });
+  }
+
+  if (!foundIncome) {
+    html += `<p><em style="color: #999;">No income recorded this month</em></p>`;
+  }
+
+  html += `<div class="day-totals" style="border-top: 1px solid #ccc; padding-top: 1rem; margin-top: 1rem;">`;
+  html += `<p style="font-size: 1.2rem;"><strong>Total Income:</strong> <span style="color: #2ecc71; font-size: 1.3rem;">${formatMoney(totalIncome)}</span></p>`;
   html += `</div>`;
   html += `</div>`;
 
