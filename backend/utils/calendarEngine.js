@@ -290,6 +290,7 @@ export async function buildMonthlyCalendar(
 
   // --------------------------------
   // Now overlay actual transactions
+  // If actual income/expense, remove corresponding projected ones
   // --------------------------------
   for (const tx of actualTx) {
     const key = dateKey(tx.date);
@@ -300,6 +301,23 @@ export async function buildMonthlyCalendar(
     const isExpense = amt < 0;
     const absAmount = Math.abs(amt);
 
+    // If this is actual income, remove all projected income from this day
+    if (!isExpense) {
+      const projectedIncome = day.events.filter(e => e.type === "income" && e.projected);
+      for (const proj of projectedIncome) {
+        day.incomeTotal -= proj.amount;
+      }
+      day.events = day.events.filter(e => !(e.type === "income" && e.projected));
+    }
+    // If this is actual expense, remove all projected expenses from this day
+    else {
+      const projectedExpenses = day.events.filter(e => e.type === "expense" && e.projected);
+      for (const proj of projectedExpenses) {
+        day.expenseTotal -= proj.amount;
+      }
+      day.events = day.events.filter(e => !(e.type === "expense" && e.projected));
+    }
+
     day.events.push({
       type: isExpense ? "expense" : "income",
       name: tx.description,
@@ -307,6 +325,7 @@ export async function buildMonthlyCalendar(
       projected: false,
       source: "transaction",
       category: tx.category,
+      _id: tx._id,
     });
 
     if (isExpense) {
