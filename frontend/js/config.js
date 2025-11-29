@@ -1,26 +1,13 @@
-// frontend/js/config.js
-// ========================================
-// Under Water 2 - Frontend Config
-// ========================================
-//
-// 🚨 IMPORTANT FOR LATER 🚨
-// This configuration is for LOCAL DEVELOPMENT ONLY.
-// It tells the frontend to use the backend running on your PC.
-//
-// When you switch to using Railway or production:
-//   CHANGE API_BASE_URL to your Railway URL.
-// ========================================
-
-// API Base URL - always use Railway backend
-// Set via window.__API_BASE_URL__ variable injected in HTML
-// Fallback to full Railway URL to prevent hitting index.html
-export const API_BASE_URL = window.__API_BASE_URL__ || "https://underwater-production.up.railway.app/api";
+// ================================================
+//  PRODUCTION API BASE URL
+//  Vercel injects: window.__API_BASE_URL__
+//  Fallback: Railway backend URL
+// ================================================
+export const API_BASE_URL =
+  window.__API_BASE_URL__ || "https://underwater2-production.up.railway.app";
 
 // --------------------------------------------
-// Token Helpers
-// Note: Using sessionStorage instead of localStorage
-// so users must log in every browser session
-// (token is cleared when browser/tab closes)
+// Token Helpers (using sessionStorage)
 // --------------------------------------------
 export function getToken() {
   return sessionStorage.getItem("uw2_token");
@@ -35,7 +22,7 @@ export function clearToken() {
 }
 
 // --------------------------------------------
-// API Call Wrapper
+// Generic API Wrapper
 // --------------------------------------------
 export async function apiRequest(endpoint, method = "GET", body = null) {
   const headers = {
@@ -45,7 +32,6 @@ export async function apiRequest(endpoint, method = "GET", body = null) {
   const token = getToken();
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  // Debug: Log the full API URL being called
   console.log(`🔗 API Call: ${API_BASE_URL}${endpoint}`);
 
   try {
@@ -55,12 +41,9 @@ export async function apiRequest(endpoint, method = "GET", body = null) {
       body: body ? JSON.stringify(body) : null,
     });
 
-    let data;
-    try {
-      data = await response.json();
-    } catch (err) {
-      data = { error: "Invalid JSON response" };
-    }
+    const data = await response.json().catch(() => ({
+      error: "Invalid JSON returned",
+    }));
 
     if (!response.ok) {
       console.error(`API Error [${response.status}]:`, data);
@@ -69,29 +52,7 @@ export async function apiRequest(endpoint, method = "GET", body = null) {
 
     return data;
   } catch (err) {
-    console.error(`API Request Failed (${method} ${endpoint}):`, err.message);
+    console.error(`❌ API Request Failed (${method} ${endpoint})`, err.message);
     throw err;
   }
-}
-
-// --------------------------------------------
-// Date + Money Helpers
-// --------------------------------------------
-export function formatMoney(amount) {
-  return "$" + Number(amount).toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
-
-export function nowYear() {
-  return new Date().getFullYear();
-}
-
-export function nowMonth() {
-  return new Date().getMonth() + 1;
-}
-
-export function dateKey(date) {
-  return date.toISOString().split("T")[0];
 }
