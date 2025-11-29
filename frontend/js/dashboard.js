@@ -11,8 +11,10 @@ import { nowMonth, nowYear, formatMoney } from "./config.js";
 const dashIncome = document.getElementById("dash-income");
 const dashExpenses = document.getElementById("dash-expenses");
 const dashEndBal = document.getElementById("dash-end-balance");
-const dashLowest = document.getElementById("dash-lowest-balance");
-const dashHighest = document.getElementById("dash-highest-balance");
+const dashPaycheck1 = document.getElementById("dash-paycheck-1");
+const dashPaycheck1Detail = document.getElementById("dash-paycheck-1-detail");
+const dashPaycheck2 = document.getElementById("dash-paycheck-2");
+const dashPaycheck2Detail = document.getElementById("dash-paycheck-2-detail");
 const dashPressureList = document.getElementById("dash-pressure-days");
 
 // Modal elements (shared with calendar)
@@ -57,8 +59,54 @@ function renderDashboard(data) {
   dashExpenses.textContent = formatMoney(summary.expenses);
   dashEndBal.textContent = formatMoney(summary.endingBalance);
 
-  dashLowest.textContent = formatMoney(summary.lowestBalance);
-  dashHighest.textContent = formatMoney(summary.highestBalance);
+  // Calculate paycheck periods (first 14 days and days 15-31)
+  const monthStart = new Date(activeYear, activeMonth - 1, 1);
+  const monthEnd = new Date(activeYear, activeMonth, 0);
+  const period1Start = new Date(activeYear, activeMonth - 1, 1);
+  const period1End = new Date(activeYear, activeMonth - 1, 14);
+  const period2Start = new Date(activeYear, activeMonth - 1, 15);
+  const period2End = monthEnd;
+
+  // Calculate paycheck totals for each period
+  let paycheck1Total = 0;
+  let paycheck1Bills = 0;
+  let paycheck2Total = 0;
+  let paycheck2Bills = 0;
+
+  if (days && days.length > 0) {
+    days.forEach(day => {
+      const dayDate = new Date(day.date);
+      
+      // Period 1 (days 1-14)
+      if (dayDate >= period1Start && dayDate <= period1End && day.events) {
+        day.events.forEach(event => {
+          if (event.type === "income" && event.name && event.name.toLowerCase().includes("paycheck")) {
+            paycheck1Total += event.amount || 0;
+          } else if (event.type === "expense") {
+            paycheck1Bills += event.amount || 0;
+          }
+        });
+      }
+      // Period 2 (days 15-31)
+      if (dayDate >= period2Start && dayDate <= period2End && day.events) {
+        day.events.forEach(event => {
+          if (event.type === "income" && event.name && event.name.toLowerCase().includes("paycheck")) {
+            paycheck2Total += event.amount || 0;
+          } else if (event.type === "expense") {
+            paycheck2Bills += event.amount || 0;
+          }
+        });
+      }
+    });
+  }
+
+  const paycheck1Net = paycheck1Total - paycheck1Bills;
+  const paycheck2Net = paycheck2Total - paycheck2Bills;
+
+  dashPaycheck1.textContent = formatMoney(paycheck1Net);
+  dashPaycheck1Detail.textContent = `Paycheck: ${formatMoney(paycheck1Total)} | Bills: ${formatMoney(paycheck1Bills)}`;
+  dashPaycheck2.textContent = formatMoney(paycheck2Net);
+  dashPaycheck2Detail.textContent = `Paycheck: ${formatMoney(paycheck2Total)} | Bills: ${formatMoney(paycheck2Bills)}`;
 
   // Pressure points list
   if (pressurePoints && pressurePoints.length > 0) {
