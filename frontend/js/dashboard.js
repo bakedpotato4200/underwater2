@@ -74,8 +74,10 @@ function renderDashboard(data) {
   // Calculate paycheck totals for each period
   let paycheck1Total = 0;
   let paycheck1Bills = 0;
+  let paycheck1Income = 0;
   let paycheck2Total = 0;
   let paycheck2Bills = 0;
+  let paycheck2Income = 0;
 
   if (days && days.length > 0) {
     days.forEach(day => {
@@ -86,6 +88,8 @@ function renderDashboard(data) {
         day.events.forEach(event => {
           if (event.type === "income" && event.name && event.name.toLowerCase().includes("paycheck")) {
             paycheck1Total += event.amount || 0;
+          } else if (event.type === "income") {
+            paycheck1Income += event.amount || 0;
           } else if (event.type === "expense") {
             paycheck1Bills += event.amount || 0;
           }
@@ -96,6 +100,8 @@ function renderDashboard(data) {
         day.events.forEach(event => {
           if (event.type === "income" && event.name && event.name.toLowerCase().includes("paycheck")) {
             paycheck2Total += event.amount || 0;
+          } else if (event.type === "income") {
+            paycheck2Income += event.amount || 0;
           } else if (event.type === "expense") {
             paycheck2Bills += event.amount || 0;
           }
@@ -108,15 +114,15 @@ function renderDashboard(data) {
   const paycheck2Net = paycheck2Total - paycheck2Bills;
 
   dashPaycheck1.textContent = formatMoney(paycheck1Net);
-  dashPaycheck1Detail.textContent = `Paycheck: ${formatMoney(paycheck1Total)} | Bills: ${formatMoney(paycheck1Bills)}`;
+  dashPaycheck1Detail.textContent = `Paycheck: ${formatMoney(paycheck1Total)} | Other Income: ${formatMoney(paycheck1Income)} | Bills: ${formatMoney(paycheck1Bills)}`;
   dashPaycheck2.textContent = formatMoney(paycheck2Net);
-  dashPaycheck2Detail.textContent = `Paycheck: ${formatMoney(paycheck2Total)} | Bills: ${formatMoney(paycheck2Bills)}`;
+  dashPaycheck2Detail.textContent = `Paycheck: ${formatMoney(paycheck2Total)} | Other Income: ${formatMoney(paycheck2Income)} | Bills: ${formatMoney(paycheck2Bills)}`;
 
   // Add click handlers for cards
   dashIncomeCard.onclick = () => showMonthlyIncomeDetails(days);
   dashExpensesCard.onclick = () => showMonthlyExpensesDetails(days);
-  dashPaycheck1Card.onclick = () => showPaycheckDetails(1, period1Start, period1End, days, paycheck1Total, paycheck1Bills);
-  dashPaycheck2Card.onclick = () => showPaycheckDetails(2, period2Start, period2End, days, paycheck2Total, paycheck2Bills);
+  dashPaycheck1Card.onclick = () => showPaycheckDetails(1, period1Start, period1End, days, paycheck1Total, paycheck1Bills, paycheck1Income);
+  dashPaycheck2Card.onclick = () => showPaycheckDetails(2, period2Start, period2End, days, paycheck2Total, paycheck2Bills, paycheck2Income);
 
   // Pressure points list
   if (pressurePoints && pressurePoints.length > 0) {
@@ -204,7 +210,7 @@ function showPressureDayDetails(dateStr, days) {
 // ========================================
 // Show Paycheck Details Modal
 // ========================================
-function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPaycheck, totalBills) {
+function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPaycheck, totalBills, otherIncome) {
   if (!dayModal || !dayModalContent) {
     console.error("Modal elements not found");
     return;
@@ -215,7 +221,36 @@ function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPay
 
   let html = `<h3>Paycheck ${paycheckNum} (${startFormatted} - ${endFormatted})</h3>`;
   html += `<div class="day-detail-section">`;
-  html += `<p><strong>Total Paycheck:</strong> <span style="color: #2ecc71">+${formatMoney(totalPaycheck)}</span></p>`;
+  
+  // Show all income for the period
+  html += `<h4 style="margin-bottom: 0.5rem;">Income for this Period:</h4>`;
+  let foundIncome = false;
+  let totalPeriodIncome = 0;
+
+  if (days && days.length > 0) {
+    days.forEach(day => {
+      const dayDate = new Date(day.date);
+      
+      // Check if day is in this period
+      if (dayDate >= periodStart && dayDate <= periodEnd && day.events) {
+        day.events.forEach(event => {
+          if (event.type === "income") {
+            foundIncome = true;
+            totalPeriodIncome += event.amount || 0;
+            const dayFormatted = dayDate.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" });
+            html += `<div class="detail-income" style="padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px;">
+              <small style="color: #999;">${dayFormatted}</small> - ${event.name}: <strong style="color: #2ecc71;">+${formatMoney(event.amount)}</strong>
+            </div>`;
+          }
+        });
+      }
+    });
+  }
+
+  if (!foundIncome) {
+    html += `<p><em style="color: #999;">No income this period</em></p>`;
+  }
+
   html += `<h4 style="margin-top: 1rem; margin-bottom: 0.5rem;">Bills for this Period:</h4>`;
 
   let billCount = 0;
@@ -246,8 +281,9 @@ function showPaycheckDetails(paycheckNum, periodStart, periodEnd, days, totalPay
   }
 
   html += `<div class="day-totals" style="border-top: 1px solid #ccc; padding-top: 1rem; margin-top: 1rem;">`;
+  html += `<p><strong>Total Income:</strong> <span style="color: #2ecc71;">+${formatMoney(totalPeriodIncome)}</span></p>`;
   html += `<p><strong>Total Bills:</strong> <span style="color: #e74c3c;">-${formatMoney(totalBills)}</span></p>`;
-  html += `<p style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>Paycheck After Bills:</strong> <span style="color: ${totalPaycheck - totalBills >= 0 ? '#2ecc71' : '#e74c3c'}; font-size: 1.3rem;">${formatMoney(totalPaycheck - totalBills)}</span></p>`;
+  html += `<p style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>Income After Bills:</strong> <span style="color: ${totalPeriodIncome - totalBills >= 0 ? '#2ecc71' : '#e74c3c'}; font-size: 1.3rem;">${formatMoney(totalPeriodIncome - totalBills)}</span></p>`;
   html += `</div>`;
   html += `</div>`;
 
