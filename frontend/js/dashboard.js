@@ -64,13 +64,6 @@ function renderDashboard(data) {
   dashEndBal.textContent = formatMoney(summary.endingBalance);
 
   // Calculate paycheck periods (first 14 days and days 15-31)
-  const monthStart = new Date(activeYear, activeMonth - 1, 1);
-  const monthEnd = new Date(activeYear, activeMonth, 0);
-  const period1Start = new Date(activeYear, activeMonth - 1, 1);
-  const period1End = new Date(activeYear, activeMonth - 1, 14);
-  const period2Start = new Date(activeYear, activeMonth - 1, 15);
-  const period2End = monthEnd;
-
   // Calculate paycheck totals for each period
   let paycheck1Total = 0;
   let paycheck1Bills = 0;
@@ -81,10 +74,12 @@ function renderDashboard(data) {
 
   if (days && days.length > 0) {
     days.forEach(day => {
-      const dayDate = new Date(day.date);
+      // Use dateKey directly (YYYY-MM-DD format) to avoid timezone issues
+      const dateKey = day.dateKey; // Format: "2025-11-01"
+      const dayNum = parseInt(dateKey.split('-')[2], 10); // Extract day (1-31)
       
       // Period 1 (days 1-14)
-      if (dayDate >= period1Start && dayDate <= period1End && day.events) {
+      if (dayNum >= 1 && dayNum <= 14 && day.events) {
         // For income: count ALL income items this day (not just one per day)
         const allIncomes = day.events.filter(e => e.type === "income");
         allIncomes.forEach(income => {
@@ -100,7 +95,7 @@ function renderDashboard(data) {
         }
       }
       // Period 2 (days 15-31)
-      if (dayDate >= period2Start && dayDate <= period2End && day.events) {
+      if (dayNum >= 15 && dayNum <= 31 && day.events) {
         // For income: count ALL income items this day (not just one per day)
         const allIncomes = day.events.filter(e => e.type === "income");
         allIncomes.forEach(income => {
