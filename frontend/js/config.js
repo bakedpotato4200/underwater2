@@ -1,10 +1,9 @@
 // ================================================
 //  PRODUCTION API BASE URL
-//  Vercel injects: window.__API_BASE_URL__
-//  Fallback: Railway backend URL
 // ================================================
+// MUST end with /api or the entire app breaks
 export const API_BASE_URL =
-  window.__API_BASE_URL__ || "https://underwater2-production.up.railway.app";
+  window.__API_BASE_URL__ || "https://underwater2-production.up.railway.app/api";
 
 // --------------------------------------------
 // Token Helpers (using sessionStorage)
