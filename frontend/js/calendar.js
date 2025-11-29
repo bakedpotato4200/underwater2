@@ -204,8 +204,10 @@ function showDayDetails(day) {
       const deleteId = event._id || event.recurringId || event.paycheckSettingsId;
       const deleteType = event._id ? 'transaction' : (event.recurringId ? 'recurring' : 'paycheck');
       if (event.type === "income") {
-        const isClickable = !event.projected && event._id ? `style="cursor: pointer; padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; background: rgba(46, 204, 113, 0.1); transition: background 0.2s;" data-income-id="${event._id}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" onclick="openEditIncomeModal(event)"` : `style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;"`;
-        html += `<div class="detail-income" ${isClickable}>
+        const isActualIncome = !event.projected && event._id;
+        const clickableClass = isActualIncome ? 'actual-income-clickable' : '';
+        const clickableAttrs = isActualIncome ? `data-income-id="${event._id}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}"` : '';
+        html += `<div class="detail-income ${clickableClass}" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; ${isActualIncome ? 'background: rgba(46, 204, 113, 0.1); cursor: pointer;' : ''}" ${clickableAttrs}>
           <span style="flex: 1;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
           <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; margin-left: 0.5rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
         </div>`;
@@ -256,6 +258,33 @@ function showDayDetails(day) {
         }
       });
     });
+    
+    // Add click listeners for actual income items to edit
+    const incomeItems = dayModalContent.querySelectorAll(".actual-income-clickable");
+    incomeItems.forEach(item => {
+      item.addEventListener("click", (e) => {
+        if (e.target.tagName === 'BUTTON') return; // Don't trigger if delete button clicked
+        const incomeId = item.getAttribute("data-income-id");
+        const incomeAmount = item.getAttribute("data-income-amount");
+        const incomeName = item.getAttribute("data-income-name");
+        const incomeDate = item.getAttribute("data-income-date");
+        
+        selectedIncomeDate = incomeDate;
+        selectedIncomeAmount = incomeAmount;
+        
+        const date = new Date(incomeDate);
+        const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+        
+        addIncomeDate.textContent = `${dateStr} - Edit Income`;
+        addIncomeAmount.value = incomeAmount;
+        addIncomeDescription.value = incomeName;
+        addIncomeError.textContent = "";
+        addIncomeForm.dataset.transactionId = incomeId;
+        
+        dayModal.classList.remove("modal-visible");
+        addIncomeModal.classList.add("modal-visible");
+      });
+    });
   }, 0);
 }
 
@@ -278,32 +307,6 @@ function openAddIncomeModal(dateKey, dateObj, projectedAmount, incomeName = null
   addIncomeModal.classList.add("modal-visible");
 }
 
-// ========================================
-// Open Edit Income Modal (for actual income)
-// ========================================
-window.openEditIncomeModal = function(e) {
-  e.stopPropagation();
-  const incomeDiv = e.currentTarget;
-  const incomeId = incomeDiv.dataset.incomeId;
-  const incomeAmount = incomeDiv.dataset.incomeAmount;
-  const incomeName = incomeDiv.dataset.incomeName;
-  const incomeDate = incomeDiv.dataset.incomeDate;
-  
-  selectedIncomeDate = incomeDate;
-  selectedIncomeAmount = incomeAmount;
-  
-  const date = new Date(incomeDate);
-  const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
-  
-  addIncomeDate.textContent = `${dateStr} - Edit Income`;
-  addIncomeAmount.value = incomeAmount;
-  addIncomeDescription.value = incomeName;
-  addIncomeError.textContent = "";
-  addIncomeForm.dataset.transactionId = incomeId;
-  
-  dayModal.classList.remove("modal-visible");
-  addIncomeModal.classList.add("modal-visible");
-}
 
 // ========================================
 // Helpers
