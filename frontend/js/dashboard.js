@@ -214,12 +214,12 @@ function showPressureDayDetails(dateStr, days) {
       if (event.type === "income") {
         html += `<div class="detail-income" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
           <span>✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
-          ${event.source === "transaction" ? `<button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-tx="${event._id || 'N/A'}">Delete</button>` : ''}
+          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-tx="${event._id || 'N/A'}">Delete</button>
         </div>`;
       } else {
         html += `<div class="detail-expense" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
           <span>✗ ${event.name}: <strong>-${formatMoney(event.amount)}</strong></span>
-          ${event.source === "transaction" ? `<button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-tx="${event._id || 'N/A'}">Delete</button>` : ''}
+          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem;" data-delete-tx="${event._id || 'N/A'}">Delete</button>
         </div>`;
       }
     });
