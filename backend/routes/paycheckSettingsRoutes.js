@@ -18,14 +18,14 @@ router.get("/", auth, async (req, res) => {
     const record = await PaycheckSettings.findOne({ userId: req.userId });
 
     if (!record) {
-      return res.json({
+      return res.status(200).json({
         payAmount: 0,
         frequency: "biweekly",
         startDate: null
       });
     }
 
-    res.json(record);
+    res.status(200).json(record);
   } catch (err) {
     console.error("Get paycheck settings error:", err);
     res.status(500).json({ error: "Server error" });

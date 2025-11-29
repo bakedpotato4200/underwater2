@@ -156,7 +156,8 @@ router.get("/verify", auth, async (req, res) => {
       return res.status(401).json({ error: "Invalid token" });
     }
 
-    return res.json({
+    return res.status(200).json({
+      userId: req.userId,
       user: {
         id: user._id,
         email: user.email,

@@ -35,7 +35,7 @@ router.post("/", auth, async (req, res) => {
       userId: req.userId,
     });
 
-    res.json(item);
+    res.status(201).json(item);
   } catch (err) {
     console.error("Create recurring error:", err);
     res.status(500).json({ error: "Server error" });
