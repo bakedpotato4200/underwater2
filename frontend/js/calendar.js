@@ -203,7 +203,7 @@ function showDayDetails(day) {
         const isActualIncome = !event.projected && event._id;
         const isPaycheck = event.projected && (event.name.toLowerCase().includes('paycheck') || event.recurringId || event.paycheckSettingsId);
         const clickableAttrs = (isActualIncome || isPaycheck) ? `data-income-id="${event._id || ''}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" data-is-actual="${!event.projected}" data-is-paycheck="${isPaycheck}"` : '';
-        const style = `padding: 0.5rem; padding-left: 0.75rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; background: rgba(46, 204, 113, 0.15); border-left: 4px solid #2ecc71; ${(isActualIncome || isPaycheck) ? 'cursor: pointer;' : ''}`;
+        const style = `padding: 0.5rem; padding-left: 0.75rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; background: rgba(46, 204, 113, 0.15); border-left: 4px solid #2ecc71; color: #1e7e34; ${(isActualIncome || isPaycheck) ? 'cursor: pointer;' : ''}`;
         html += `<div style="${style}" class="income-clickable" ${clickableAttrs}>
           <span style="flex: 1; pointer-events: none;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
           <button style="background: none; color: #e74c3c; border: none; padding: 0; margin-left: 0.5rem; cursor: pointer; font-size: 0.85rem; white-space: nowrap; pointer-events: auto; font-weight: bold;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
