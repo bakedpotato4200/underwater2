@@ -1708,3 +1708,78 @@ html[data-theme="light"] .calendar-grid-item:hover {
 .theme-switch:active .theme-slider:before {
   width: 28px;
 }
+
+/* ================================
+   LIGHT MODE CALENDAR SPECIFIC
+   ================================ */
+html[data-theme="light"] .calendar-month-label {
+  background: linear-gradient(135deg, #0077b6 0%, #0096c7 100%);
+  color: white;
+}
+
+html[data-theme="light"] .calendar-weekdays {
+  background: linear-gradient(135deg, #0077b6 0%, #0096c7 100%);
+  color: white;
+}
+
+html[data-theme="light"] .weekday {
+  color: white;
+  font-weight: 600;
+}
+
+html[data-theme="light"] .calendar-day {
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  color: #1a1a1a;
+}
+
+html[data-theme="light"] .calendar-day:hover {
+  background: #f0f7ff;
+  border-color: #0077b6;
+  transform: translateY(-2px);
+}
+
+html[data-theme="light"] .calendar-day-header {
+  color: #0077b6;
+  font-weight: 600;
+}
+
+html[data-theme="light"] .calendar-event-income {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-left: 3px solid #4caf50;
+}
+
+html[data-theme="light"] .calendar-event-expense {
+  background: #ffebee;
+  color: #c62828;
+  border-left: 3px solid #f44336;
+}
+
+html[data-theme="light"] .day-balance {
+  color: #0077b6;
+  font-weight: 600;
+}
+
+html[data-theme="light"] .calendar-summary {
+  background: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+html[data-theme="light"] .summary-label {
+  color: #555555;
+}
+
+html[data-theme="light"] .summary-value {
+  color: #0077b6;
+  font-weight: 700;
+}
+
+html[data-theme="light"] .calendar-summary-positive {
+  color: #2e7d32;
+}
+
+html[data-theme="light"] .calendar-summary-negative {
+  color: #c62828;
+}
