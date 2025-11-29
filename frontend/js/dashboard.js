@@ -110,13 +110,10 @@ function renderDashboard(data) {
     });
   }
 
-  const paycheck1Net = paycheck1Total - paycheck1Bills;
-  const paycheck2Net = paycheck2Total - paycheck2Bills;
-
-  dashPaycheck1.textContent = formatMoney(paycheck1Net);
-  dashPaycheck1Detail.textContent = `Bills: ${formatMoney(paycheck1Bills)}`;
-  dashPaycheck2.textContent = formatMoney(paycheck2Net);
-  dashPaycheck2Detail.textContent = `Bills: ${formatMoney(paycheck2Bills)}`;
+  dashPaycheck1.textContent = `-${formatMoney(paycheck1Bills)}`;
+  dashPaycheck1Detail.textContent = ``;
+  dashPaycheck2.textContent = `-${formatMoney(paycheck2Bills)}`;
+  dashPaycheck2Detail.textContent = ``;
 
   // Add click handlers for cards
   dashIncomeCard.onclick = () => showMonthlyIncomeDetails(days);
