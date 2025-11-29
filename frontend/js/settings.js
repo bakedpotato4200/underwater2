@@ -1,14 +1,12 @@
 // frontend/js/settings.js
 // ========================================
 // Under Water 2 - Settings Page
-// Handles Account, Password, Starting Balance + Paycheck Settings
+// Handles Account, Password, Starting Balance
 // ========================================
 
 import {
   apiGetStartingBalance,
   apiSetStartingBalance,
-  apiGetPaycheckSettings,
-  apiSetPaycheckSettings,
   apiGetProfile,
   apiUpdateProfile,
   apiChangePassword
@@ -33,13 +31,6 @@ const startBalInput = document.getElementById("starting-balance-input");
 const startBalForm = document.getElementById("starting-balance-form");
 const startBalStatus = document.getElementById("starting-balance-status");
 
-// Paycheck DOM elements
-const payForm = document.getElementById("paycheck-form");
-const payAmountInput = document.getElementById("pay-amount-input");
-const payFrequencyInput = document.getElementById("pay-frequency-input");
-const payStartDateInput = document.getElementById("pay-start-date-input");
-const payStatus = document.getElementById("paycheck-status");
-
 // ========================================
 // Load all settings when the page is shown
 // Called by: ui.js → showView("settings-view")
@@ -47,7 +38,6 @@ const payStatus = document.getElementById("paycheck-status");
 export async function loadSettingsPage() {
   loadProfile();
   loadStartingBalance();
-  loadPaycheckSettings();
 }
 
 // ========================================
@@ -191,48 +181,3 @@ startBalForm.addEventListener("submit", async (e) => {
   }
 });
 
-// ========================================
-// Paycheck Settings: GET
-// ========================================
-async function loadPaycheckSettings() {
-  payStatus.textContent = "";
-
-  try {
-    const data = await apiGetPaycheckSettings();
-
-    if (data) {
-      if (data.payAmount) payAmountInput.value = data.payAmount;
-      if (data.frequency) payFrequencyInput.value = data.frequency;
-      if (data.startDate) {
-        payStartDateInput.value = data.startDate.split("T")[0];
-      }
-    }
-  } catch (err) {
-    payStatus.textContent = "Could not load paycheck settings.";
-  }
-}
-
-// ========================================
-// Paycheck Settings: SAVE
-// ========================================
-payForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  payStatus.textContent = "";
-  payStatus.className = "form-status";
-
-  const amt = Number(payAmountInput.value);
-  const freq = payFrequencyInput.value;
-  const date = payStartDateInput.value;
-
-  try {
-    await apiSetPaycheckSettings(amt, freq, date);
-    payStatus.textContent = "✓ Saved successfully!";
-    payStatus.className = "form-status success";
-    setTimeout(() => {
-      payStatus.textContent = "";
-    }, 3000);
-  } catch (err) {
-    payStatus.textContent = "✗ " + err.message;
-    payStatus.className = "form-status";
-  }
-});
