@@ -5,7 +5,9 @@
 // ========================================
 
 import {
-  apiGetMonthlyCalendar
+  apiGetMonthlyCalendar,
+  apiDeleteTransaction,
+  apiDeleteRecurring
 } from "./api.js";
 
 import {
@@ -198,10 +200,18 @@ function showDayDetails(day) {
     html += `<div class="day-events">`;
     html += `<h4>Transactions:</h4>`;
     day.events.forEach((event, idx) => {
+      const deleteId = event._id || event.recurringId || event.paycheckSettingsId;
+      const deleteType = event._id ? 'transaction' : (event.recurringId ? 'recurring' : 'paycheck');
       if (event.type === "income") {
-        html += `<div class="detail-income" style="cursor: pointer; padding: 0.5rem; border-radius: 4px; transition: background 0.2s;" data-income-idx="${idx}" data-income-name="${event.name}" data-income-amount="${event.amount}">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></div>`;
+        html += `<div class="detail-income" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
+          <span style="flex: 1;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
+          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; margin-left: 0.5rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
+        </div>`;
       } else {
-        html += `<div class="detail-expense">✗ ${event.name}: <strong>-${formatMoney(event.amount)}</strong></div>`;
+        html += `<div class="detail-expense" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
+          <span style="flex: 1;">✗ ${event.name}: <strong>-${formatMoney(event.amount)}</strong></span>
+          <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; margin-left: 0.5rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
+        </div>`;
       }
     });
     html += `</div>`;
@@ -218,23 +228,34 @@ function showDayDetails(day) {
   dayModalContent.innerHTML = html;
   dayModal.classList.add("modal-visible");
   
-  // Make income items clickable to record actual income
-  const incomeItems = dayModalContent.querySelectorAll(".detail-income");
-  incomeItems.forEach((item) => {
-    item.addEventListener("mouseenter", () => {
-      item.style.background = "#f0f0f0";
+  // Add delete button event listeners
+  setTimeout(() => {
+    const deleteButtons = dayModalContent.querySelectorAll("[data-delete-id]");
+    deleteButtons.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const deleteId = btn.getAttribute("data-delete-id");
+        const deleteType = btn.getAttribute("data-delete-type");
+        if (deleteId && confirm("Are you sure you want to delete this?")) {
+          try {
+            if (deleteType === "transaction") {
+              await apiDeleteTransaction(deleteId);
+            } else if (deleteType === "recurring") {
+              await apiDeleteRecurring(deleteId);
+            } else if (deleteType === "paycheck") {
+              alert("Paycheck settings must be deleted from Settings page");
+              return;
+            }
+            dayModal.classList.remove("modal-visible");
+            loadCalendar();
+          } catch (err) {
+            console.error("❌ Delete error:", err);
+            alert("Failed to delete item");
+          }
+        }
+      });
     });
-    item.addEventListener("mouseleave", () => {
-      item.style.background = "transparent";
-    });
-    item.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const incomeAmount = parseFloat(item.dataset.incomeAmount);
-      const incomeName = item.dataset.incomeName;
-      dayModal.classList.remove("modal-visible");
-      openAddIncomeModal(day.dateKey, day.date, incomeAmount, incomeName);
-    });
-  });
+  }, 0);
 }
 
 // ========================================
