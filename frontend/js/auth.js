@@ -18,7 +18,7 @@ import {
   apiResetPassword,
 } from "./api.js";
 
-import { showView } from "./ui.js";
+import { showView, getSavedView } from "./ui.js";
 import { initInactivityTracking, stopInactivityTracking } from "./inactivity.js";
 
 // DOM elements
@@ -224,6 +224,7 @@ function showApp() {
   // Start inactivity tracking when user logs in
   initInactivityTracking();
 
-  // Default view after login
-  showView("dashboard-view");
+  // Restore saved view from session, or default to dashboard
+  const savedView = getSavedView();
+  showView(savedView);
 }

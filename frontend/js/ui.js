@@ -18,11 +18,19 @@ const navButtons = document.querySelectorAll(".nav-item");
 // Current active view
 let activeView = "dashboard-view";
 
+// Get saved view from session storage
+export function getSavedView() {
+  return sessionStorage.getItem("activeView") || "dashboard-view";
+}
+
 // ----------------------------------------------
 // Switch to a specific view by ID
 // ----------------------------------------------
 export function showView(viewId) {
   activeView = viewId;
+  
+  // Save current view to sessionStorage
+  sessionStorage.setItem("activeView", viewId);
 
   // Hide all views
   views.forEach((v) => v.classList.remove("view-active"));
