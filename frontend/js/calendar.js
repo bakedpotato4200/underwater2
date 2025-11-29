@@ -204,7 +204,8 @@ function showDayDetails(day) {
       const deleteId = event._id || event.recurringId || event.paycheckSettingsId;
       const deleteType = event._id ? 'transaction' : (event.recurringId ? 'recurring' : 'paycheck');
       if (event.type === "income") {
-        html += `<div class="detail-income" style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;">
+        const isClickable = !event.projected && event._id ? `style="cursor: pointer; padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0; background: rgba(46, 204, 113, 0.1); transition: background 0.2s;" data-income-id="${event._id}" data-income-amount="${event.amount}" data-income-name="${event.name}" data-income-date="${day.dateKey}" onclick="openEditIncomeModal(event)"` : `style="padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; margin: 0.25rem 0;"`;
+        html += `<div class="detail-income" ${isClickable}>
           <span style="flex: 1;">✓ ${event.name}: <strong>+${formatMoney(event.amount)}</strong></span>
           <button style="background: #e74c3c; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; margin-left: 0.5rem;" data-delete-id="${deleteId}" data-delete-type="${deleteType}">Delete</button>
         </div>`;
@@ -272,7 +273,35 @@ function openAddIncomeModal(dateKey, dateObj, projectedAmount, incomeName = null
   addIncomeAmount.value = projectedAmount;
   addIncomeDescription.value = incomeName || "Actual Paycheck";
   addIncomeError.textContent = "";
+  addIncomeForm.dataset.transactionId = "";
   
+  addIncomeModal.classList.add("modal-visible");
+}
+
+// ========================================
+// Open Edit Income Modal (for actual income)
+// ========================================
+window.openEditIncomeModal = function(e) {
+  e.stopPropagation();
+  const incomeDiv = e.currentTarget;
+  const incomeId = incomeDiv.dataset.incomeId;
+  const incomeAmount = incomeDiv.dataset.incomeAmount;
+  const incomeName = incomeDiv.dataset.incomeName;
+  const incomeDate = incomeDiv.dataset.incomeDate;
+  
+  selectedIncomeDate = incomeDate;
+  selectedIncomeAmount = incomeAmount;
+  
+  const date = new Date(incomeDate);
+  const dateStr = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+  
+  addIncomeDate.textContent = `${dateStr} - Edit Income`;
+  addIncomeAmount.value = incomeAmount;
+  addIncomeDescription.value = incomeName;
+  addIncomeError.textContent = "";
+  addIncomeForm.dataset.transactionId = incomeId;
+  
+  dayModal.classList.remove("modal-visible");
   addIncomeModal.classList.add("modal-visible");
 }
 
@@ -334,9 +363,15 @@ if (addIncomeForm) {
     }
     
     try {
-      const { apiCreateTransaction } = await import("./api.js");
+      const { apiCreateTransaction, apiDeleteTransaction } = await import("./api.js");
+      const transactionId = addIncomeForm.dataset.transactionId;
       
-      // Create transaction for this specific date
+      if (transactionId) {
+        // Delete old transaction and create new one
+        await apiDeleteTransaction(transactionId);
+      }
+      
+      // Create new transaction for this specific date
       await apiCreateTransaction({
         description,
         amount,
@@ -347,6 +382,7 @@ if (addIncomeForm) {
       // Close modal and reload calendar
       addIncomeModal.classList.remove("modal-visible");
       addIncomeForm.reset();
+      addIncomeForm.dataset.transactionId = "";
       loadCalendar();
       
     } catch (err) {
