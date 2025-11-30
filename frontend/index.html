@@ -220,5 +220,43 @@
   <!-- Main JS -->
   <script type="module" src="./js/main.js"></script>
 
+<!-- TEMPORARY ON-SCREEN DEBUG CONSOLE -->
+<div id="debug-console" style="
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 40%;
+  overflow-y: auto;
+  background: rgba(0,0,0,0.85);
+  color: #00ff88;
+  font-size: 12px;
+  padding: 6px;
+  z-index: 999999;
+  font-family: monospace;
+"></div>
+
+<script>
+(function () {
+  const dbg = document.getElementById("debug-console");
+  const log = (type, args) => {
+    const msg = [...args].map(a => 
+      typeof a === "object" ? JSON.stringify(a) : a
+    ).join(" ");
+    dbg.innerText += `[${type}] ${msg}\n`;
+    dbg.scrollTop = dbg.scrollHeight;
+  };
+
+  const origLog = console.log;
+  console.log = (...args) => { origLog(...args); log("LOG", args); };
+
+  const origErr = console.error;
+  console.error = (...args) => { origErr(...args); log("ERR", args); };
+
+  const origWarn = console.warn;
+  console.warn = (...args) => { origWarn(...args); log("WARN", args); };
+})();
+</script>
+
 </body>
 </html>
