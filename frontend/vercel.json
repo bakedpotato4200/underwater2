@@ -1,3 +1,11 @@
 {
-  "version": 2
+  "version": 2,
+  "buildCommand": "echo 'Frontend is static HTML'",
+  "public": ".",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
