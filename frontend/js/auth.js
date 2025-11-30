@@ -21,6 +21,9 @@ import {
 import { showView, getSavedView } from "./ui.js";
 import { initInactivityTracking, stopInactivityTracking } from "./inactivity.js";
 
+// Initialize auth module with DOM elements
+console.log("🔵 Auth.js loading...");
+
 // DOM elements - with safety checks
 const authScreen = document.getElementById("auth-screen");
 const appShell = document.getElementById("app-shell");
@@ -45,38 +48,53 @@ const backToLoginFromReset = document.getElementById("back-to-login-from-reset")
 const userEmailLabel = document.getElementById("user-email-label");
 const logoutBtn = document.getElementById("logout-btn");
 
-// Debug: Check if elements loaded
-if (!signupTab || !signupForm) {
-  console.error("❌ Auth elements missing - check HTML");
+console.log("Auth elements check:", {
+  signupTab: !!signupTab,
+  loginTab: !!loginTab,
+  signupForm: !!signupForm,
+  loginForm: !!loginForm
+});
+
+// Simple tab switcher function
+function switchToSignup() {
+  console.log("🟢 Switching to signup...");
+  if (signupTab) signupTab.classList.add("auth-tab-active");
+  if (loginTab) loginTab.classList.remove("auth-tab-active");
+  if (signupForm) signupForm.classList.remove("auth-form-hidden");
+  if (loginForm) loginForm.classList.add("auth-form-hidden");
+  if (forgotPasswordForm) forgotPasswordForm.classList.add("auth-form-hidden");
+  if (resetPasswordForm) resetPasswordForm.classList.add("auth-form-hidden");
 }
 
-// ----------------------------------------------
-// Toggle between Login and Signup tabs
-// ----------------------------------------------
-if (loginTab && signupTab && loginForm && signupForm) {
-  loginTab.addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log("✅ Clicked Login tab");
-    loginTab.classList.add("auth-tab-active");
-    signupTab.classList.remove("auth-tab-active");
-    loginForm.classList.remove("auth-form-hidden");
-    signupForm.classList.add("auth-form-hidden");
-    forgotPasswordForm?.classList.add("auth-form-hidden");
-    resetPasswordForm?.classList.add("auth-form-hidden");
-  });
+function switchToLogin() {
+  console.log("🟢 Switching to login...");
+  if (loginTab) loginTab.classList.add("auth-tab-active");
+  if (signupTab) signupTab.classList.remove("auth-tab-active");
+  if (loginForm) loginForm.classList.remove("auth-form-hidden");
+  if (signupForm) signupForm.classList.add("auth-form-hidden");
+  if (forgotPasswordForm) forgotPasswordForm.classList.add("auth-form-hidden");
+  if (resetPasswordForm) resetPasswordForm.classList.add("auth-form-hidden");
+}
 
-  signupTab.addEventListener("click", (e) => {
+// Attach tab click listeners
+if (loginTab) {
+  loginTab.onclick = (e) => {
     e.preventDefault();
-    console.log("✅ Clicked Signup tab");
-    signupTab.classList.add("auth-tab-active");
-    loginTab.classList.remove("auth-tab-active");
-    signupForm.classList.remove("auth-form-hidden");
-    loginForm.classList.add("auth-form-hidden");
-    forgotPasswordForm?.classList.add("auth-form-hidden");
-    resetPasswordForm?.classList.add("auth-form-hidden");
-  });
-} else {
-  console.error("❌ Tab or form elements not found");
+    e.stopPropagation();
+    switchToLogin();
+    return false;
+  };
+  console.log("✅ Login tab listener attached");
+}
+
+if (signupTab) {
+  signupTab.onclick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    switchToSignup();
+    return false;
+  };
+  console.log("✅ Signup tab listener attached");
 }
 
 // Forgot Password Link
