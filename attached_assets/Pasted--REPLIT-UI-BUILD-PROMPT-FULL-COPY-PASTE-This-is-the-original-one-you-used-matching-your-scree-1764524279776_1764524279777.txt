@@ -1,0 +1,115 @@
+✅ REPLIT UI BUILD PROMPT (FULL COPY/PASTE)
+
+(This is the original one you used — matching your screenshots EXACTLY.)
+
+⸻
+
+PROMPT FOR REPLIT AI — COPY/PASTE EVERYTHING BELOW
+
+⸻
+
+You are rebuilding the full frontend UI for the “Under Water” budgeting app.
+
+Use this exact design system:
+
+🌊 THEME / COLORS
+	•	Background: deep navy gradient (#071622 → #0a1f33)
+	•	Cards: slightly lighter navy (#0d233b)
+	•	Accents: aqua-cyan (#19d3ff)
+	•	Buttons: bright blue gradient (#009dff → #00c8ff)
+	•	Text primary: white
+	•	Text secondary: gray-blue (#9bb4c9)
+	•	Income amounts: green (#2ecc71)
+	•	Expense amounts: red (#e74c3c)
+	•	Pressure-day indicators:
+	•	🔴 red
+	•	🟠 orange
+	•	🟡 yellow
+
+✨ UI STYLE
+
+Exactly like the screenshots:
+	•	Rounded 20px cards
+	•	Subtle glow effects around selected cards
+	•	Soft shadows under all cards
+	•	Thin aqua highlight stripe on the left of each card
+	•	Mobile-first layout
+	•	Smooth fade-in transitions
+	•	Sidebar slide-out with a hamburger button
+	•	Under Water logo centered above login and dashboard
+	•	“Under Water” title in bright aqua gradient
+	•	All spacing generous and modern (Flutter-style spacing)
+
+🔧 COMPONENTS TO BUILD
+
+Build all of the following:
+
+1. Login / Signup Page
+	•	Large logo centered
+	•	“Under Water” title aqua gradient
+	•	Subtitle: Smart paycheck-to-paycheck budgeting
+	•	Login/Signup toggle tabs
+	•	Blue gradient login button
+	•	Styled inputs exactly like screenshots
+
+2. Dashboard Page
+	•	Starting Balance card
+	•	Monthly Income card (green text)
+	•	Monthly Bills card (red text)
+	•	End of Month Balance card
+	•	Top Pressure Days section with:
+	•	colored emoji
+	•	date
+	•	amount
+	•	card with aqua highlight stripe
+
+3. Calendar Page
+	•	Full monthly view
+	•	Each day shows:
+	•	number
+	•	ending balance
+	•	red/green if negative or positive
+	•	Modern card container with rounded edges
+	•	Month header + arrows
+
+4. Sidebar Navigation
+	•	Hamburger button opens sidebar
+	•	Sidebar items:
+	•	Dashboard
+	•	Calendar
+	•	Recurring Bills
+	•	Settings
+	•	Highlight active item
+
+5. Modal Windows
+	•	Day detail modal (dark navy)
+	•	Top rounded corners
+	•	Close button
+	•	Show all events grouped
+
+6. Typography
+	•	Keep font modern, rounded (use Inter, Poppins, or system default)
+	•	Large, bold section titles
+	•	Soft secondary text
+
+⸻
+
+📌 REQUIREMENTS
+
+Replit should:
+	•	Keep all HTML structure the same so JS works
+	•	Fix layout issues
+	•	Apply the exact modern aesthetic in screenshots
+	•	Make everything responsive
+	•	Preserve all IDs because main.js, ui.js, dashboard.js, calendar.js rely on them
+
+⸻
+
+📌 FILES TO OUTPUT
+
+Replit must modify ONLY:
+	•	styles.css
+	•	index.html (only layout improvements, keep IDs)
+	•	Any extra CSS/utility classes if needed
+
+Do NOT change JavaScript files.
