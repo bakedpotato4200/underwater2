@@ -1,10 +1,15 @@
-// frontend/js/main.js
-// ========================================
-// Under Water 2 - App Entry Point
-// Runs on startup and ties all modules together
-// ========================================
+// EARLY DEBUG — ENSURE JS IS RUNNING
+try {
+  document.getElementById("early-debug").innerText = "main.js started";
+} catch (e) {
+  // If THIS fails, JS is breaking before DOM
+}
 
-// Import ALL modules to ensure they're loaded
+// ===========================================================
+//  Under Water 2 — App Entry Point
+// ===========================================================
+
+// Import modules
 import "./config.js";
 import "./api.js";
 import "./ui.js";
@@ -16,27 +21,20 @@ import "./inactivity.js";
 import { initTheme } from "./theme.js";
 import { checkAuthOnLoad } from "./auth.js";
 
-// ========================================
-// APP INIT
-// ========================================
-console.log("🚀 Under Water 2 - Starting...");
+// Start log
+console.log("🚀 Under Water 2 — main.js running");
 
-// Initialize theme before anything else
+// Init theme first
 initTheme();
 
+// DOM READY
 window.addEventListener("DOMContentLoaded", () => {
-  console.log("📄 DOM Content Loaded");
-  // 1. Check token + load login or app shell
+  console.log("📄 DOMContentLoaded fired");
   checkAuthOnLoad();
-
-  // 2. Default active view after auth is "dashboard-view"
-  // (the auth.js module calls showView() after successful login)
 });
 
-// Also check on immediate load (in case DOM already loaded)
-if (document.readyState === "loading") {
-  console.log("⏳ DOM still loading, waiting for DOMContentLoaded...");
-} else {
-  console.log("✅ DOM already loaded, checking auth...");
+// If DOM already loaded
+if (document.readyState !== "loading") {
+  console.log("✅ DOM already loaded, checking auth");
   checkAuthOnLoad();
 }
