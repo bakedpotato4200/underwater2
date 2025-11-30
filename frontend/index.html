@@ -5,21 +5,22 @@
   <title>Under Water 2</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="manifest" href="./manifest.json" />
-  <meta name="theme-color" content="#0a1628" />
-  <link rel="icon" type="image/png" href="./assets/icons/icon-square-192.png" />
-
   <!-- Main Styles -->
   <link rel="stylesheet" href="./styles.css" />
 
-  <!-- API Base URL -->
-  <meta name="api-base-url" content="https://underwater2-production.up.railway.app/api" />
+  <!-- Manifest -->
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#0a1628" />
+  <link rel="icon" type="image/png" href="./assets/icons/logo-badge.png" />
+
+  <!-- API Base URL (Vercel injects this dynamically) -->
+  <meta name="api-base-url" content="https://underwater2-production.up.railway.app" />
 
   <!-- Inject API URL -->
   <script>
     (function () {
       const tag = document.querySelector('meta[name="api-base-url"]');
-      window.__API_BASE_URL__ = tag ? tag.content : "https://underwater2-production.up.railway.app/api";
+      window.__API_BASE_URL__ = tag?.content || "https://underwater2-production.up.railway.app";
       console.log("API BASE URL →", window.__API_BASE_URL__);
     })();
   </script>
@@ -27,173 +28,102 @@
 
 <body>
 
-  <!-- EARLY DEBUG PANEL -->
-  <div id="early-debug" style="
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    background: red;
-    color: white;
-    font-size: 20px;
-    padding: 10px;
-    z-index: 999999999999;
-  ">
-    JS LOADING…
-  </div>
-
-  <!-- AFTER BODY LOAD, UPDATE DEBUG -->
-  <script>
-    document.getElementById("early-debug").innerText = "main.js loading…";
-  </script>
-
   <!-- AUTH SCREEN -->
-  <div id="auth-screen" class="auth-screen app-shell-hidden">
+  <div id="auth-screen" class="auth-screen active-view">
     <div class="auth-card">
-      <img src="./assets/icons/logo-badge.png" alt="Under Water Logo" class="auth-logo-badge" />
-      <h1 class="app-title">Under Water</h1>
-      <p class="app-subtitle">Smart paycheck-to-paycheck budgeting</p>
 
+      <img src="./assets/icons/logo-badge.png" class="auth-logo" />
+      <h1 class="app-title">Under Water</h1>
+      <p class="app-subtitle">Smart paycheck automation</p>
+
+      <!-- Login / Signup Tabs -->
       <div class="auth-toggle">
-        <button id="login-tab" class="auth-tab auth-tab-active">Login</button>
+        <button id="login-tab" class="auth-tab active">Login</button>
         <button id="signup-tab" class="auth-tab">Sign Up</button>
       </div>
 
       <!-- LOGIN FORM -->
-      <form id="login-form" class="auth-form">
-        <label>Email<input type="email" id="login-email" required /></label>
-        <label>Password<input type="password" id="login-password" required /></label>
-        <button type="submit" class="btn btn-primary">Login</button>
+      <form id="login-form" class="auth-form active">
+        <label>Email <input id="login-email" type="email" /></label>
+        <label>Password <input id="login-password" type="password" /></label>
+        <button class="btn btn-primary" type="submit">Login</button>
         <p id="login-error" class="auth-error"></p>
-        <button type="button" id="forgot-password-link" class="btn-link">Forgot password?</button>
+        <button id="forgot-password-link" type="button" class="link-btn">Forgot Password?</button>
       </form>
 
       <!-- SIGNUP FORM -->
-      <form id="signup-form" class="auth-form auth-form-hidden">
-        <label>Email<input type="email" id="signup-email" required /></label>
-        <label>Password<input type="password" id="signup-password" required /></label>
-        <button type="submit" class="btn btn-secondary">Create Account</button>
+      <form id="signup-form" class="auth-form">
+        <label>Email <input id="signup-email" type="email" /></label>
+        <label>Password <input id="signup-password" type="password" /></label>
+        <button class="btn btn-secondary" type="submit">Create Account</button>
         <p id="signup-error" class="auth-error"></p>
       </form>
 
       <!-- FORGOT PASSWORD -->
-      <form id="forgot-password-form" class="auth-form auth-form-hidden">
-        <label>Email<input type="email" id="forgot-email" required /></label>
-        <button type="submit" class="btn btn-secondary">Send Reset Code</button>
+      <form id="forgot-password-form" class="auth-form">
+        <label>Email <input id="forgot-email" type="email" /></label>
+        <button class="btn btn-secondary" type="submit">Send Reset Code</button>
         <p id="forgot-error" class="auth-error"></p>
-        <button type="button" id="back-to-login-from-forgot" class="btn-link">Back to Login</button>
+        <button id="back-to-login-from-forgot" type="button" class="link-btn">Back to Login</button>
       </form>
 
       <!-- RESET PASSWORD -->
-      <form id="reset-password-form" class="auth-form auth-form-hidden">
-        <label>Email<input type="email" id="reset-email" required /></label>
-        <label>Reset Code<input type="text" id="reset-code" maxlength="6" required /></label>
-        <label>New Password<input type="password" id="reset-new-password" required /></label>
-        <button type="submit" class="btn btn-secondary">Reset Password</button>
+      <form id="reset-password-form" class="auth-form">
+        <label>Email <input id="reset-email" type="email" /></label>
+        <label>Reset Code <input id="reset-code" type="text" /></label>
+        <label>New Password <input id="reset-password" type="password" /></label>
+        <button class="btn btn-primary" type="submit">Reset Password</button>
         <p id="reset-error" class="auth-error"></p>
-        <button type="button" id="back-to-login-from-reset" class="btn-link">Back to Login</button>
       </form>
+
     </div>
   </div>
 
-  <!-- APP SHELL -->
-  <div id="app-shell" class="app-shell app-shell-hidden">
-    <div id="sidebar-overlay" class="sidebar-overlay"></div>
-
-    <aside id="sidebar" class="sidebar">
-      <div class="sidebar-logo">
-        <img src="./assets/icons/icon-sidebar.png" class="sidebar-logo-icon" />
-        <div class="sidebar-logo-text">Under Water</div>
-      </div>
-
-      <nav class="sidebar-nav">
-        <button class="nav-item nav-item-active" data-view="dashboard-view">Dashboard</button>
-        <button class="nav-item" data-view="calendar-view">Calendar</button>
-        <button class="nav-item" data-view="recurring-view">Recurring</button>
-        <button class="nav-item" data-view="settings-view">Settings</button>
-      </nav>
-
-      <div class="sidebar-footer">
-        <span id="user-email-label" class="sidebar-user"></span>
-        <button id="logout-btn" class="btn btn-ghost">Logout</button>
-      </div>
-    </aside>
-
-    <main class="main-content">
-      <header class="app-header">
-        <button id="menu-toggle-btn" class="menu-toggle-btn">☰</button>
-        <div class="app-logo">
-          <span class="logo-icon">UW2</span>
-          <span class="logo-text">Under Water</span>
-        </div>
-      </header>
-
-      <!-- DASHBOARD VIEW -->
-      <section id="dashboard-view" class="view view-active">
-        <div class="dashboard-header-banner">
-          <img src="./assets/icons/logo-horizontal.png" class="dashboard-logo-horizontal" />
-        </div>
-        <h2>Dashboard</h2>
-
-        <div class="cards-row">
-          <div class="card positive" id="dash-income-card"><h3>This Month Income</h3><p id="dash-income" class="big-number">$0</p></div>
-          <div class="card negative" id="dash-expenses-card"><h3>This Month Bills</h3><p id="dash-expenses" class="big-number">$0</p></div>
-          <div class="card positive"><h3>End of Month Balance</h3><p id="dash-end-balance" class="big-number">$0</p></div>
-        </div>
-      </section>
-
-      <!-- The rest of your views (calendar, recurring, settings) remain unchanged -->
-
-    </main>
+  <!-- APP SHELL (HIDDEN UNTIL LOGIN) -->
+  <div id="app-shell" class="hidden">
+    <!-- Your dashboard and views will load here after login -->
   </div>
 
-  <!-- MAIN JS ENTRY -->
+  <!-- MAIN APP MODULE -->
   <script type="module" src="./js/main.js"></script>
 
-<!-- DEBUG CONSOLE -->
-<div id="debug-console" style="
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  max-height: 45%;
-  overflow-y: auto;
-  background: rgba(0,0,0,0.85);
-  color: #00ff88;
-  font-size: 12px;
-  padding: 6px;
-  z-index: 999999;
-  font-family: monospace;">
-</div>
+  <!-- DEBUG CONSOLE -->
+  <div id="debug-console" style="
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%;
+    max-height: 40%;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.85);
+    color: #00ff88;
+    font-size: 12px;
+    padding: 6px;
+    z-index: 999999;
+    font-family: monospace;
+  "></div>
 
-<script>
-(function () {
-  // Enable only when ?debug=1 in URL
-  if (!window.location.search.includes("debug=1")) return;
+  <script>
+    (function () {
+      const dbg = document.getElementById("debug-console");
 
-  const dbg = document.getElementById("debug-console");
-  dbg.style.display = "block";
+      const write = (type, args) => {
+        const msg = [...args].map(a =>
+          typeof a === "object" ? JSON.stringify(a) : a
+        ).join(" ");
+        dbg.innerText += `[${type}] ${msg}\n`;
+        dbg.scrollTop = dbg.scrollHeight;
+      };
 
-  function write(type, args) {
-    const msg = [...args].map(a =>
-      typeof a === "object" ? JSON.stringify(a) : String(a)
-    ).join(" ");
-    dbg.innerText += `[${type}] ${msg}\n`;
-    dbg.scrollTop = dbg.scrollHeight;
-  }
+      const origLog = console.log;
+      console.log = (...args) => { origLog(...args); write("LOG", args); };
 
-  const origLog = console.log;
-  console.log = (...args) => { origLog(...args); write("LOG", args); };
+      const origErr = console.error;
+      console.error = (...args) => { origErr(...args); write("ERR", args); };
 
-  const origErr = console.error;
-  console.error = (...args) => { origErr(...args); write("ERR", args); };
-
-  const origWarn = console.warn;
-  console.warn = (...args) => { origWarn(...args); write("WARN", args); };
-
-  console.log("DEBUG CONSOLE READY");
-})();
-</script>
+      const origWarn = console.warn;
+      console.warn = (...args) => { origWarn(...args); write("WARN", args); };
+    })();
+  </script>
 
 </body>
 </html>
