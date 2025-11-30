@@ -1,12 +1,13 @@
 // ================================================
-//  PRODUCTION API BASE URL
+// PRODUCTION API BASE URL
+// index.html injects: window.__API_BASE_URL__
+// Fallback: Railway backend URL (domain only)
 // ================================================
-// MUST end with /api or the entire app breaks
 export const API_BASE_URL =
-  window.__API_BASE_URL__ || "https://underwater2-production.up.railway.app/api";
+  window.__API_BASE_URL__ || "https://underwater2-production.up.railway.app";
 
 // --------------------------------------------
-// Token Helpers (using sessionStorage)
+// Token Helpers
 // --------------------------------------------
 export function getToken() {
   return sessionStorage.getItem("uw2_token");
@@ -22,6 +23,7 @@ export function clearToken() {
 
 // --------------------------------------------
 // Generic API Wrapper
+// endpoint should always start with "/api/..."
 // --------------------------------------------
 export async function apiRequest(endpoint, method = "GET", body = null) {
   const headers = {
@@ -31,10 +33,11 @@ export async function apiRequest(endpoint, method = "GET", body = null) {
   const token = getToken();
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  console.log(`🔗 API Call: ${API_BASE_URL}${endpoint}`);
+  const url = `${API_BASE_URL}${endpoint}`;
+  console.log(`🔗 API Call: ${url}`);
 
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await fetch(url, {
       method,
       headers,
       body: body ? JSON.stringify(body) : null,
