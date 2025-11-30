@@ -1,4 +1,5 @@
 {
   "buildCommand": "echo 'Static build'",
-  "outputDirectory": "."
+  "outputDirectory": "frontend",
+  "public": "frontend"
 }
