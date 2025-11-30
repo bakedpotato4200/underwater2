@@ -9,44 +9,61 @@ import { loadCalendar } from "./calendar.js";
 import { loadRecurringPage } from "./recurring.js";
 import { loadSettingsPage } from "./settings.js";
 
-// All views
-const views = document.querySelectorAll(".view");
-
-// Sidebar navigation
-const navButtons = document.querySelectorAll(".nav-item");
-
 // Current active view
 let activeView = "dashboard-view";
+let views, navButtons;
+
+// Initialize UI elements after DOM is ready
+function initUIElements() {
+  views = document.querySelectorAll(".view");
+  navButtons = document.querySelectorAll(".nav-item");
+  attachNavListeners();
+}
 
 // Get saved view from session storage
 export function getSavedView() {
   return sessionStorage.getItem("activeView") || "dashboard-view";
 }
 
+// Attach sidebar button events
+function attachNavListeners() {
+  if (!navButtons || navButtons.length === 0) return;
+  navButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const view = btn.dataset.view;
+      showView(view);
+      closeSidebar();
+    });
+  });
+}
+
 // ----------------------------------------------
 // Switch to a specific view by ID
 // ----------------------------------------------
 export function showView(viewId) {
-  activeView = viewId;
+  // Initialize if needed
+  if (!views || views.length === 0) initUIElements();
   
-  // Save current view to sessionStorage
+  activeView = viewId;
   sessionStorage.setItem("activeView", viewId);
 
   // Hide all views
-  views.forEach((v) => v.classList.remove("view-active"));
+  if (views) views.forEach((v) => v.classList.remove("view-active"));
 
   // Show selected view
   const selected = document.getElementById(viewId);
   if (selected) selected.classList.add("view-active");
 
   // Update sidebar highlight
-  navButtons.forEach((btn) => {
-    if (btn.dataset.view === viewId) {
-      btn.classList.add("nav-item-active");
-    } else {
-      btn.classList.remove("nav-item-active");
-    }
-  });
+  if (navButtons) {
+    navButtons.forEach((btn) => {
+      if (btn.dataset.view === viewId) {
+        btn.classList.add("nav-item-active");
+      } else {
+        btn.classList.remove("nav-item-active");
+      }
+    });
+  }
 
   // Load content for each page
   if (viewId === "dashboard-view") loadDashboard();
@@ -54,17 +71,6 @@ export function showView(viewId) {
   if (viewId === "recurring-view") loadRecurringPage();
   if (viewId === "settings-view") loadSettingsPage();
 }
-
-// ----------------------------------------------
-// Attach sidebar button events
-// ----------------------------------------------
-navButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const view = btn.dataset.view;
-    showView(view);
-    closeSidebar();
-  });
-});
 
 // ================================================
 // SIDEBAR TOGGLE

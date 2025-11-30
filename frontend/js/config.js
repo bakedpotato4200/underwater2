@@ -34,7 +34,7 @@ export function clearToken() {
 
 // --------------------------------------------
 // Generic API Wrapper
-// endpoint should always start with "/api/..."
+// endpoint examples: "/auth/login", "/bills", "/calendar"
 // --------------------------------------------
 export async function apiRequest(endpoint, method = "GET", body = null) {
   const headers = {

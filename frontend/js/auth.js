@@ -20,8 +20,6 @@ import {
 import { showView, getSavedView } from "./ui.js";
 import { initInactivityTracking, stopInactivityTracking } from "./inactivity.js";
 
-console.log("🔵 Auth.js module loading...");
-
 // DOM elements
 let authScreen, appShell, loginTab, signupTab, loginForm, signupForm;
 let loginError, signupError, forgotError, resetError;
@@ -31,8 +29,6 @@ let userEmailLabel, logoutBtn;
 
 // Initialize and cache all DOM elements
 function initDOMElements() {
-  console.log("📍 Initializing DOM elements...");
-  
   authScreen = document.getElementById("auth-screen");
   appShell = document.getElementById("app-shell");
   loginTab = document.getElementById("login-tab");
@@ -51,38 +47,24 @@ function initDOMElements() {
   userEmailLabel = document.getElementById("user-email-label");
   logoutBtn = document.getElementById("logout-btn");
 
-  console.log("✅ Elements initialized:", {
-    loginTab: !!loginTab,
-    signupTab: !!signupTab,
-    loginForm: !!loginForm,
-    signupForm: !!signupForm
-  });
-
   attachAllListeners();
 }
 
 // Attach all event listeners
 function attachAllListeners() {
-  console.log("🔗 Attaching event listeners...");
-
   // LOGIN TAB
   if (loginTab) {
     loginTab.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log("🟢 Login tab clicked");
-      
       if (signupTab) signupTab.classList.remove("auth-tab-active");
       loginTab.classList.add("auth-tab-active");
-      
       if (signupForm) signupForm.classList.add("auth-form-hidden");
       if (loginForm) loginForm.classList.remove("auth-form-hidden");
       if (forgotPasswordForm) forgotPasswordForm.classList.add("auth-form-hidden");
       if (resetPasswordForm) resetPasswordForm.classList.add("auth-form-hidden");
-      
       return false;
     });
-    console.log("✅ Login tab listener attached");
   }
 
   // SIGNUP TAB
@@ -90,27 +72,20 @@ function attachAllListeners() {
     signupTab.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log("🟢 Signup tab clicked");
-      
       if (loginTab) loginTab.classList.remove("auth-tab-active");
       signupTab.classList.add("auth-tab-active");
-      
       if (loginForm) loginForm.classList.add("auth-form-hidden");
       if (signupForm) signupForm.classList.remove("auth-form-hidden");
       if (forgotPasswordForm) forgotPasswordForm.classList.add("auth-form-hidden");
       if (resetPasswordForm) resetPasswordForm.classList.add("auth-form-hidden");
-      
       return false;
     });
-    console.log("✅ Signup tab listener attached");
   }
 
   // FORGOT PASSWORD LINK
   if (forgotPasswordLink) {
     forgotPasswordLink.addEventListener("click", (e) => {
       e.preventDefault();
-      console.log("🟢 Forgot password link clicked");
-      
       if (loginForm) loginForm.classList.add("auth-form-hidden");
       if (signupForm) signupForm.classList.add("auth-form-hidden");
       if (resetPasswordForm) resetPasswordForm.classList.add("auth-form-hidden");
@@ -148,9 +123,7 @@ function attachAllListeners() {
 
       try {
         const res = await apiForgotPassword(email);
-        console.log("✅ Reset code sent:", res.resetCode);
         alert(`Reset code: ${res.resetCode}\n\n(In production, this would be sent via email)`);
-        
         if (forgotPasswordForm) forgotPasswordForm.classList.add("auth-form-hidden");
         if (resetPasswordForm) resetPasswordForm.classList.remove("auth-form-hidden");
         document.getElementById("reset-email").value = email;
@@ -233,17 +206,14 @@ function attachAllListeners() {
     });
   }
 
-  console.log("✅ All event listeners attached");
 }
 
 // Verify token on page load
 export async function checkAuthOnLoad() {
-  console.log("🚀 Checking auth on load...");
   initDOMElements();
   
   const token = getToken();
   if (!token) {
-    console.log("❌ No token found, showing auth screen");
     showAuth();
     return;
   }
@@ -251,10 +221,8 @@ export async function checkAuthOnLoad() {
   try {
     const res = await apiVerify();
     if (userEmailLabel) userEmailLabel.textContent = res.user.email;
-    console.log("✅ Token verified, showing app");
     showApp();
   } catch (err) {
-    console.error("❌ Token verification failed:", err);
     clearToken();
     showAuth();
   }
@@ -262,7 +230,6 @@ export async function checkAuthOnLoad() {
 
 // Show Auth Screen
 export function showAuth() {
-  console.log("📺 Showing auth screen");
   if (authScreen) {
     authScreen.style.visibility = "visible";
     authScreen.classList.remove("app-shell-hidden");
@@ -276,7 +243,6 @@ export function showAuth() {
 
 // Show Main App
 function showApp() {
-  console.log("📺 Showing app");
   if (appShell) {
     appShell.style.visibility = "visible";
     appShell.classList.remove("app-shell-hidden");
