@@ -1,45 +1,56 @@
-// EARLY DEBUG — confirm JS is alive
+// frontend/js/main.js
+// ========================================
+// Under Water 2 - Main Loader + Debug System
+// ========================================
+
+// EARLY DEBUG — confirm JS running
 try {
   document.getElementById("early-debug").innerText = "JS Loaded";
-} catch (e) { }
+} catch (e) {}
 
-// ================================================
+const debugConsole = document.getElementById("debug-console");
+function log(msg) {
+  console.log(msg);
+  if (debugConsole) debugConsole.innerHTML += msg + "\n";
+}
+
+// ----------------------------------------
 // MODULE DEBUGGING STAGE
-// ================================================
+// ----------------------------------------
+log("🟦 main.js: starting module import test");
 
-console.log("🟦 main.js: starting module import test");
-
-// Helper function for clean module loading
+// Helper to load modules cleanly
 async function loadModule(name) {
   try {
-    console.log(`Loading ${name}…`);
+    log(`Loading ${name}.js…`);
     await import(`./${name}.js`);
-    console.log(`✔️  ${name}.js loaded`);
+    log(`✔️ ${name}.js loaded`);
   } catch (e) {
-    console.error(`❌ ${name}.js failed:`, e);
+    log(`❌ ${name}.js failed: ${e.message || e}`);
   }
 }
 
-// Load modules one by one with debug output
-await loadModule("config");
-await loadModule("api");
-await loadModule("ui");
-await loadModule("dashboard");
-await loadModule("calendar");
-await loadModule("recurring");
-await loadModule("settings");
-await loadModule("inactivity");
-await loadModule("theme");
-await loadModule("auth");
+// ----------------------------------------
+// Sequential module loading
+// ----------------------------------------
+await loadModule("js/config");
+await loadModule("js/api");
+await loadModule("js/ui");
+await loadModule("js/dashboard");
+await loadModule("js/calendar");
+await loadModule("js/recurring");
+await loadModule("js/settings");
+await loadModule("js/inactivity");
+await loadModule("js/theme");
+await loadModule("js/auth");
 
-console.log("🎉 All modules loaded");
+log("🎉 All modules loaded");
 
-// ================================================
+// ----------------------------------------
 // NORMAL APP STARTUP
-// ================================================
-
-import { initTheme } from "./theme.js";
-import { checkAuthOnLoad } from "./auth.js";
+// ----------------------------------------
+import { initTheme } from "./js/theme.js";
+import { checkAuthOnLoad } from "./js/auth.js";
 
 initTheme();
 checkAuthOnLoad();
