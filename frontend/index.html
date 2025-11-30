@@ -2,37 +2,172 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Under Water 2</title>
-
   <link rel="stylesheet" href="./styles.css" />
 </head>
 
 <body>
-  <!-- SIDEBAR -->
-  <div id="sidebar" class="sidebar">
-      <div class="nav-item" data-view="dashboard-view">Dashboard</div>
-      <div class="nav-item" data-view="calendar-view">Calendar</div>
-      <div class="nav-item" data-view="recurring-view">Recurring</div>
-      <div class="nav-item" data-view="settings-view">Settings</div>
+  <!-- ============================================
+       AUTH SCREEN (Login/Signup/Password Recovery)
+       ============================================ -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-container">
+      <div class="auth-header">
+        <h1>Under Water 2</h1>
+        <p>Financial Planning Made Simple</p>
+      </div>
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button id="login-tab" class="auth-tab auth-tab-active">Login</button>
+        <button id="signup-tab" class="auth-tab">Sign Up</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="login-form" class="auth-form">
+        <input
+          type="email"
+          id="login-email"
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          id="login-password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit" class="auth-btn">Login</button>
+        <div id="login-error" class="auth-error"></div>
+        <a id="forgot-password-link" href="#" class="auth-link">
+          Forgot Password?
+        </a>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form id="signup-form" class="auth-form auth-form-hidden">
+        <input
+          type="email"
+          id="signup-email"
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          id="signup-password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit" class="auth-btn">Sign Up</button>
+        <div id="signup-error" class="auth-error"></div>
+      </form>
+
+      <!-- FORGOT PASSWORD FORM -->
+      <form id="forgot-password-form" class="auth-form auth-form-hidden">
+        <h2>Reset Password</h2>
+        <input
+          type="email"
+          id="forgot-email"
+          placeholder="Enter your email"
+          required
+        />
+        <button type="submit" class="auth-btn">Send Reset Code</button>
+        <div id="forgot-error" class="auth-error"></div>
+        <button
+          type="button"
+          id="back-to-login-from-forgot"
+          class="auth-link-btn"
+        >
+          Back to Login
+        </button>
+      </form>
+
+      <!-- RESET PASSWORD FORM -->
+      <form id="reset-password-form" class="auth-form auth-form-hidden">
+        <h2>Enter Reset Code</h2>
+        <input
+          type="email"
+          id="reset-email"
+          placeholder="Email"
+          disabled
+        />
+        <input
+          type="text"
+          id="reset-code"
+          placeholder="Reset Code"
+          required
+        />
+        <input
+          type="password"
+          id="reset-new-password"
+          placeholder="New Password"
+          required
+        />
+        <button type="submit" class="auth-btn">Reset Password</button>
+        <div id="reset-error" class="auth-error"></div>
+        <button
+          type="button"
+          id="back-to-login-from-reset"
+          class="auth-link-btn"
+        >
+          Back to Login
+        </button>
+      </form>
+    </div>
   </div>
 
-  <!-- OVERLAY -->
-  <div id="sidebar-overlay"></div>
+  <!-- ============================================
+       APP SHELL (Main Application)
+       ============================================ -->
+  <div id="app-shell" class="app-shell app-shell-hidden">
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <h2>Under Water 2</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-item" data-view="dashboard-view">
+          <span>📊 Dashboard</span>
+        </div>
+        <div class="nav-item" data-view="calendar-view">
+          <span>📅 Calendar</span>
+        </div>
+        <div class="nav-item" data-view="recurring-view">
+          <span>🔄 Recurring</span>
+        </div>
+        <div class="nav-item" data-view="settings-view">
+          <span>⚙️ Settings</span>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div id="user-email-label" class="user-email"></div>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+      </div>
+    </div>
 
-  <!-- MENU BUTTON -->
-  <button id="menu-toggle-btn" class="menu-btn">☰</button>
+    <!-- SIDEBAR OVERLAY (for mobile) -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-  <!-- VIEWS -->
-  <div id="dashboard-view" class="view view-active"></div>
-  <div id="calendar-view" class="view"></div>
-  <div id="recurring-view" class="view"></div>
-  <div id="settings-view" class="view"></div>
+    <!-- MENU BUTTON -->
+    <button id="menu-toggle-btn" class="menu-btn">☰</button>
+
+    <!-- MAIN CONTENT -->
+    <div class="app-content">
+      <!-- VIEWS -->
+      <div id="dashboard-view" class="view view-active"></div>
+      <div id="calendar-view" class="view"></div>
+      <div id="recurring-view" class="view"></div>
+      <div id="settings-view" class="view"></div>
+    </div>
+  </div>
 
   <!-- MODAL -->
-  <div id="day-detail-modal" class="modal">
+  <div id="day-detail-modal" class="modal app-shell-hidden">
+    <div class="modal-content">
+      <button id="day-modal-close" class="modal-close">✕</button>
       <div id="day-modal-content"></div>
-      <button id="day-modal-close">Close</button>
+    </div>
   </div>
 
   <!-- MAIN JS -->
