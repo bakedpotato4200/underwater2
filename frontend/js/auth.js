@@ -1,7 +1,5 @@
-// frontend/js/auth.js
-// ========================================
-// Under Water 2 - Authentication Logic
-// ========================================
+// Under Water 2 - Authentication Module
+// Handles login, signup, password recovery, token verification
 
 import {
   setToken,
@@ -20,14 +18,12 @@ import {
 import { showView, getSavedView } from "./ui.js";
 import { initInactivityTracking, stopInactivityTracking } from "./inactivity.js";
 
-// DOM elements
 let authScreen, appShell, loginTab, signupTab, loginForm, signupForm;
 let loginError, signupError, forgotError, resetError;
 let forgotPasswordForm, resetPasswordForm, forgotPasswordLink;
 let backToLoginFromForgot, backToLoginFromReset;
 let userEmailLabel, logoutBtn;
 
-// Initialize and cache all DOM elements
 function initDOMElements() {
   authScreen = document.getElementById("auth-screen");
   appShell = document.getElementById("app-shell");
@@ -50,9 +46,7 @@ function initDOMElements() {
   attachAllListeners();
 }
 
-// Attach all event listeners
 function attachAllListeners() {
-  // LOGIN TAB
   if (loginTab) {
     loginTab.addEventListener("click", (e) => {
       e.preventDefault();
@@ -67,7 +61,6 @@ function attachAllListeners() {
     });
   }
 
-  // SIGNUP TAB
   if (signupTab) {
     signupTab.addEventListener("click", (e) => {
       e.preventDefault();
@@ -82,7 +75,6 @@ function attachAllListeners() {
     });
   }
 
-  // FORGOT PASSWORD LINK
   if (forgotPasswordLink) {
     forgotPasswordLink.addEventListener("click", (e) => {
       e.preventDefault();
@@ -94,7 +86,6 @@ function attachAllListeners() {
     });
   }
 
-  // BACK BUTTONS
   if (backToLoginFromForgot) {
     backToLoginFromForgot.addEventListener("click", (e) => {
       e.preventDefault();
@@ -113,7 +104,6 @@ function attachAllListeners() {
     });
   }
 
-  // FORGOT PASSWORD FORM
   if (forgotPasswordForm) {
     forgotPasswordForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -133,7 +123,6 @@ function attachAllListeners() {
     });
   }
 
-  // RESET PASSWORD FORM
   if (resetPasswordForm) {
     resetPasswordForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -157,7 +146,6 @@ function attachAllListeners() {
     });
   }
 
-  // SIGNUP FORM
   if (signupForm) {
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -177,7 +165,6 @@ function attachAllListeners() {
     });
   }
 
-  // LOGIN FORM
   if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -197,7 +184,6 @@ function attachAllListeners() {
     });
   }
 
-  // LOGOUT BUTTON
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       stopInactivityTracking();
@@ -205,10 +191,8 @@ function attachAllListeners() {
       showAuth();
     });
   }
-
 }
 
-// Verify token on page load
 export async function checkAuthOnLoad() {
   initDOMElements();
   
@@ -228,7 +212,6 @@ export async function checkAuthOnLoad() {
   }
 }
 
-// Show Auth Screen
 export function showAuth() {
   if (authScreen) {
     authScreen.style.visibility = "visible";
@@ -241,7 +224,6 @@ export function showAuth() {
   stopInactivityTracking();
 }
 
-// Show Main App
 function showApp() {
   if (appShell) {
     appShell.style.visibility = "visible";
