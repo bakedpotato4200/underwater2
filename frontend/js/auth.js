@@ -1,7 +1,6 @@
 // frontend/js/auth.js
 // ========================================
 // Under Water 2 - Authentication Logic
-// Handles login, signup, logout, and token verify
 // ========================================
 
 import {
@@ -21,6 +20,8 @@ import {
 import { showView, getSavedView } from "./ui.js";
 import { initInactivityTracking, stopInactivityTracking } from "./inactivity.js";
 
+console.log("🔵 Auth.js module loading...");
+
 // DOM elements
 let authScreen, appShell, loginTab, signupTab, loginForm, signupForm;
 let loginError, signupError, forgotError, resetError;
@@ -28,8 +29,10 @@ let forgotPasswordForm, resetPasswordForm, forgotPasswordLink;
 let backToLoginFromForgot, backToLoginFromReset;
 let userEmailLabel, logoutBtn;
 
-// Initialize DOM elements
+// Initialize and cache all DOM elements
 function initDOMElements() {
+  console.log("📍 Initializing DOM elements...");
+  
   authScreen = document.getElementById("auth-screen");
   appShell = document.getElementById("app-shell");
   loginTab = document.getElementById("login-tab");
@@ -47,71 +50,97 @@ function initDOMElements() {
   backToLoginFromReset = document.getElementById("back-to-login-from-reset");
   userEmailLabel = document.getElementById("user-email-label");
   logoutBtn = document.getElementById("logout-btn");
-  
-  attachEventListeners();
+
+  console.log("✅ Elements initialized:", {
+    loginTab: !!loginTab,
+    signupTab: !!signupTab,
+    loginForm: !!loginForm,
+    signupForm: !!signupForm
+  });
+
+  attachAllListeners();
 }
 
-// Tab switching
-function attachEventListeners() {
+// Attach all event listeners
+function attachAllListeners() {
+  console.log("🔗 Attaching event listeners...");
+
+  // LOGIN TAB
   if (loginTab) {
-    loginTab.onclick = (e) => {
+    loginTab.addEventListener("click", (e) => {
       e.preventDefault();
+      e.stopPropagation();
+      console.log("🟢 Login tab clicked");
+      
       if (signupTab) signupTab.classList.remove("auth-tab-active");
       loginTab.classList.add("auth-tab-active");
+      
       if (signupForm) signupForm.classList.add("auth-form-hidden");
       if (loginForm) loginForm.classList.remove("auth-form-hidden");
       if (forgotPasswordForm) forgotPasswordForm.classList.add("auth-form-hidden");
       if (resetPasswordForm) resetPasswordForm.classList.add("auth-form-hidden");
-    };
+      
+      return false;
+    });
+    console.log("✅ Login tab listener attached");
   }
 
+  // SIGNUP TAB
   if (signupTab) {
-    signupTab.onclick = (e) => {
+    signupTab.addEventListener("click", (e) => {
       e.preventDefault();
+      e.stopPropagation();
+      console.log("🟢 Signup tab clicked");
+      
       if (loginTab) loginTab.classList.remove("auth-tab-active");
       signupTab.classList.add("auth-tab-active");
+      
       if (loginForm) loginForm.classList.add("auth-form-hidden");
       if (signupForm) signupForm.classList.remove("auth-form-hidden");
       if (forgotPasswordForm) forgotPasswordForm.classList.add("auth-form-hidden");
       if (resetPasswordForm) resetPasswordForm.classList.add("auth-form-hidden");
-    };
+      
+      return false;
+    });
+    console.log("✅ Signup tab listener attached");
   }
 
-  // Forgot Password Link
+  // FORGOT PASSWORD LINK
   if (forgotPasswordLink) {
-    forgotPasswordLink.onclick = (e) => {
+    forgotPasswordLink.addEventListener("click", (e) => {
       e.preventDefault();
+      console.log("🟢 Forgot password link clicked");
+      
       if (loginForm) loginForm.classList.add("auth-form-hidden");
       if (signupForm) signupForm.classList.add("auth-form-hidden");
       if (resetPasswordForm) resetPasswordForm.classList.add("auth-form-hidden");
       if (forgotPasswordForm) forgotPasswordForm.classList.remove("auth-form-hidden");
       if (forgotError) forgotError.textContent = "";
-    };
+    });
   }
 
-  // Back to Login from Forgot
+  // BACK BUTTONS
   if (backToLoginFromForgot) {
-    backToLoginFromForgot.onclick = (e) => {
+    backToLoginFromForgot.addEventListener("click", (e) => {
       e.preventDefault();
       if (forgotPasswordForm) forgotPasswordForm.classList.add("auth-form-hidden");
       if (loginForm) loginForm.classList.remove("auth-form-hidden");
       if (forgotError) forgotError.textContent = "";
-    };
+    });
   }
 
-  // Back to Login from Reset
   if (backToLoginFromReset) {
-    backToLoginFromReset.onclick = (e) => {
+    backToLoginFromReset.addEventListener("click", (e) => {
       e.preventDefault();
       if (resetPasswordForm) resetPasswordForm.classList.add("auth-form-hidden");
       if (loginForm) loginForm.classList.remove("auth-form-hidden");
       if (resetError) resetError.textContent = "";
-    };
+    });
   }
 
-  // Forgot Password Form
+  // FORGOT PASSWORD FORM
   if (forgotPasswordForm) {
-    forgotPasswordForm.onsubmit = async (e) => {
+    forgotPasswordForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (forgotError) forgotError.textContent = "";
 
@@ -128,12 +157,12 @@ function attachEventListeners() {
       } catch (err) {
         if (forgotError) forgotError.textContent = err.message;
       }
-    };
+    });
   }
 
-  // Reset Password Form
+  // RESET PASSWORD FORM
   if (resetPasswordForm) {
-    resetPasswordForm.onsubmit = async (e) => {
+    resetPasswordForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (resetError) resetError.textContent = "";
 
@@ -152,12 +181,12 @@ function attachEventListeners() {
       } catch (err) {
         if (resetError) resetError.textContent = err.message;
       }
-    };
+    });
   }
 
-  // Signup Form
+  // SIGNUP FORM
   if (signupForm) {
-    signupForm.onsubmit = async (e) => {
+    signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (signupError) signupError.textContent = "";
 
@@ -172,12 +201,12 @@ function attachEventListeners() {
       } catch (err) {
         if (signupError) signupError.textContent = err.message;
       }
-    };
+    });
   }
 
-  // Login Form
+  // LOGIN FORM
   if (loginForm) {
-    loginForm.onsubmit = async (e) => {
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (loginError) loginError.textContent = "";
 
@@ -192,24 +221,29 @@ function attachEventListeners() {
       } catch (err) {
         if (loginError) loginError.textContent = err.message;
       }
-    };
+    });
   }
 
-  // Logout Button
+  // LOGOUT BUTTON
   if (logoutBtn) {
-    logoutBtn.onclick = () => {
+    logoutBtn.addEventListener("click", () => {
       stopInactivityTracking();
       clearToken();
       showAuth();
-    };
+    });
   }
+
+  console.log("✅ All event listeners attached");
 }
 
 // Verify token on page load
 export async function checkAuthOnLoad() {
+  console.log("🚀 Checking auth on load...");
   initDOMElements();
+  
   const token = getToken();
   if (!token) {
+    console.log("❌ No token found, showing auth screen");
     showAuth();
     return;
   }
@@ -217,8 +251,10 @@ export async function checkAuthOnLoad() {
   try {
     const res = await apiVerify();
     if (userEmailLabel) userEmailLabel.textContent = res.user.email;
+    console.log("✅ Token verified, showing app");
     showApp();
   } catch (err) {
+    console.error("❌ Token verification failed:", err);
     clearToken();
     showAuth();
   }
@@ -226,6 +262,7 @@ export async function checkAuthOnLoad() {
 
 // Show Auth Screen
 export function showAuth() {
+  console.log("📺 Showing auth screen");
   if (authScreen) {
     authScreen.style.visibility = "visible";
     authScreen.classList.remove("app-shell-hidden");
@@ -239,6 +276,7 @@ export function showAuth() {
 
 // Show Main App
 function showApp() {
+  console.log("📺 Showing app");
   if (appShell) {
     appShell.style.visibility = "visible";
     appShell.classList.remove("app-shell-hidden");
