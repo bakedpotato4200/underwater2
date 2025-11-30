@@ -12,14 +12,16 @@
   <!-- Main Styles -->
   <link rel="stylesheet" href="./styles.css" />
 
-  <!-- API Base for Production -->
-  <meta name="api-base-url" content="https://underwater2-production.up.railway.app/api" />
+  <!-- API Base URL (NO /api here) -->
+  <meta name="api-base-url" content="https://underwater2-production.up.railway.app" />
 
-  <!-- Inject API URL Safely -->
+  <!-- Inject API URL -->
   <script>
-    (function() {
-      const meta = document.querySelector('meta[name="api-base-url"]');
-      window.__API_BASE_URL__ = meta ? meta.content : "https://underwater2-production.up.railway.app/api";
+    (function () {
+      const tag = document.querySelector('meta[name="api-base-url"]');
+      window.__API_BASE_URL__ =
+        tag?.content || "https://underwater2-production.up.railway.app";
+
       console.log("API BASE URL →", window.__API_BASE_URL__);
     })();
   </script>
@@ -30,7 +32,7 @@
   <!-- AUTH SCREEN -->
   <div id="auth-screen" class="auth-screen app-shell-hidden">
     <div class="auth-card">
-      <img src="./assets/icons/logo-badge.png" alt="Under Water Logo" class="auth-logo-badge" />
+      <img src="./assets/icons/logo-badge.png" class="auth-logo-badge" />
       <h1 class="app-title">Under Water</h1>
       <p class="app-subtitle">Smart paycheck-to-paycheck budgeting</p>
 
@@ -41,46 +43,45 @@
 
       <!-- LOGIN FORM -->
       <form id="login-form" class="auth-form">
-        <label>Email<input type="email" id="login-email" required /></label>
-        <label>Password<input type="password" id="login-password" required /></label>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <label>Email<input id="login-email" type="email" required /></label>
+        <label>Password<input id="login-password" type="password" required /></label>
+        <button class="btn btn-primary" type="submit">Login</button>
         <p id="login-error" class="auth-error"></p>
-        <button type="button" id="forgot-password-link" class="btn-link">Forgot password?</button>
+        <button id="forgot-password-link" type="button" class="btn-link">Forgot password?</button>
       </form>
 
       <!-- SIGNUP FORM -->
       <form id="signup-form" class="auth-form auth-form-hidden">
-        <label>Email<input type="email" id="signup-email" required /></label>
-        <label>Password<input type="password" id="signup-password" required /></label>
-        <button type="submit" class="btn btn-secondary">Create Account</button>
+        <label>Email<input id="signup-email" type="email" required /></label>
+        <label>Password<input id="signup-password" type="password" required /></label>
+        <button class="btn btn-secondary" type="submit">Create Account</button>
         <p id="signup-error" class="auth-error"></p>
       </form>
 
-      <!-- FORGOT PASSWORD FORM -->
+      <!-- FORGOT PASSWORD -->
       <form id="forgot-password-form" class="auth-form auth-form-hidden">
-        <label>Email<input type="email" id="forgot-email" required /></label>
-        <button type="submit" class="btn btn-secondary">Send Reset Code</button>
+        <label>Email<input id="forgot-email" type="email" required /></label>
+        <button class="btn btn-secondary" type="submit">Send Reset Code</button>
         <p id="forgot-error" class="auth-error"></p>
-        <button type="button" id="back-to-login-from-forgot" class="btn-link">Back to Login</button>
+        <button id="back-to-login-from-forgot" type="button" class="btn-link">Back to Login</button>
       </form>
 
-      <!-- RESET PASSWORD FORM -->
+      <!-- RESET PASSWORD -->
       <form id="reset-password-form" class="auth-form auth-form-hidden">
-        <label>Email<input type="email" id="reset-email" required /></label>
-        <label>Reset Code<input type="text" id="reset-code" maxlength="6" required /></label>
-        <label>New Password<input type="password" id="reset-new-password" required /></label>
-        <button type="submit" class="btn btn-secondary">Reset Password</button>
+        <label>Email<input id="reset-email" type="email" required /></label>
+        <label>Reset Code<input id="reset-code" type="text" maxlength="6" required /></label>
+        <label>New Password<input id="reset-new-password" type="password" required /></label>
+        <button class="btn btn-secondary" type="submit">Reset Password</button>
         <p id="reset-error" class="auth-error"></p>
-        <button type="button" id="back-to-login-from-reset" class="btn-link">Back to Login</button>
+        <button id="back-to-login-from-reset" type="button" class="btn-link">Back</button>
       </form>
     </div>
   </div>
 
-  <!-- MAIN APP -->
+  <!-- APP SHELL -->
   <div id="app-shell" class="app-shell app-shell-hidden">
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-logo">
         <img src="./assets/icons/icon-sidebar.png" class="sidebar-logo-icon" />
@@ -115,17 +116,16 @@
           <img src="./assets/icons/logo-horizontal.png" class="dashboard-logo-horizontal" />
         </div>
         <h2>Dashboard</h2>
-
         <div class="cards-row">
-          <div class="card positive" id="dash-income-card"><h3>This Month Income</h3><p id="dash-income" class="big-number">$0</p></div>
-          <div class="card negative" id="dash-expenses-card"><h3>This Month Bills</h3><p id="dash-expenses" class="big-number">$0</p></div>
-          <div class="card positive"><h3>End of Month Balance</h3><p id="dash-end-balance" class="big-number">$0</p></div>
-        </div>
-
-        <div class="cards-row">
-          <div class="card" id="dash-paycheck-1-card"><h3>Paycheck 1 + Bills</h3><p id="dash-paycheck-1" class="big-number">$0</p></div>
-          <div class="card" id="dash-paycheck-2-card"><h3>Paycheck 2 + Bills</h3><p id="dash-paycheck-2" class="big-number">$0</p></div>
-          <div class="card card-wide"><h3>Top Pressure Days</h3><ul id="dash-pressure-days" class="simple-list"></ul></div>
+          <div id="dash-income-card" class="card positive">
+            <h3>This Month Income</h3><p id="dash-income" class="big-number">$0</p>
+          </div>
+          <div id="dash-expenses-card" class="card negative">
+            <h3>This Month Bills</h3><p id="dash-expenses" class="big-number">$0</p>
+          </div>
+          <div class="card positive">
+            <h3>End of Month Balance</h3><p id="dash-end-balance" class="big-number">$0</p>
+          </div>
         </div>
       </section>
 
@@ -139,33 +139,37 @@
             <button id="next-month-btn" class="btn btn-ghost">&gt;</button>
           </div>
         </header>
-
         <div class="calendar-summary">
           <div>Income: <span id="cal-income">$0</span></div>
           <div>Bills: <span id="cal-expenses">$0</span></div>
           <div>Net: <span id="cal-net">$0</span></div>
         </div>
-
         <div id="calendar-grid" class="calendar-grid"></div>
       </section>
 
       <!-- Recurring -->
       <section id="recurring-view" class="view">
         <h2>Recurring Items</h2>
-
         <form id="recurring-form" class="form-row">
           <input id="rec-name" placeholder="Name" required />
           <input id="rec-amount" type="number" step="0.01" placeholder="Amount" required />
-          <select id="rec-type"><option value="expense">Expense</option><option value="income">Income</option></select>
-          <select id="rec-frequency"><option value="monthly">Monthly</option><option value="biweekly">Biweekly</option><option value="weekly">Weekly</option></select>
+          <select id="rec-type">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+          <select id="rec-frequency">
+            <option value="monthly">Monthly</option>
+            <option value="biweekly">Biweekly</option>
+            <option value="weekly">Weekly</option>
+          </select>
           <input id="rec-start-date" type="date" required />
           <button class="btn btn-primary">Save</button>
         </form>
-
         <p id="recurring-error" class="form-error"></p>
-
         <table class="data-table">
-          <thead><tr><th>Name</th><th>Type</th><th>Frequency</th><th>Amount</th><th>Start</th><th></th></tr></thead>
+          <thead>
+            <tr><th>Name</th><th>Type</th><th>Frequency</th><th>Amount</th><th>Start</th><th></th></tr>
+          </thead>
           <tbody id="recurring-table-body"></tbody>
         </table>
       </section>
@@ -182,12 +186,12 @@
         <form id="change-password-form" class="form-row">
           <input id="current-password-input" type="password" placeholder="Current password" required />
           <input id="new-password-input" type="password" placeholder="New password" required />
-          <input id="verify-password-input" type="password" placeholder="Verify new password" required />
+          <input id="verify-password-input" type="password" placeholder="Verify password" required />
           <button class="btn btn-secondary">Change Password</button>
         </form>
 
         <form id="starting-balance-form" class="form-row">
-          <input id="starting-balance-input" type="number" step="0.01" placeholder="Starting balance" required />
+          <input id="starting-balance-input" type="number" placeholder="Starting balance" step="0.01" required />
           <button class="btn btn-secondary">Save</button>
         </form>
       </section>
@@ -195,14 +199,19 @@
   </div>
 
   <!-- Modals -->
-  <div id="day-detail-modal" class="modal"><div class="modal-content"><button id="day-modal-close">&times;</button><div id="day-modal-content"></div></div></div>
+  <div id="day-detail-modal" class="modal">
+    <div class="modal-content">
+      <button id="day-modal-close">&times;</button>
+      <div id="day-modal-content"></div>
+    </div>
+  </div>
 
   <div id="actual-pay-modal" class="modal">
     <div class="modal-content" style="max-width:300px;">
       <h3>Actual Income</h3>
       <form id="actual-pay-form">
         <input id="actual-pay-amount" type="number" step="0.01" required />
-        <button class="btn btn-primary">Submit</button>
+        <button class="btn btn-primary" type="submit">Submit</button>
         <p id="actual-pay-error" class="form-error"></p>
       </form>
     </div>
