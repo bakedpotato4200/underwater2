@@ -6,6 +6,10 @@
   <title>Under Water 2</title>
 
   <link rel="stylesheet" href="./styles.css" />
+  <script>
+    // Inject API base URL from environment or use Railway backend as fallback
+    window.__API_BASE_URL__ = import.meta.env.VITE_API_BASE_URL || "https://underwater2-production.up.railway.app";
+  </script>
 </head>
 
 <body>
