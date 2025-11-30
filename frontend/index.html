@@ -12,17 +12,15 @@
   <!-- Main Styles -->
   <link rel="stylesheet" href="./styles.css" />
 
-  <!-- API Base URL (NO /api here) -->
-  <meta name="api-base-url" content="https://underwater2-production.up.railway.app" />
+  <!-- API Base URL (Vercel injects this) -->
+  <meta name="api-base-url" content="https://underwater2-production.up.railway.app/api" />
 
   <!-- Inject API URL -->
   <script>
-    (function () {
-      const tag = document.querySelector('meta[name="api-base-url"]');
-      window.__API_BASE_URL__ =
-        tag?.content || "https://underwater2-production.up.railway.app";
-
-      console.log("API BASE URL →", window.__API_BASE_URL__);
+    (function() {
+      const metaTag = document.querySelector("meta[name='api-base-url']");
+      window.__API_BASE_URL__ = metaTag ? metaTag.content : "https://underwater2-production.up.railway.app/api";
+      console.log("API BASE SET →", window.__API_BASE_URL__);
     })();
   </script>
 </head>
@@ -32,7 +30,7 @@
   <!-- AUTH SCREEN -->
   <div id="auth-screen" class="auth-screen app-shell-hidden">
     <div class="auth-card">
-      <img src="./assets/icons/logo-badge.png" class="auth-logo-badge" />
+      <img src="./assets/icons/logo-badge.png" alt="Under Water Logo" class="auth-logo-badge" />
       <h1 class="app-title">Under Water</h1>
       <p class="app-subtitle">Smart paycheck-to-paycheck budgeting</p>
 
@@ -41,47 +39,50 @@
         <button id="signup-tab" class="auth-tab">Sign Up</button>
       </div>
 
-      <!-- LOGIN FORM -->
+      <!-- LOGIN -->
       <form id="login-form" class="auth-form">
-        <label>Email<input id="login-email" type="email" required /></label>
-        <label>Password<input id="login-password" type="password" required /></label>
-        <button class="btn btn-primary" type="submit">Login</button>
+        <label>Email<input type="email" id="login-email" required /></label>
+        <label>Password<input type="password" id="login-password" required /></label>
+        <button type="submit" class="btn btn-primary">Login</button>
         <p id="login-error" class="auth-error"></p>
-        <button id="forgot-password-link" type="button" class="btn-link">Forgot password?</button>
+        <button type="button" id="forgot-password-link" class="btn-link">Forgot password?</button>
       </form>
 
-      <!-- SIGNUP FORM -->
+      <!-- SIGNUP -->
       <form id="signup-form" class="auth-form auth-form-hidden">
-        <label>Email<input id="signup-email" type="email" required /></label>
-        <label>Password<input id="signup-password" type="password" required /></label>
-        <button class="btn btn-secondary" type="submit">Create Account</button>
+        <label>Email<input type="email" id="signup-email" required /></label>
+        <label>Password<input type="password" id="signup-password" required /></label>
+        <button type="submit" class="btn btn-secondary">Create Account</button>
         <p id="signup-error" class="auth-error"></p>
       </form>
 
       <!-- FORGOT PASSWORD -->
       <form id="forgot-password-form" class="auth-form auth-form-hidden">
-        <label>Email<input id="forgot-email" type="email" required /></label>
-        <button class="btn btn-secondary" type="submit">Send Reset Code</button>
+        <label>Email<input type="email" id="forgot-email" required /></label>
+        <button type="submit" class="btn btn-secondary">Send Reset Code</button>
         <p id="forgot-error" class="auth-error"></p>
-        <button id="back-to-login-from-forgot" type="button" class="btn-link">Back to Login</button>
+        <button type="button" id="back-to-login-from-forgot" class="btn-link">Back to Login</button>
       </form>
 
       <!-- RESET PASSWORD -->
       <form id="reset-password-form" class="auth-form auth-form-hidden">
-        <label>Email<input id="reset-email" type="email" required /></label>
-        <label>Reset Code<input id="reset-code" type="text" maxlength="6" required /></label>
-        <label>New Password<input id="reset-new-password" type="password" required /></label>
-        <button class="btn btn-secondary" type="submit">Reset Password</button>
+        <label>Email<input type="email" id="reset-email" required /></label>
+        <label>Reset Code<input type="text" id="reset-code" maxlength="6" required /></label>
+        <label>New Password<input type="password" id="reset-new-password" required /></label>
+        <button type="submit" class="btn btn-secondary">Reset Password</button>
         <p id="reset-error" class="auth-error"></p>
-        <button id="back-to-login-from-reset" type="button" class="btn-link">Back</button>
+        <button type="button" id="back-to-login-from-reset" class="btn-link">Back to Login</button>
       </form>
+
     </div>
   </div>
 
-  <!-- APP SHELL -->
+  <!-- MAIN APP -->
   <div id="app-shell" class="app-shell app-shell-hidden">
+
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
+    <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-logo">
         <img src="./assets/icons/icon-sidebar.png" class="sidebar-logo-icon" />
@@ -101,6 +102,7 @@
       </div>
     </aside>
 
+    <!-- MAIN CONTENT AREA -->
     <main class="main-content">
       <header class="app-header">
         <button id="menu-toggle-btn" class="menu-toggle-btn">☰</button>
@@ -110,26 +112,46 @@
         </div>
       </header>
 
-      <!-- Dashboard -->
+      <!-- DASHBOARD -->
       <section id="dashboard-view" class="view view-active">
         <div class="dashboard-header-banner">
           <img src="./assets/icons/logo-horizontal.png" class="dashboard-logo-horizontal" />
         </div>
+
         <h2>Dashboard</h2>
+
         <div class="cards-row">
-          <div id="dash-income-card" class="card positive">
-            <h3>This Month Income</h3><p id="dash-income" class="big-number">$0</p>
+          <div class="card positive" id="dash-income-card">
+            <h3>This Month Income</h3>
+            <p id="dash-income" class="big-number">$0</p>
           </div>
-          <div id="dash-expenses-card" class="card negative">
-            <h3>This Month Bills</h3><p id="dash-expenses" class="big-number">$0</p>
+          <div class="card negative" id="dash-expenses-card">
+            <h3>This Month Bills</h3>
+            <p id="dash-expenses" class="big-number">$0</p>
           </div>
           <div class="card positive">
-            <h3>End of Month Balance</h3><p id="dash-end-balance" class="big-number">$0</p>
+            <h3>End of Month Balance</h3>
+            <p id="dash-end-balance" class="big-number">$0</p>
+          </div>
+        </div>
+
+        <div class="cards-row">
+          <div class="card" id="dash-paycheck-1-card">
+            <h3>Paycheck 1 + Bills</h3>
+            <p id="dash-paycheck-1" class="big-number">$0</p>
+          </div>
+          <div class="card" id="dash-paycheck-2-card">
+            <h3>Paycheck 2 + Bills</h3>
+            <p id="dash-paycheck-2" class="big-number">$0</p>
+          </div>
+          <div class="card card-wide">
+            <h3>Top Pressure Days</h3>
+            <ul id="dash-pressure-days" class="simple-list"></ul>
           </div>
         </div>
       </section>
 
-      <!-- Calendar -->
+      <!-- CALENDAR -->
       <section id="calendar-view" class="view">
         <header class="view-header">
           <h2>Calendar</h2>
@@ -139,17 +161,20 @@
             <button id="next-month-btn" class="btn btn-ghost">&gt;</button>
           </div>
         </header>
+
         <div class="calendar-summary">
           <div>Income: <span id="cal-income">$0</span></div>
           <div>Bills: <span id="cal-expenses">$0</span></div>
           <div>Net: <span id="cal-net">$0</span></div>
         </div>
+
         <div id="calendar-grid" class="calendar-grid"></div>
       </section>
 
-      <!-- Recurring -->
+      <!-- RECURRING -->
       <section id="recurring-view" class="view">
         <h2>Recurring Items</h2>
+
         <form id="recurring-form" class="form-row">
           <input id="rec-name" placeholder="Name" required />
           <input id="rec-amount" type="number" step="0.01" placeholder="Amount" required />
@@ -165,7 +190,7 @@
           <input id="rec-start-date" type="date" required />
           <button class="btn btn-primary">Save</button>
         </form>
-        <p id="recurring-error" class="form-error"></p>
+
         <table class="data-table">
           <thead>
             <tr><th>Name</th><th>Type</th><th>Frequency</th><th>Amount</th><th>Start</th><th></th></tr>
@@ -174,7 +199,7 @@
         </table>
       </section>
 
-      <!-- Settings -->
+      <!-- SETTINGS -->
       <section id="settings-view" class="view">
         <h2>Settings</h2>
 
@@ -186,19 +211,20 @@
         <form id="change-password-form" class="form-row">
           <input id="current-password-input" type="password" placeholder="Current password" required />
           <input id="new-password-input" type="password" placeholder="New password" required />
-          <input id="verify-password-input" type="password" placeholder="Verify password" required />
+          <input id="verify-password-input" type="password" placeholder="Verify new password" required />
           <button class="btn btn-secondary">Change Password</button>
         </form>
 
         <form id="starting-balance-form" class="form-row">
-          <input id="starting-balance-input" type="number" placeholder="Starting balance" step="0.01" required />
+          <input id="starting-balance-input" type="number" step="0.01" placeholder="Starting balance" required />
           <button class="btn btn-secondary">Save</button>
         </form>
       </section>
+
     </main>
   </div>
 
-  <!-- Modals -->
+  <!-- MODALS -->
   <div id="day-detail-modal" class="modal">
     <div class="modal-content">
       <button id="day-modal-close">&times;</button>
@@ -211,52 +237,57 @@
       <h3>Actual Income</h3>
       <form id="actual-pay-form">
         <input id="actual-pay-amount" type="number" step="0.01" required />
-        <button class="btn btn-primary" type="submit">Submit</button>
+        <button class="btn btn-primary">Submit</button>
         <p id="actual-pay-error" class="form-error"></p>
       </form>
     </div>
   </div>
 
-  <!-- Main JS -->
+  <!-- MAIN JS -->
   <script type="module" src="./js/main.js"></script>
 
-<!-- TEMPORARY ON-SCREEN DEBUG CONSOLE -->
-<div id="debug-console" style="
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  max-height: 40%;
-  overflow-y: auto;
-  background: rgba(0,0,0,0.85);
-  color: #00ff88;
-  font-size: 12px;
-  padding: 6px;
-  z-index: 999999;
-  font-family: monospace;
-"></div>
+  <!-- DEBUG CONSOLE (OPTION 2 — only shows with ?debug=1) -->
+  <script>
+    if (location.search.includes("debug=1")) {
+      document.body.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div id="debug-console" style="
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          max-height: 40%;
+          overflow-y: auto;
+          background: rgba(0,0,0,0.85);
+          color: #00ff88;
+          font-size: 12px;
+          padding: 6px;
+          z-index: 999999;
+          font-family: monospace;">
+        </div>`
+      );
 
-<script>
-(function () {
-  const dbg = document.getElementById("debug-console");
-  const log = (type, args) => {
-    const msg = [...args].map(a => 
-      typeof a === "object" ? JSON.stringify(a) : a
-    ).join(" ");
-    dbg.innerText += `[${type}] ${msg}\n`;
-    dbg.scrollTop = dbg.scrollHeight;
-  };
+      (function () {
+        const dbg = document.getElementById("debug-console");
+        const origLog = console.log;
+        const origErr = console.error;
+        const origWarn = console.warn;
 
-  const origLog = console.log;
-  console.log = (...args) => { origLog(...args); log("LOG", args); };
+        function push(type, args) {
+          const msg = [...args].map(a =>
+            typeof a === "object" ? JSON.stringify(a) : a
+          ).join(" ");
+          dbg.innerText += `[${type}] ${msg}\n`;
+          dbg.scrollTop = dbg.scrollHeight;
+        }
 
-  const origErr = console.error;
-  console.error = (...args) => { origErr(...args); log("ERR", args); };
-
-  const origWarn = console.warn;
-  console.warn = (...args) => { origWarn(...args); log("WARN", args); };
-})();
-</script>
+        console.log = (...args) => { origLog(...args); push("LOG", args); };
+        console.error = (...args) => { origErr(...args); push("ERR", args); };
+        console.warn = (...args) => { origWarn(...args); push("WARN", args); };
+      })();
+    }
+  </script>
 
 </body>
 </html>
