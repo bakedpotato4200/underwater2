@@ -1,10 +1,21 @@
 // ================================================
 // PRODUCTION API BASE URL
-// index.html injects: window.__API_BASE_URL__
-// Fallback: Railway backend URL (domain only)
+// Uses environment variable if available, fallback to Railway
 // ================================================
-export const API_BASE_URL =
-  window.__API_BASE_URL__ || "https://underwater2-production.up.railway.app";
+const getApiBaseUrl = () => {
+  // Check if in Vercel environment with env var
+  if (typeof process !== 'undefined' && process.env.VITE_API_BASE_URL) {
+    return process.env.VITE_API_BASE_URL;
+  }
+  // Check window global (set by HTML if available)
+  if (window.__API_BASE_URL__) {
+    return window.__API_BASE_URL__;
+  }
+  // Default fallback to Railway backend
+  return "https://underwater2-production.up.railway.app";
+};
+
+export const API_BASE_URL = getApiBaseUrl();
 
 // --------------------------------------------
 // Token Helpers
