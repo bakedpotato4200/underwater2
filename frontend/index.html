@@ -149,5 +149,51 @@
   <!-- MAIN JS ENTRY -->
   <script type="module" src="./js/main.js"></script>
 
+<!-- DEBUG CONSOLE -->
+<div id="debug-console" style="
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 45%;
+  overflow-y: auto;
+  background: rgba(0,0,0,0.85);
+  color: #00ff88;
+  font-size: 12px;
+  padding: 6px;
+  z-index: 999999;
+  font-family: monospace;">
+</div>
+
+<script>
+(function () {
+  // Enable only when ?debug=1 in URL
+  if (!window.location.search.includes("debug=1")) return;
+
+  const dbg = document.getElementById("debug-console");
+  dbg.style.display = "block";
+
+  function write(type, args) {
+    const msg = [...args].map(a =>
+      typeof a === "object" ? JSON.stringify(a) : String(a)
+    ).join(" ");
+    dbg.innerText += `[${type}] ${msg}\n`;
+    dbg.scrollTop = dbg.scrollHeight;
+  }
+
+  const origLog = console.log;
+  console.log = (...args) => { origLog(...args); write("LOG", args); };
+
+  const origErr = console.error;
+  console.error = (...args) => { origErr(...args); write("ERR", args); };
+
+  const origWarn = console.warn;
+  console.warn = (...args) => { origWarn(...args); write("WARN", args); };
+
+  console.log("DEBUG CONSOLE READY");
+})();
+</script>
+
 </body>
 </html>
