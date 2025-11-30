@@ -54,7 +54,8 @@ if (!signupTab || !signupForm) {
 // Toggle between Login and Signup tabs
 // ----------------------------------------------
 if (loginTab && signupTab && loginForm && signupForm) {
-  loginTab.addEventListener("click", () => {
+  loginTab.addEventListener("click", (e) => {
+    e.preventDefault();
     console.log("✅ Clicked Login tab");
     loginTab.classList.add("auth-tab-active");
     signupTab.classList.remove("auth-tab-active");
@@ -64,7 +65,8 @@ if (loginTab && signupTab && loginForm && signupForm) {
     resetPasswordForm?.classList.add("auth-form-hidden");
   });
 
-  signupTab.addEventListener("click", () => {
+  signupTab.addEventListener("click", (e) => {
+    e.preventDefault();
     console.log("✅ Clicked Signup tab");
     signupTab.classList.add("auth-tab-active");
     loginTab.classList.remove("auth-tab-active");
