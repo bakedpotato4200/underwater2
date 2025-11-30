@@ -2,45 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Under Water 2</title>
 
   <link rel="stylesheet" href="./styles.css" />
-
-  <!-- DEBUG BAR -->
-  <style>
-    #debug-bar {
-      background: red;
-      color: white;
-      padding: 8px;
-      font-weight: bold;
-      text-align: center;
-    }
-    #debug-console {
-      background: #0a0f24;
-      color: #00ff9c;
-      padding: 10px;
-      height: 35vh;
-      overflow-y: auto;
-      font-family: monospace;
-      font-size: 0.85rem;
-    }
-  </style>
 </head>
 
 <body>
-
-  <!-- DEBUG OUTPUT -->
-  <div id="debug-bar">ALL MODULES LOADED ✔️</div>
-  <pre id="debug-console"></pre>
-  <div id="early-debug"></div>
-
   <!-- SIDEBAR -->
   <div id="sidebar" class="sidebar">
-    <div class="nav-item" data-view="dashboard-view">Dashboard</div>
-    <div class="nav-item" data-view="calendar-view">Calendar</div>
-    <div class="nav-item" data-view="recurring-view">Recurring</div>
-    <div class="nav-item" data-view="settings-view">Settings</div>
+      <div class="nav-item" data-view="dashboard-view">Dashboard</div>
+      <div class="nav-item" data-view="calendar-view">Calendar</div>
+      <div class="nav-item" data-view="recurring-view">Recurring</div>
+      <div class="nav-item" data-view="settings-view">Settings</div>
   </div>
 
   <!-- OVERLAY -->
@@ -57,12 +31,11 @@
 
   <!-- MODAL -->
   <div id="day-detail-modal" class="modal">
-    <div id="day-modal-content"></div>
-    <button id="day-modal-close">Close</button>
+      <div id="day-modal-content"></div>
+      <button id="day-modal-close">Close</button>
   </div>
 
-  <!-- MAIN JS MODULE (corrected path) -->
+  <!-- MAIN JS -->
   <script type="module" src="./js/main.js"></script>
-
 </body>
 </html>
