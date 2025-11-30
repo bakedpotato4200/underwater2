@@ -2,128 +2,67 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Under Water 2</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Under Water 2</title>
 
-  <!-- Main Styles -->
   <link rel="stylesheet" href="./styles.css" />
 
-  <!-- Manifest -->
-  <link rel="manifest" href="./manifest.json" />
-  <meta name="theme-color" content="#0a1628" />
-  <link rel="icon" type="image/png" href="./assets/icons/logo-badge.png" />
-
-  <!-- API Base URL (Vercel injects this dynamically) -->
-  <meta name="api-base-url" content="https://underwater2-production.up.railway.app" />
-
-  <!-- Inject API URL -->
-  <script>
-    (function () {
-      const tag = document.querySelector('meta[name="api-base-url"]');
-      window.__API_BASE_URL__ = tag?.content || "https://underwater2-production.up.railway.app";
-      console.log("API BASE URL →", window.__API_BASE_URL__);
-    })();
-  </script>
+  <!-- DEBUG BAR -->
+  <style>
+    #debug-bar {
+      background: red;
+      color: white;
+      padding: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+    #debug-console {
+      background: #0a0f24;
+      color: #00ff9c;
+      padding: 10px;
+      height: 35vh;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- AUTH SCREEN -->
-  <div id="auth-screen" class="auth-screen active-view">
-    <div class="auth-card">
+  <!-- DEBUG OUTPUT -->
+  <div id="debug-bar">ALL MODULES LOADED ✔️</div>
+  <pre id="debug-console"></pre>
+  <div id="early-debug"></div>
 
-      <img src="./assets/icons/logo-badge.png" class="auth-logo" />
-      <h1 class="app-title">Under Water</h1>
-      <p class="app-subtitle">Smart paycheck automation</p>
-
-      <!-- Login / Signup Tabs -->
-      <div class="auth-toggle">
-        <button id="login-tab" class="auth-tab active">Login</button>
-        <button id="signup-tab" class="auth-tab">Sign Up</button>
-      </div>
-
-      <!-- LOGIN FORM -->
-      <form id="login-form" class="auth-form active">
-        <label>Email <input id="login-email" type="email" /></label>
-        <label>Password <input id="login-password" type="password" /></label>
-        <button class="btn btn-primary" type="submit">Login</button>
-        <p id="login-error" class="auth-error"></p>
-        <button id="forgot-password-link" type="button" class="link-btn">Forgot Password?</button>
-      </form>
-
-      <!-- SIGNUP FORM -->
-      <form id="signup-form" class="auth-form">
-        <label>Email <input id="signup-email" type="email" /></label>
-        <label>Password <input id="signup-password" type="password" /></label>
-        <button class="btn btn-secondary" type="submit">Create Account</button>
-        <p id="signup-error" class="auth-error"></p>
-      </form>
-
-      <!-- FORGOT PASSWORD -->
-      <form id="forgot-password-form" class="auth-form">
-        <label>Email <input id="forgot-email" type="email" /></label>
-        <button class="btn btn-secondary" type="submit">Send Reset Code</button>
-        <p id="forgot-error" class="auth-error"></p>
-        <button id="back-to-login-from-forgot" type="button" class="link-btn">Back to Login</button>
-      </form>
-
-      <!-- RESET PASSWORD -->
-      <form id="reset-password-form" class="auth-form">
-        <label>Email <input id="reset-email" type="email" /></label>
-        <label>Reset Code <input id="reset-code" type="text" /></label>
-        <label>New Password <input id="reset-password" type="password" /></label>
-        <button class="btn btn-primary" type="submit">Reset Password</button>
-        <p id="reset-error" class="auth-error"></p>
-      </form>
-
-    </div>
+  <!-- SIDEBAR -->
+  <div id="sidebar" class="sidebar">
+    <div class="nav-item" data-view="dashboard-view">Dashboard</div>
+    <div class="nav-item" data-view="calendar-view">Calendar</div>
+    <div class="nav-item" data-view="recurring-view">Recurring</div>
+    <div class="nav-item" data-view="settings-view">Settings</div>
   </div>
 
-  <!-- APP SHELL (HIDDEN UNTIL LOGIN) -->
-  <div id="app-shell" class="hidden">
-    <!-- Your dashboard and views will load here after login -->
+  <!-- OVERLAY -->
+  <div id="sidebar-overlay"></div>
+
+  <!-- MENU BUTTON -->
+  <button id="menu-toggle-btn" class="menu-btn">☰</button>
+
+  <!-- VIEWS -->
+  <div id="dashboard-view" class="view view-active"></div>
+  <div id="calendar-view" class="view"></div>
+  <div id="recurring-view" class="view"></div>
+  <div id="settings-view" class="view"></div>
+
+  <!-- MODAL -->
+  <div id="day-detail-modal" class="modal">
+    <div id="day-modal-content"></div>
+    <button id="day-modal-close">Close</button>
   </div>
 
-  <!-- MAIN APP MODULE -->
+  <!-- MAIN JS MODULE (corrected path) -->
   <script type="module" src="./js/main.js"></script>
-
-  <!-- DEBUG CONSOLE -->
-  <div id="debug-console" style="
-    position: fixed;
-    bottom: 0; left: 0;
-    width: 100%;
-    max-height: 40%;
-    overflow-y: auto;
-    background: rgba(0,0,0,0.85);
-    color: #00ff88;
-    font-size: 12px;
-    padding: 6px;
-    z-index: 999999;
-    font-family: monospace;
-  "></div>
-
-  <script>
-    (function () {
-      const dbg = document.getElementById("debug-console");
-
-      const write = (type, args) => {
-        const msg = [...args].map(a =>
-          typeof a === "object" ? JSON.stringify(a) : a
-        ).join(" ");
-        dbg.innerText += `[${type}] ${msg}\n`;
-        dbg.scrollTop = dbg.scrollHeight;
-      };
-
-      const origLog = console.log;
-      console.log = (...args) => { origLog(...args); write("LOG", args); };
-
-      const origErr = console.error;
-      console.error = (...args) => { origErr(...args); write("ERR", args); };
-
-      const origWarn = console.warn;
-      console.warn = (...args) => { origWarn(...args); write("WARN", args); };
-    })();
-  </script>
 
 </body>
 </html>
